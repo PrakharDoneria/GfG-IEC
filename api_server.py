@@ -64,7 +64,7 @@ def fetch_gfg_data(handle: str):
 
     return {"score": total_score, "tier": tier}
 
-@app.post("/user/{handle}")
+@app.post("/api/user/{handle}")
 async def add_user(handle: str):
     stats = fetch_gfg_data(handle)
     data = {
@@ -75,7 +75,7 @@ async def add_user(handle: str):
     response = supabase.table("users").upsert(data, on_conflict="handle").execute()
     return {"message": f"User {handle} synced", "data": response.data}
 
-@app.put("/user/{old_handle}")
+@app.put("/api/user/{old_handle}")
 async def edit_user(old_handle: str, new_handle: str):
     stats = fetch_gfg_data(new_handle)
     response = supabase.table("users").update({
@@ -88,7 +88,7 @@ async def edit_user(old_handle: str, new_handle: str):
         raise HTTPException(status_code=404, detail="User not found")
     return {"message": "Handle updated", "data": response.data}
 
-@app.get("/leaderboard")
+@app.get("/api/leaderboard")
 async def get_leaderboard():
     response = supabase.table("users") \
         .select("*") \
@@ -97,7 +97,7 @@ async def get_leaderboard():
         .execute()
     return response.data
 
-@app.get("/rank/{handle}")
+@app.get("/api/rank/{handle}")
 async def get_my_rank(handle: str):
     user_res = supabase.table("users").select("score").eq("handle", handle).execute()
     if not user_res.data:
@@ -120,7 +120,7 @@ async def get_my_rank(handle: str):
         "tier": user_tier
     }
 
-@app.delete("/user/{handle}")
+@app.delete("/api/user/{handle}")
 async def delete_user(handle: str):
     supabase.table("users").delete().eq("handle", handle).execute()
     return {"message": f"User {handle} removed"}

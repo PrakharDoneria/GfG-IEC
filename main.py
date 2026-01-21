@@ -70,15 +70,38 @@ def get_events(event_type):
     return jsonify(data)
 
 if __name__ == '__main__':
-    # Start API server only if this is the main process (not the reloader)
+    # --- Local Development Proxy ---
+    # This block allows running locally without CORS issues.
+    # It proxies all /api requests from Flask (port 5000) to FastAPI (port 8001).
+    @app.route('/api/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+    def proxy_api(path):
+        # Only run this proxy if we are definitely local
+        if not os.environ.get('VERCEL') and not os.environ.get('WERKZEUG_RUN_MAIN'):
+             # Note: simple proxy logic for local dev
+             import requests
+             url = f"http://127.0.0.1:8001/api/{path}"
+             try:
+                resp = requests.request(
+                    method=request.method,
+                    url=url,
+                    headers={key: value for (key, value) in request.headers if key != 'Host'},
+                    data=request.get_data(),
+                    cookies=request.cookies,
+                    allow_redirects=False)
+                excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
+                headers = [(name, value) for (name, value) in resp.raw.headers.items()
+                           if name.lower() not in excluded_headers]
+                return (resp.content, resp.status_code, headers)
+             except Exception as e:
+                 return jsonify({'error': 'Local API Server (8001) not running or reachable', 'details': str(e)}), 500
+        return jsonify({'error': 'Not Found'}), 404
+
     if not os.environ.get('WERKZEUG_RUN_MAIN'):
-        print("Starting API Server...")
-        process = subprocess.Popen([sys.executable, 'api_server.py'])
-        
-        def kill_server():
-            print("Stopping API Server...")
-            process.terminate()
-            
-        atexit.register(kill_server)
+        # Just print instructions for the user locally
+        print("----------------------------------------------------------")
+        print(" IMPORTANT: Start the API server separately in a new terminal:")
+        print(" python api_server.py")
+        print("----------------------------------------------------------")
+
 
     app.run(debug=True, port=5000)
