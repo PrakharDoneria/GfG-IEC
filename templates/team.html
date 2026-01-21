@@ -38,8 +38,13 @@
                     <span class="team-role faculty">{{ member.role }}</span>
                     <p class="team-details">{{ member.details }}</p>
                     <div class="team-social">
-                        <a href="#" class="social-link"><i data-lucide="linkedin"></i></a>
-                        <a href="#" class="social-link"><i data-lucide="mail"></i></a>
+                        {% if member.linkedin %}
+                        <a href="{{ member.linkedin }}" target="_blank" class="social-link"><i
+                                data-lucide="linkedin"></i></a>
+                        {% endif %}
+                        {% if member.email %}
+                        <a href="mailto:{{ member.email }}" class="social-link"><i data-lucide="mail"></i></a>
+                        {% endif %}
                     </div>
                 </div>
                 {% endfor %}
@@ -63,8 +68,13 @@
                     <span class="team-role">{{ member.role }}</span>
                     <p class="team-details">{{ member.details }}</p>
                     <div class="team-social">
-                        <a href="#" class="social-link"><i data-lucide="github"></i></a>
-                        <a href="#" class="social-link"><i data-lucide="linkedin"></i></a>
+                        {% if member.linkedin %}
+                        <a href="{{ member.linkedin }}" target="_blank" class="social-link"><i
+                                data-lucide="linkedin"></i></a>
+                        {% endif %}
+                        {% if member.email %}
+                        <a href="mailto:{{ member.email }}" class="social-link"><i data-lucide="mail"></i></a>
+                        {% endif %}
                     </div>
                 </div>
                 {% endfor %}
@@ -82,7 +92,7 @@
                 <p>We're always looking for passionate individuals to join our chapter. Apply for the next recruitment
                     drive!</p>
             </div>
-            <a href="#" class="btn-glow">
+            <a href="https://forms.gle/NGTVzxbYBkLuKgKZA" target="_blank" class="btn-glow">
                 <span>Apply Now</span>
                 <i data-lucide="send"></i>
             </a>

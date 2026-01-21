@@ -1,24 +1,82 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, abort
 import json
 import os
-import sys
-import subprocess
-import atexit
+import requests
+from pathlib import Path
+from dotenv import load_dotenv
+from supabase import create_client, Client
+
+# --- Configuration & Setup ---
+env_path = Path(__file__).parent / ".env"
+load_dotenv(dotenv_path=env_path)
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
-# Helper to load JSON data
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+
+supabase = None
+if SUPABASE_URL and SUPABASE_KEY:
+    try:
+        supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    except Exception as e:
+        print(f"Failed to initialize Supabase: {e}")
+        supabase = None
+else:
+    print("Warning: Supabase credentials missing.")
+
+PRACTICE_POINTS = {"Hard": 8, "Medium": 4, "Easy": 2, "Basic": 1}
+
+# --- Helper Functions ---
+
 def load_json(filepath):
     try:
-        with open(filepath, 'r', encoding='utf-8') as f:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        full_path = os.path.join(base_dir, filepath)
+        with open(full_path, 'r', encoding='utf-8') as f:
             return json.load(f)
-    except:
+    except Exception as e:
+        print(f"Error loading {filepath}: {e}")
         return []
 
-# Routes
+def fetch_gfg_data(handle: str):
+    practice_url = "https://practiceapi.geeksforgeeks.org/api/v1/user/problems/submissions/"
+    try:
+        practice_res = requests.post(practice_url, json={"handle": handle}, timeout=10).json()
+    except:
+        practice_res = {}
+    
+    community_url = f"https://communityapi.geeksforgeeks.org/post/user/{handle}/"
+    try:
+        community_res = requests.get(community_url, params={"fetch_type": "posts", "page": 1}, timeout=10).json()
+    except:
+        community_res = {}
+
+    p_score = 0
+    if practice_res.get("status") == "success":
+        res = practice_res.get("result", {})
+        p_score = sum(len(res.get(lvl, {})) * PRACTICE_POINTS.get(lvl, 0) for lvl in PRACTICE_POINTS.keys())
+
+    c_score = 0
+    if community_res and "results" in community_res:
+        total_posts = community_res.get("count", 0)
+        total_likes = sum(p.get("like_count", 0) for p in community_res.get("results", []))
+        c_score = (total_posts * 5) + (total_likes * 2)
+
+    total_score = p_score + c_score
+    
+    tier = "🥉 Bronze"
+    if total_score >= 500: tier = "💎 Diamond"
+    elif total_score >= 200: tier = "🥇 Gold"
+    elif total_score >= 50:  tier = "🥈 Silver"
+
+    return {"score": total_score, "tier": tier}
+
+# --- Page Routes ---
+
 @app.route('/')
 def home():
-    courses = load_json('data/courses.json')[:3]  # Show only 3 on home
+    courses = load_json('data/courses.json')[:3]
     events = load_json('data/events/upcoming.json')[:2]
     ongoing = load_json('data/events/ongoing.json')
     deals = load_json('data/deals.json')[:2]
@@ -67,45 +125,96 @@ def profile_page():
 def id_generator():
     return render_template('id_generator.html')
 
-# API Endpoints for AJAX
+# --- API Routes ---
+
 @app.route('/api/events/<event_type>')
 def get_events(event_type):
     data = load_json(f'data/events/{event_type}.json')
     return jsonify(data)
 
+@app.route("/api/user/<handle>", methods=['POST'])
+def add_user(handle):
+    if not supabase: return jsonify({"error": "Database not connected"}), 500
+    try:
+        stats = fetch_gfg_data(handle)
+        data = {
+            "handle": handle,
+            "score": stats["score"],
+            "tier": stats["tier"]
+        }
+        response = supabase.table("users").upsert(data, on_conflict="handle").execute()
+        return jsonify({"message": f"User {handle} synced", "data": response.data})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/user/<old_handle>", methods=['PUT'])
+def edit_user(old_handle):
+    if not supabase: return jsonify({"error": "Database not connected"}), 500
+    new_handle = request.args.get('new_handle')
+    if not new_handle:
+        return jsonify({"error": "Missing new_handle query parameter"}), 400
+    
+    try:
+        stats = fetch_gfg_data(new_handle)
+        response = supabase.table("users").update({
+            "handle": new_handle, 
+            "score": stats["score"], 
+            "tier": stats["tier"]
+        }).eq("handle", old_handle).execute()
+        
+        if not response.data:
+            return jsonify({"error": "User not found"}), 404
+        return jsonify({"message": "Handle updated", "data": response.data})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/leaderboard", methods=['GET'])
+def get_leaderboard():
+    if not supabase: return jsonify({"error": "Database not connected"}), 500
+    try:
+        response = supabase.table("users") \
+            .select("*") \
+            .order("score", desc=True) \
+            .limit(10) \
+            .execute()
+        return jsonify(response.data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/rank/<handle>", methods=['GET'])
+def get_my_rank(handle):
+    if not supabase: return jsonify({"error": "Database not connected"}), 500
+    try:
+        user_res = supabase.table("users").select("score").eq("handle", handle).execute()
+        if not user_res.data:
+            return jsonify({"error": "User not found"}), 404
+        
+        user_score = user_res.data[0]["score"]
+        rank_res = supabase.table("users").select("count", count="exact").gt("score", user_score).execute()
+        rank = (rank_res.count or 0) + 1
+        
+        user_tier = "🥉 Bronze"
+        if user_score >= 500: user_tier = "💎 Diamond"
+        elif user_score >= 200: user_tier = "🥇 Gold"
+        elif user_score >= 50:  user_tier = "🥈 Silver"
+
+        return jsonify({
+            "handle": handle,
+            "score": user_score,
+            "rank": rank,
+            "tier": user_tier
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/user/<handle>", methods=['DELETE'])
+def delete_user(handle):
+    if not supabase: return jsonify({"error": "Database not connected"}), 500
+    try:
+        supabase.table("users").delete().eq("handle", handle).execute()
+        return jsonify({"message": f"User {handle} removed"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == '__main__':
-    # --- Local Development Proxy ---
-    # This block allows running locally without CORS issues.
-    # It proxies all /api requests from Flask (port 5000) to FastAPI (port 8001).
-    @app.route('/api/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
-    def proxy_api(path):
-        # Only run this proxy if we are definitely local
-        if not os.environ.get('VERCEL') and not os.environ.get('WERKZEUG_RUN_MAIN'):
-             # Note: simple proxy logic for local dev
-             import requests
-             url = f"http://127.0.0.1:8001/api/{path}"
-             try:
-                resp = requests.request(
-                    method=request.method,
-                    url=url,
-                    headers={key: value for (key, value) in request.headers if key != 'Host'},
-                    data=request.get_data(),
-                    cookies=request.cookies,
-                    allow_redirects=False)
-                excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
-                headers = [(name, value) for (name, value) in resp.raw.headers.items()
-                           if name.lower() not in excluded_headers]
-                return (resp.content, resp.status_code, headers)
-             except Exception as e:
-                 return jsonify({'error': 'Local API Server (8001) not running or reachable', 'details': str(e)}), 500
-        return jsonify({'error': 'Not Found'}), 404
-
-    if not os.environ.get('WERKZEUG_RUN_MAIN'):
-        # Just print instructions for the user locally
-        print("----------------------------------------------------------")
-        print(" IMPORTANT: Start the API server separately in a new terminal:")
-        print(" python api_server.py")
-        print("----------------------------------------------------------")
-
-
     app.run(debug=True, port=5000)
