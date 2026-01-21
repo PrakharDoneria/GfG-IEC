@@ -38,7 +38,11 @@
                 </div>
                 <button class="btn-primary copy-code-btn" id="copy-code-btn">
                     <i data-lucide="copy"></i>
-                    <span>Copy Code</span>
+                    <span>Copy</span>
+                </button>
+                <button class="btn-glow share-link-btn" id="share-link-btn">
+                    <i data-lucide="share-2"></i>
+                    <span>Share Link</span>
                 </button>
             </div>
 
@@ -155,6 +159,9 @@
         // Copy code button
         document.getElementById('copy-code-btn')?.addEventListener('click', copyReferralCode);
 
+        // Share link button
+        document.getElementById('share-link-btn')?.addEventListener('click', shareReferralLink);
+
         // Use referral form
         document.getElementById('use-referral-form')?.addEventListener('submit', useReferralCode);
     });
@@ -195,6 +202,26 @@
         navigator.clipboard.writeText(codeText).then(() => {
             showToast('Referral code copied!');
         });
+    }
+
+    function shareReferralLink() {
+        const code = document.getElementById('referral-code-text').textContent;
+        if (!code || code === 'Loading...' || code.includes('Please')) return;
+
+        const shareUrl = `${window.location.origin}/?refer=${code}`;
+        const shareData = {
+            title: 'Join GFG IEC Chapter',
+            text: `Use my referral code ${code} to join the GFG IEC Student Chapter and earn bonus points!`,
+            url: shareUrl
+        };
+
+        if (navigator.share) {
+            navigator.share(shareData).catch(console.error);
+        } else {
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                showToast('Referral link copied to clipboard!');
+            });
+        }
     }
 
     async function useReferralCode(e) {

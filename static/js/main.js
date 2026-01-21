@@ -101,7 +101,20 @@ function initNavigation() {
     if (currentUser) {
         updateNavUsername(currentUser);
         updateDrawerUserInfo(currentUser);
-        fetchUserStats(currentUser); // This will update points
+
+        // Initial fetch from DB
+        fetchUserStats(currentUser).then(() => {
+            // Background sync from GFG API to DB
+            syncUserWithBackend(currentUser).then(() => {
+                // Refresh UI with latest data from DB after sync
+                fetchUserStats(currentUser);
+
+                // If on leaderboard page, refresh it to show updated stats
+                if (document.getElementById('leaderboard-body')) {
+                    loadLeaderboard();
+                }
+            });
+        });
     }
 }
 
@@ -267,17 +280,21 @@ function initProfile() {
             let input = modalInput.value.trim();
             if (input) {
                 let handle = extractUsernameFromURL(input);
-                saveHandle(handle);
+                if (handle) {
+                    saveHandle(handle);
 
-                // Show stats in modal
-                if (modalUserStats) modalUserStats.classList.remove('hidden');
+                    // Show stats in modal
+                    if (modalUserStats) modalUserStats.classList.remove('hidden');
 
-                // Close modal after short delay
-                setTimeout(() => {
-                    if (modal) modal.classList.remove('active');
-                }, 1000);
+                    // Close modal after short delay
+                    setTimeout(() => {
+                        if (modal) modal.classList.remove('active');
+                    }, 1000);
+                } else {
+                    showToast('Please use a valid GFG profile URL. If you don\'t have an account, please make one on GFG and come back!');
+                }
             } else {
-                showToast('Please enter a valid GFG profile URL or username');
+                showToast('Please enter your GFG profile URL or username');
             }
         });
     }
@@ -289,15 +306,19 @@ function initProfile() {
             let input = profileInput.value.trim();
             if (input) {
                 let handle = extractUsernameFromURL(input);
-                await saveHandle(handle);
+                if (handle) {
+                    await saveHandle(handle);
 
-                // Show success on profile page
-                if (syncStatus) {
-                    syncStatus.classList.add('show');
-                    setTimeout(() => syncStatus.classList.remove('show'), 3000);
+                    // Show success on profile page
+                    if (syncStatus) {
+                        syncStatus.classList.add('show');
+                        setTimeout(() => syncStatus.classList.remove('show'), 3000);
+                    }
+                } else {
+                    showToast('Please use a valid GFG profile URL. If you don\'t have an account, please make one on GFG and come back!');
                 }
             } else {
-                showToast('Please enter a valid GFG profile URL or username');
+                showToast('Please enter your GFG profile URL or username');
             }
         });
     }
@@ -316,6 +337,55 @@ function initProfile() {
             }
         });
     }
+
+    // Check for referral code on load
+    checkReferralParam();
+}
+
+function checkReferralParam() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const referCode = urlParams.get('refer');
+    if (referCode) {
+        localStorage.setItem('pending_referral', referCode);
+        // Optional: Clean URL
+        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.pushState({ path: newUrl }, '', newUrl);
+
+        // If user is already logged in, try to redeem immediately
+        if (currentUser) {
+            redeemReferral(currentUser, referCode);
+        } else {
+            showToast('Referral code saved! Sign in to redeem +5 points.');
+        }
+    }
+}
+
+async function redeemReferral(username, code) {
+    try {
+        const response = await fetch(`${API_BASE}/referral/use`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: username, code: code })
+        });
+        const result = await response.json();
+
+        if (result.success) {
+            showToast(result.message);
+            localStorage.removeItem('pending_referral');
+            fetchUserStats(username); // Update points
+        } else {
+            // If already used, also clear it so we don't spam
+            if (result.error && (result.error.includes('already used') || result.error.includes('own referral'))) {
+                localStorage.removeItem('pending_referral');
+            }
+            // Optional: still show error if it's relevant, or silent fail if just "already used"
+            if (result.error && !result.error.includes('already used')) {
+                console.log("Referral error:", result.error);
+            }
+        }
+    } catch (err) {
+        console.error("Referral redemption failed", err);
+    }
 }
 
 // Shared save logic
@@ -330,25 +400,44 @@ async function saveHandle(handle) {
     // Sync with backend
     await syncUserWithBackend(handle);
 
+    // Check for pending referral
+    const pendingReferral = localStorage.getItem('pending_referral');
+    if (pendingReferral) {
+        await redeemReferral(handle, pendingReferral);
+    }
+
     // Show success message
     showToast(`Profile saved: ${handle}`);
 }
 
 // Extract username from GFG profile URL
 function extractUsernameFromURL(input) {
+    if (!input) return null;
+
+    const lowerInput = input.toLowerCase();
+
     // Check if input is a URL
-    if (input.includes('geeksforgeeks.org/profile/') || input.includes('gfg.org/profile/')) {
-        // Extract username from URL
-        // URL format: https://www.geeksforgeeks.org/profile/prakhardoneria
-        const parts = input.split('/profile/');
-        if (parts.length > 1) {
-            // Remove trailing slashes and query parameters
-            let username = parts[1].split('/')[0].split('?')[0];
-            return username;
+    if (lowerInput.includes('geeksforgeeks.org') || lowerInput.includes('gfg.org')) {
+        // Strict check: it MUST contain /profile/ to be valid
+        if (lowerInput.includes('/profile/')) {
+            const parts = input.split(/\/profile\//i);
+            if (parts.length > 1) {
+                // Remove trailing slashes and query parameters
+                let username = parts[1].split('/')[0].split('?')[0];
+                return username || null;
+            }
         }
+        // If it's any other GFG URL (like /connect/explore), it's invalid
+        return null;
     }
-    // If not a URL, return as is (assuming it's just the username)
-    return input;
+
+    // If it's not a URL at all (no http, no domain), check if it looks like a username
+    if (!input.includes('.') && !input.includes('/')) {
+        return input; // Assume it's a handle
+    }
+
+    // Otherwise it's an invalid URL or weird format
+    return null;
 }
 
 function updateProfileDisplay(handle) {

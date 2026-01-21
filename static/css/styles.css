@@ -114,21 +114,60 @@ img {
 /* ===================================
    Navigation
    =================================== */
+/* Navigation Container */
 .glass-nav {
     position: fixed;
-    top: 0;
-    width: 100%;
-    padding: 1rem 0;
     z-index: 1000;
-    background: rgba(10, 15, 26, 0.85);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    transition: var(--transition);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.glass-nav.scrolled {
-    padding: 0.5rem 0;
-    background: rgba(10, 15, 26, 0.95);
+/* Mobile: Standard Full Width */
+@media (max-width: 768px) {
+    .glass-nav {
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 1rem 0;
+        background: rgba(10, 15, 26, 0.95);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .glass-nav.scrolled {
+        padding: 0.5rem 0;
+    }
+}
+
+/* Desktop: Floating Premium Pill */
+@media (min-width: 769px) {
+    .glass-nav {
+        top: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 1200px;
+        padding: 0.8rem 0;
+
+        background: rgba(10, 15, 26, 0.6);
+        /* Translucent dark */
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 100px;
+        /* Pill shape */
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .glass-nav.scrolled {
+        top: 12px;
+        width: 85%;
+        padding: 0.5rem 0;
+        background: rgba(10, 15, 26, 0.85);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        border-color: rgba(47, 141, 70, 0.2);
+        /* Subtle brand tint */
+    }
 }
 
 .nav-container {
@@ -3705,222 +3744,28 @@ img {
     font-family: 'Courier New', monospace;
 }
 
-.copy-code-btn {
+.copy-code-btn,
+.share-link-btn {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     white-space: nowrap;
-}
-
-.referral-stats {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-}
-
-.stat-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: var(--radius-md);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.stat-item i {
-    width: 24px;
-    height: 24px;
-    color: var(--primary);
-}
-
-.stat-details {
-    display: flex;
-    flex-direction: column;
-}
-
-.stat-details .stat-value {
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: var(--primary);
-    line-height: 1;
-}
-
-.stat-details .stat-label {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    margin-top: 0.25rem;
-}
-
-/* Use Referral Card */
-.use-referral-card h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-white);
-    margin-bottom: 0.5rem;
-}
-
-.use-referral-card p {
-    color: var(--text-muted);
-    margin-bottom: 1.5rem;
-}
-
-.referral-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.referral-status {
-    margin-top: 1rem;
-    padding: 1rem;
-    border-radius: var(--radius-md);
-    text-align: center;
-}
-
-.success-message {
-    text-align: center;
-    padding: 2rem;
-}
-
-.success-message i {
-    width: 60px;
-    height: 60px;
-    color: var(--primary);
-    margin-bottom: 1rem;
-}
-
-.success-message h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-white);
-    margin-bottom: 0.5rem;
-}
-
-.success-message p {
-    color: var(--text-muted);
-}
-
-/* How it Works */
-.how-it-works h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-white);
-    margin-bottom: 2rem;
-    text-align: center;
-}
-
-.steps-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-}
-
-.step-card {
-    position: relative;
-    padding: 2rem 1.5rem;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: var(--radius-md);
-    text-align: center;
-    transition: var(--transition);
-}
-
-.step-card:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: var(--primary);
-    transform: translateY(-5px);
-}
-
-.step-number {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--primary);
-    color: white;
-    border-radius: 50%;
-    font-weight: 700;
-    font-size: 0.9rem;
-}
-
-.step-icon {
-    width: 60px;
-    height: 60px;
-    margin: 0 auto 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    border-radius: var(--radius-md);
-}
-
-.step-icon i {
-    width: 30px;
-    height: 30px;
-    color: white;
-}
-
-.step-card h4 {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--text-white);
-    margin-bottom: 0.75rem;
-}
-
-.step-card p {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-}
-
-/* Referrals Table */
-.referrals-table-wrapper {
-    overflow-x: auto;
-}
-
-.referrals-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.referrals-table thead th {
-    text-align: left;
-    padding: 1rem;
-    font-weight: 700;
-    color: var(--text-light);
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-bottom: 2px solid rgba(47, 141, 70, 0.3);
-}
-
-.referrals-table tbody tr {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    transition: var(--transition);
-}
-
-.referrals-table tbody tr:hover {
-    background: rgba(47, 141, 70, 0.05);
-}
-
-.referrals-table tbody td {
-    padding: 1rem;
-    color: var(--text-muted);
-}
-
-.points-cell {
-    color: var(--primary);
-    font-weight: 700;
+    padding: 0.8rem 1.5rem;
+    /* Ensure consistent padding */
 }
 
 /* Mobile Responsive for Referral */
 @media (max-width: 768px) {
     .referral-code-display {
         flex-direction: column;
+        gap: 1rem;
+    }
+
+    .code-box,
+    .copy-code-btn,
+    .share-link-btn {
+        width: 100%;
+        justify-content: center;
     }
 
     .referral-stats {
@@ -4269,8 +4114,7 @@ img {
     }
 
     .nav-actions {
-        gap: 0.35rem;
-        /* Reduced gap */
+        gap: 0.75rem;
     }
 
     /* Nav Points Mobile */

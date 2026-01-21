@@ -52,19 +52,58 @@ def fetch_gfg_data(handle: str):
 
 # --- Page Routes ---
 
+
+def format_count(count):
+    """Formats count to show ranges like 15+, 50+"""
+    if count <= 0: return "0"
+    if count < 15: return f"{count}" # Exact count for small numbers
+    
+    # Round down to nearest 5 or 10 or 50 based on size/preference
+    if count < 50:
+        base = (count // 5) * 5
+        return f"{base}+"
+    elif count < 100:
+        base = (count // 10) * 10
+        return f"{base}+"
+    else:
+        base = (count // 50) * 50
+        return f"{base}+"
+
 @app.route('/')
 def home():
     courses = load_json('data/courses.json')[:3]
-    events = load_json('data/events/upcoming.json')[:2]
-    ongoing = load_json('data/events/ongoing.json')
+    
+    # Event Counts
+    events_list = load_json('data/events/upcoming.json')
+    ongoing_list = load_json('data/events/ongoing.json')
+    past_list = load_json('data/events/past.json') # Load past to get accurate total events
+    
+    total_events = len(events_list) + len(ongoing_list) + len(past_list)
+    
+    events = events_list[:2]
+    ongoing = ongoing_list
     deals = load_json('data/deals.json')[:2]
     team = load_json('data/team.json')[:4]
+    
+    # Member Count
+    member_count = 0
+    if supabase:
+        try:
+            # We use count='exact' and head=True to avoid fetching data
+            count_res = supabase.table("users").select("handle", count="exact").execute()
+            member_count = count_res.count if count_res.count else 0
+        except Exception as e:
+            print(f"Error counting members: {e}")
+            member_count = 500 # Fallback
+            
     return render_template('index.html', 
                            courses=courses, 
                            events=events,
                            ongoing=ongoing,
                            deals=deals, 
-                           team=team)
+                           team=team,
+                           member_count=format_count(member_count),
+                           events_count=format_count(total_events))
 
 @app.route('/courses')
 def courses_page():
@@ -119,9 +158,16 @@ def add_user(handle):
     if not supabase: return jsonify({"error": "Database not connected"}), 500
     try:
         stats = fetch_gfg_data(handle)
+        
+        # Get referral points to add to total score
+        ref_data = refer.get_user_points(handle)
+        referral_points = ref_data.get('referral_points', 0) if ref_data else 0
+        
+        total_score = stats["score"] + referral_points
+        
         data = {
             "handle": handle,
-            "score": stats["score"],
+            "score": total_score,
             "tier": stats["tier"]
         }
         response = supabase.table("users").upsert(data, on_conflict="handle").execute()
@@ -138,9 +184,16 @@ def edit_user(old_handle):
     
     try:
         stats = fetch_gfg_data(new_handle)
+        
+        # Get referral points
+        ref_data = refer.get_user_points(new_handle)
+        referral_points = ref_data.get('referral_points', 0) if ref_data else 0
+        
+        total_score = stats["score"] + referral_points
+        
         response = supabase.table("users").update({
             "handle": new_handle, 
-            "score": stats["score"], 
+            "score": total_score, 
             "tier": stats["tier"]
         }).eq("handle", old_handle).execute()
         
@@ -167,22 +220,37 @@ def get_leaderboard():
 def get_my_rank(handle):
     if not supabase: return jsonify({"error": "Database not connected"}), 500
     try:
+        # Get GFG Score
         user_res = supabase.table("users").select("score").eq("handle", handle).execute()
         if not user_res.data:
             return jsonify({"error": "User not found"}), 404
         
-        user_score = user_res.data[0]["score"]
-        rank_res = supabase.table("users").select("count", count="exact").gt("score", user_score).execute()
+        gfg_score = user_res.data[0]["score"]
+        
+        # Get Referral Points
+        referral_points = 0
+        try:
+            ref_res = supabase.table("user_points").select("referral_points").eq("username", handle).execute()
+            if ref_res.data:
+                referral_points = ref_res.data[0].get('referral_points', 0)
+        except:
+            pass
+            
+        total_score = gfg_score + referral_points
+
+        # Calculate Rank (based on GFG score for now as leaderboard is GFG based)
+        # Ideally this should be based on total_score but requires DB schema change
+        rank_res = supabase.table("users").select("count", count="exact").gt("score", gfg_score).execute()
         rank = (rank_res.count or 0) + 1
         
         user_tier = "🥉 Bronze"
-        if user_score >= 500: user_tier = "💎 Diamond"
-        elif user_score >= 200: user_tier = "🥇 Gold"
-        elif user_score >= 50:  user_tier = "🥈 Silver"
+        if total_score >= 500: user_tier = "💎 Diamond"
+        elif total_score >= 200: user_tier = "🥇 Gold"
+        elif total_score >= 50:  user_tier = "🥈 Silver"
 
         return jsonify({
             "handle": handle,
-            "score": user_score,
+            "score": total_score, # Return TOTAL score for display
             "rank": rank,
             "tier": user_tier
         })
