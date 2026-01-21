@@ -5,6 +5,8 @@ import requests
 from pathlib import Path
 from dotenv import load_dotenv
 from supabase import create_client, Client
+import points
+import refer
 
 # --- Configuration & Setup ---
 env_path = Path(__file__).parent / ".env"
@@ -40,37 +42,13 @@ def load_json(filepath):
         return []
 
 def fetch_gfg_data(handle: str):
-    practice_url = "https://practiceapi.geeksforgeeks.org/api/v1/user/problems/submissions/"
-    try:
-        practice_res = requests.post(practice_url, json={"handle": handle}, timeout=10).json()
-    except:
-        practice_res = {}
-    
-    community_url = f"https://communityapi.geeksforgeeks.org/post/user/{handle}/"
-    try:
-        community_res = requests.get(community_url, params={"fetch_type": "posts", "page": 1}, timeout=10).json()
-    except:
-        community_res = {}
-
-    p_score = 0
-    if practice_res.get("status") == "success":
-        res = practice_res.get("result", {})
-        p_score = sum(len(res.get(lvl, {})) * PRACTICE_POINTS.get(lvl, 0) for lvl in PRACTICE_POINTS.keys())
-
-    c_score = 0
-    if community_res and "results" in community_res:
-        total_posts = community_res.get("count", 0)
-        total_likes = sum(p.get("like_count", 0) for p in community_res.get("results", []))
-        c_score = (total_posts * 5) + (total_likes * 2)
-
-    total_score = p_score + c_score
-    
-    tier = "🥉 Bronze"
-    if total_score >= 500: tier = "💎 Diamond"
-    elif total_score >= 200: tier = "🥇 Gold"
-    elif total_score >= 50:  tier = "🥈 Silver"
-
-    return {"score": total_score, "tier": tier}
+    stats = points.fetch_gfg_detailed_stats(handle)
+    return {
+        "score": stats["total_gfg_score"],
+        "tier": stats["tier"],
+        "question_points": stats["question_points"],
+        "post_points": stats["post_points"]
+    }
 
 # --- Page Routes ---
 
@@ -124,6 +102,10 @@ def profile_page():
 @app.route('/secret-id-gen')
 def id_generator():
     return render_template('id_generator.html')
+
+@app.route('/refer')
+def refer_page():
+    return render_template('refer.html')
 
 # --- API Routes ---
 
@@ -213,6 +195,92 @@ def delete_user(handle):
     try:
         supabase.table("users").delete().eq("handle", handle).execute()
         return jsonify({"message": f"User {handle} removed"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# --- Referral API Routes ---
+import refer
+
+@app.route("/api/referral/stats/<handle>", methods=['GET'])
+def get_referral_stats(handle):
+    """Get referral statistics for a user"""
+    if not supabase:
+        return jsonify({"error": "Database not connected"}), 500
+    
+    try:
+        # Generate referral code if doesn't exist
+        code_result = refer.create_referral_code(handle)
+        
+        if not code_result.get('success'):
+            return jsonify({"success": False, "error": code_result.get('error')}), 500
+        
+        # Get full stats
+        stats = refer.get_user_referral_stats(handle)
+        
+        if stats:
+            return jsonify({
+                "success": True,
+                "referral_code": stats.get('referral_code'),
+                "referral_count": stats.get('referral_count', 0),
+                "referrals_made": stats.get('referrals_made', []),
+                "was_referred_by": stats.get('was_referred_by')
+            })
+        else:
+            return jsonify({"success": False, "error": "Could not fetch stats"}), 500
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/referral/use", methods=['POST'])
+def use_referral():
+    """Apply a referral code"""
+    if not supabase:
+        return jsonify({"error": "Database not connected"}), 500
+    
+    try:
+        data = request.get_json()
+        username = data.get('username')
+        code = data.get('code')
+        
+        if not username or not code:
+            return jsonify({"success": False, "error": "Missing username or code"}), 400
+        
+        result = refer.use_referral_code(username, code)
+        
+        if result.get('success'):
+            return jsonify({
+                "success": True,
+                "message": f"Referral applied! +5 points for you and {result.get('referrer')}"
+            })
+        else:
+            return jsonify({"success": False, "error": result.get('error')}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/points/<handle>", methods=['GET'])
+def get_points_breakdown(handle):
+    """Get detailed points breakdown for a user"""
+    if not supabase:
+        return jsonify({"error": "Database not connected"}), 500
+    
+    try:
+        # Get REAL-TIME GFG stats for questions and posts
+        gfg_stats = points.fetch_gfg_detailed_stats(handle)
+        
+        # Get referral points from database
+        ref_stats = refer.get_user_points(handle)
+        referral_points = ref_stats.get('referral_points', 0) if ref_stats else 0
+        
+        # Calculate total points (Platform Points = GFG Score + Referral Points)
+        total_platform_points = gfg_stats["total_gfg_score"] + referral_points
+        
+        return jsonify({
+            "success": True,
+            "total_points": total_platform_points,
+            "referral_points": referral_points,
+            "post_points": gfg_stats["post_points"],
+            "question_points": gfg_stats["question_points"],
+            "gfg_score": gfg_stats["total_gfg_score"]
+        })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

@@ -15,6 +15,7 @@ let currentUser = localStorage.getItem(STORAGE_KEY) || null;
 document.addEventListener('DOMContentLoaded', () => {
     initLoader();
     initNavigation();
+    initModal();
     initRevealAnimations();
     initTabs();
     initProfile();
@@ -53,8 +54,11 @@ function hideLoader() {
 // ===================================
 function initNavigation() {
     const nav = document.querySelector('.glass-nav');
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenuBtn = document.getElementById('mobile-menu-toggle');
+    const drawer = document.getElementById('mobile-drawer');
+    const drawerBackdrop = document.getElementById('mobile-drawer-backdrop');
+    const drawerClose = document.getElementById('drawer-close');
+    const drawerLinks = document.querySelectorAll('.drawer-link');
 
     // Scroll effect
     window.addEventListener('scroll', () => {
@@ -65,27 +69,112 @@ function initNavigation() {
         }
     });
 
-    // Mobile menu toggle
-    if (mobileMenuBtn && mobileMenu) {
+    // Open drawer
+    if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('active');
-        });
-
-        // Close on link click
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.remove('active');
-            });
+            openDrawer();
         });
     }
 
-    // Update nav username if logged in
+    // Close drawer
+    if (drawerClose) {
+        drawerClose.addEventListener('click', () => {
+            closeDrawer();
+        });
+    }
+
+    // Close on backdrop click
+    if (drawerBackdrop) {
+        drawerBackdrop.addEventListener('click', () => {
+            closeDrawer();
+        });
+    }
+
+    // Close on link click
+    drawerLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            closeDrawer();
+        });
+    });
+
+    // Update nav username and points if logged in
     if (currentUser) {
-        const navUsername = document.getElementById('nav-username');
-        if (navUsername) {
-            navUsername.textContent = currentUser;
-        }
+        updateNavUsername(currentUser);
+        updateDrawerUserInfo(currentUser);
+        fetchUserStats(currentUser); // This will update points
     }
+}
+
+function openDrawer() {
+    const drawer = document.getElementById('mobile-drawer');
+    const backdrop = document.getElementById('mobile-drawer-backdrop');
+    if (drawer) drawer.classList.add('active');
+    if (backdrop) backdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeDrawer() {
+    const drawer = document.getElementById('mobile-drawer');
+    const backdrop = document.getElementById('mobile-drawer-backdrop');
+    if (drawer) drawer.classList.remove('active');
+    if (backdrop) backdrop.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function updateDrawerUserInfo(username, points = 0) {
+    const drawerUsername = document.getElementById('drawer-username');
+    const drawerPoints = document.getElementById('drawer-points');
+
+    if (drawerUsername) {
+        drawerUsername.textContent = username || 'Guest User';
+    }
+    if (drawerPoints) {
+        drawerPoints.textContent = `${points} Points`;
+    }
+}
+
+function updateNavPoints(points) {
+    const navPointsValue = document.getElementById('nav-points-value');
+    if (navPointsValue) {
+        navPointsValue.textContent = points || '0';
+    }
+}
+
+// ===================================
+// Modal
+// ===================================
+function initModal() {
+    const profileBtn = document.getElementById('profile-btn');
+    const modal = document.getElementById('profile-modal');
+    const closeBtn = modal?.querySelector('.close-modal');
+
+    if (!profileBtn || !modal) return;
+
+    // Open modal
+    profileBtn.addEventListener('click', () => {
+        modal.classList.add('active');
+    });
+
+    // Close modal
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+    }
+
+    // Close on overlay click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+        }
+    });
+
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            modal.classList.remove('active');
+        }
+    });
 }
 
 // ===================================
@@ -148,55 +237,118 @@ function initTabs() {
 // Profile System
 // ===================================
 function initProfile() {
+    // Modal Elements (Home Page)
+    const modalSaveBtn = document.getElementById('save-profile');
+    const modalInput = document.getElementById('username-input');
+    const modalUserStats = document.getElementById('user-stats-display');
+    const modal = document.getElementById('profile-modal');
+
+    // Profile Page Elements
     const profileForm = document.getElementById('profile-form');
-    const handleInput = document.getElementById('gfg-handle');
+    const profileInput = document.getElementById('gfg-handle');
     const clearBtn = document.getElementById('clear-data');
     const syncStatus = document.getElementById('sync-status');
 
-    // Load saved handle
-    if (handleInput && currentUser) {
-        handleInput.value = currentUser;
+    // Load saved handle into both possible inputs
+    if (currentUser) {
+        if (modalInput) modalInput.value = currentUser;
+        if (profileInput) profileInput.value = currentUser;
+
         updateProfileDisplay(currentUser);
+
+        if (modalUserStats) {
+            modalUserStats.classList.remove('hidden');
+        }
     }
 
-    // Save handler
-    if (profileForm) {
-        profileForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const handle = handleInput.value.trim();
+    // Modal Save Handler
+    if (modalSaveBtn && modalInput) {
+        modalSaveBtn.addEventListener('click', async () => {
+            let input = modalInput.value.trim();
+            if (input) {
+                let handle = extractUsernameFromURL(input);
+                saveHandle(handle);
 
-            if (handle) {
-                localStorage.setItem(STORAGE_KEY, handle);
-                currentUser = handle;
+                // Show stats in modal
+                if (modalUserStats) modalUserStats.classList.remove('hidden');
 
-                // Update UI
-                updateProfileDisplay(handle);
-                updateNavUsername(handle);
-
-                // Sync with backend
-                await syncUserWithBackend(handle);
-
-                // Show success
-                if (syncStatus) {
-                    syncStatus.classList.add('show');
-                    setTimeout(() => syncStatus.classList.remove('show'), 3000);
-                }
+                // Close modal after short delay
+                setTimeout(() => {
+                    if (modal) modal.classList.remove('active');
+                }, 1000);
+            } else {
+                showToast('Please enter a valid GFG profile URL or username');
             }
         });
     }
 
-    // Clear data
+    // Profile Page Form Handler
+    if (profileForm && profileInput) {
+        profileForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            let input = profileInput.value.trim();
+            if (input) {
+                let handle = extractUsernameFromURL(input);
+                await saveHandle(handle);
+
+                // Show success on profile page
+                if (syncStatus) {
+                    syncStatus.classList.add('show');
+                    setTimeout(() => syncStatus.classList.remove('show'), 3000);
+                }
+            } else {
+                showToast('Please enter a valid GFG profile URL or username');
+            }
+        });
+    }
+
+    // Clear data handler
     if (clearBtn) {
         clearBtn.addEventListener('click', () => {
             if (confirm('Are you sure you want to clear your data?')) {
                 localStorage.removeItem(STORAGE_KEY);
                 currentUser = null;
-                handleInput.value = '';
+                if (modalInput) modalInput.value = '';
+                if (profileInput) profileInput.value = '';
                 updateProfileDisplay(null);
                 updateNavUsername('Profile');
+                showToast('Data cleared');
             }
         });
     }
+}
+
+// Shared save logic
+async function saveHandle(handle) {
+    localStorage.setItem(STORAGE_KEY, handle);
+    currentUser = handle;
+
+    // Update UI
+    updateProfileDisplay(handle);
+    updateNavUsername(handle);
+
+    // Sync with backend
+    await syncUserWithBackend(handle);
+
+    // Show success message
+    showToast(`Profile saved: ${handle}`);
+}
+
+// Extract username from GFG profile URL
+function extractUsernameFromURL(input) {
+    // Check if input is a URL
+    if (input.includes('geeksforgeeks.org/profile/') || input.includes('gfg.org/profile/')) {
+        // Extract username from URL
+        // URL format: https://www.geeksforgeeks.org/profile/prakhardoneria
+        const parts = input.split('/profile/');
+        if (parts.length > 1) {
+            // Remove trailing slashes and query parameters
+            let username = parts[1].split('/')[0].split('?')[0];
+            return username;
+        }
+    }
+    // If not a URL, return as is (assuming it's just the username)
+    return input;
 }
 
 function updateProfileDisplay(handle) {
@@ -229,18 +381,42 @@ async function fetchUserStats(handle) {
 
         const data = await response.json();
 
-        // Update profile page
+        // Update profile page & Modal IDs
         const profileRank = document.getElementById('profile-rank');
         const profileScore = document.getElementById('profile-score');
+        const profileTierText = document.getElementById('profile-tier-text');
+        const displayTier = document.getElementById('display-tier');
+
+        // Update Leaderboard Page IDs
         const userRank = document.getElementById('user-rank');
         const userScore = document.getElementById('user-score');
         const userTier = document.getElementById('user-tier');
 
-        if (profileRank) profileRank.textContent = `#${data.rank}`;
-        if (profileScore) profileScore.textContent = data.score;
-        if (userRank) userRank.textContent = `#${data.rank}`;
-        if (userScore) userScore.textContent = data.score;
-        if (userTier) userTier.textContent = data.tier || '--';
+        // Apply updates
+        const rankFormatted = `#${data.rank}`;
+        const scoreFormatted = data.score;
+        const tierName = data.tier || 'Bronze';
+
+        // Define tier badges
+        const tierBadges = {
+            'Diamond': '💎 Diamond',
+            'Gold': '🥇 Gold',
+            'Silver': '🥈 Silver',
+            'Bronze': '🥉 Bronze'
+        };
+
+        if (profileRank) profileRank.textContent = rankFormatted;
+        if (profileScore) profileScore.textContent = scoreFormatted;
+        if (profileTierText) profileTierText.textContent = tierName;
+        if (displayTier) displayTier.textContent = tierBadges[tierName] || `🥉 ${tierName}`;
+
+        if (userRank) userRank.textContent = rankFormatted;
+        if (userScore) userScore.textContent = scoreFormatted;
+        if (userTier) userTier.textContent = tierName;
+
+        // Update nav points and drawer
+        updateNavPoints(scoreFormatted);
+        updateDrawerUserInfo(handle, scoreFormatted);
 
     } catch (err) {
         console.log('Stats fetch failed:', err.message);

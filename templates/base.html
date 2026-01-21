@@ -47,28 +47,80 @@
                         class="nav-link {% if request.endpoint == 'deals_page' %}active{% endif %}">Deals</a></li>
                 <li><a href="{{ url_for('team_page') }}"
                         class="nav-link {% if request.endpoint == 'team_page' %}active{% endif %}">Team</a></li>
+                <li><a href="{{ url_for('refer_page') }}"
+                        class="nav-link {% if request.endpoint == 'refer_page' %}active{% endif %}">Refer</a></li>
             </ul>
             <div class="nav-actions">
+                <div class="nav-points" id="nav-points">
+                    <i data-lucide="award"></i>
+                    <span id="nav-points-value">0</span>
+                </div>
                 <a href="{{ url_for('profile_page') }}" class="btn-profile">
                     <i data-lucide="user"></i>
                     <span id="nav-username">Profile</span>
                 </a>
-                <button class="mobile-menu-btn" id="mobile-menu-btn">
-                    <i data-lucide="menu"></i>
+                <button class="mobile-menu-btn" id="mobile-menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </button>
             </div>
         </div>
-        <!-- Mobile Menu -->
-        <div class="mobile-menu" id="mobile-menu">
-            <a href="{{ url_for('home') }}">Home</a>
-            <a href="{{ url_for('leaderboard_page') }}">Leaderboard</a>
-            <a href="{{ url_for('events_page') }}">Events</a>
-            <a href="{{ url_for('courses_page') }}">Courses</a>
-            <a href="{{ url_for('deals_page') }}">Deals</a>
-            <a href="{{ url_for('team_page') }}">Team</a>
-            <a href="{{ url_for('profile_page') }}">Profile</a>
-        </div>
     </nav>
+
+    <!-- Mobile Side Drawer -->
+    <div class="mobile-drawer-backdrop" id="mobile-drawer-backdrop"></div>
+    <div class="mobile-drawer" id="mobile-drawer">
+        <div class="drawer-header">
+            <div class="drawer-user-info">
+                <div class="drawer-avatar">
+                    <i data-lucide="user"></i>
+                </div>
+                <div class="drawer-user-details">
+                    <span class="drawer-username" id="drawer-username">Guest User</span>
+                    <span class="drawer-points" id="drawer-points">0 Points</span>
+                </div>
+            </div>
+            <button class="drawer-close" id="drawer-close">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <nav class="drawer-nav">
+            <a href="{{ url_for('home') }}" class="drawer-link">
+                <i data-lucide="home"></i>
+                <span>Home</span>
+            </a>
+            <a href="{{ url_for('leaderboard_page') }}" class="drawer-link">
+                <i data-lucide="trophy"></i>
+                <span>Leaderboard</span>
+            </a>
+            <a href="{{ url_for('events_page') }}" class="drawer-link">
+                <i data-lucide="calendar"></i>
+                <span>Events</span>
+            </a>
+            <a href="{{ url_for('courses_page') }}" class="drawer-link">
+                <i data-lucide="book-open"></i>
+                <span>Courses</span>
+            </a>
+            <a href="{{ url_for('deals_page') }}" class="drawer-link">
+                <i data-lucide="gift"></i>
+                <span>Deals</span>
+            </a>
+            <a href="{{ url_for('team_page') }}" class="drawer-link">
+                <i data-lucide="users"></i>
+                <span>Team</span>
+            </a>
+            <a href="{{ url_for('refer_page') }}" class="drawer-link">
+                <i data-lucide="gift"></i>
+                <span>Refer & Earn</span>
+            </a>
+            <div class="drawer-divider"></div>
+            <a href="{{ url_for('profile_page') }}" class="drawer-link" id="drawer-profile-btn">
+                <i data-lucide="settings"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+    </div>
 
     <!-- Page Transition Wrapper -->
     <main class="page-content" id="main-content">
@@ -90,6 +142,7 @@
                 <a href="{{ url_for('leaderboard_page') }}">Leaderboard</a>
                 <a href="{{ url_for('events_page') }}">Events</a>
                 <a href="{{ url_for('courses_page') }}">Courses</a>
+                <a href="{{ url_for('refer_page') }}">Refer & Earn</a>
             </div>
             <div class="footer-links-section">
                 <h4>Resources</h4>
@@ -119,13 +172,12 @@
         <div class="footer-bottom">
             <div class="footer-bottom-content">
                 <p>&copy; 2026 GFG IEC Student Chapter. All Rights Reserved.</p>
-                <div class="footer-bottom-links">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                </div>
             </div>
         </div>
     </footer>
+
+    <!-- Points Breakdown Modal -->
+    {% include 'points.html' %}
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script>

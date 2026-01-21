@@ -1,0 +1,468 @@
+<!-- Points Breakdown Modal -->
+<div class="points-modal" id="points-modal">
+    <div class="points-modal-content glass-card">
+        <button class="close-modal" id="close-points-modal">
+            <i data-lucide="x"></i>
+        </button>
+
+        <div class="points-modal-header">
+            <div class="points-icon-large">
+                <i data-lucide="award"></i>
+            </div>
+            <h2>Your Points Breakdown</h2>
+            <p class="total-points">Total: <span id="modal-total-points">0</span> Points</p>
+        </div>
+
+        <div class="points-breakdown">
+            <!-- Referral Points -->
+            <div class="points-category">
+                <div class="category-header">
+                    <div class="category-icon" style="background: linear-gradient(135deg, #2f8d46, #3da856);">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <div class="category-info">
+                        <h4>Referrals</h4>
+                        <p>Invite friends to earn points</p>
+                    </div>
+                    <div class="category-points">
+                        <span id="referral-points-value">0</span>
+                        <small>pts</small>
+                    </div>
+                </div>
+                <div class="category-details">
+                    <span>+5 points per friend</span>
+                    <a href="/refer" class="btn-outline btn-sm">Refer Now</a>
+                </div>
+            </div>
+
+            <!-- Post Points -->
+            <div class="points-category">
+                <div class="category-header">
+                    <div class="category-icon" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);">
+                        <i data-lucide="file-text"></i>
+                    </div>
+                    <div class="category-info">
+                        <h4>Posts</h4>
+                        <p>Write articles & blogs</p>
+                    </div>
+                    <div class="category-points">
+                        <span id="post-points-value">0</span>
+                        <small>pts</small>
+                    </div>
+                </div>
+                <div class="category-details">
+                    <span>+10 points per post</span>
+                </div>
+            </div>
+
+            <!-- Question Points -->
+            <div class="points-category">
+                <div class="category-header">
+                    <div class="category-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+                        <i data-lucide="help-circle"></i>
+                    </div>
+                    <div class="category-info">
+                        <h4>Questions</h4>
+                        <p>Solve coding problems</p>
+                    </div>
+                    <div class="category-points">
+                        <span id="question-points-value">0</span>
+                        <small>pts</small>
+                    </div>
+                </div>
+                <div class="category-details">
+                    <span>+3 points per question</span>
+                </div>
+            </div>
+
+            <!-- GFG Score (from leaderboard) -->
+            <div class="points-category">
+                <div class="category-header">
+                    <div class="category-icon" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">
+                        <i data-lucide="trophy"></i>
+                    </div>
+                    <div class="category-info">
+                        <h4>GFG Score</h4>
+                        <p>Your GeeksforGeeks rank</p>
+                    </div>
+                    <div class="category-points">
+                        <span id="gfg-score-value">0</span>
+                        <small>pts</small>
+                    </div>
+                </div>
+                <div class="category-details">
+                    <span>Based on your GFG activity</span>
+                    <a href="https://www.geeksforgeeks.org/" target="_blank" class="btn-outline btn-sm">View GFG</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="points-modal-footer">
+            <h3>How to Earn More Points?</h3>
+            <div class="earn-tips">
+                <div class="tip-item">
+                    <i data-lucide="check-circle"></i>
+                    <span>Refer friends using your code</span>
+                </div>
+                <div class="tip-item">
+                    <i data-lucide="check-circle"></i>
+                    <span>Stay active on GeeksforGeeks</span>
+                </div>
+                <div class="tip-item">
+                    <i data-lucide="check-circle"></i>
+                    <span>Participate in events & workshops</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Points Modal Styles */
+    .points-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(10px);
+        z-index: 2000;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        overflow-y: auto;
+    }
+
+    .points-modal.active {
+        display: flex;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .points-modal-content {
+        position: relative;
+        max-width: 600px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        animation: slideUp 0.4s ease;
+    }
+
+    .points-modal-header {
+        text-align: center;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .points-icon-large {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        border-radius: 50%;
+    }
+
+    .points-icon-large i {
+        width: 40px;
+        height: 40px;
+        color: white;
+    }
+
+    .points-modal-header h2 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+        color: var(--text-white);
+    }
+
+    .total-points {
+        font-size: 1.2rem;
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    .total-points span {
+        color: var(--primary);
+        font-size: 2rem;
+        font-weight: 800;
+    }
+
+    .points-breakdown {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .points-category {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: var(--radius-md);
+        padding: 1.5rem;
+        transition: var(--transition);
+    }
+
+    .points-category:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(47, 141, 70, 0.3);
+    }
+
+    .category-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .category-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .category-icon i {
+        width: 24px;
+        height: 24px;
+        color: white;
+    }
+
+    .category-info {
+        flex: 1;
+    }
+
+    .category-info h4 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-white);
+        margin-bottom: 0.25rem;
+    }
+
+    .category-info p {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+    }
+
+    .category-points {
+        display: flex;
+        align-items: baseline;
+        gap: 0.25rem;
+    }
+
+    .category-points span {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--primary);
+        transition: opacity 0.3s ease;
+    }
+
+    .category-points span.loading {
+        opacity: 0.5;
+        animation: pointsPulse 1.5s infinite ease-in-out;
+    }
+
+    @keyframes pointsPulse {
+
+        0%,
+        100% {
+            opacity: 0.5;
+        }
+
+        50% {
+            opacity: 0.2;
+        }
+    }
+
+    .category-points small {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+
+    .category-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        font-size: 0.85rem;
+        color: var(--text-muted);
+    }
+
+    .btn-sm {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    .coming-soon {
+        padding: 0.25rem 0.75rem;
+        background: rgba(251, 191, 36, 0.2);
+        color: #fbbf24;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .points-modal-footer {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .points-modal-footer h3 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--text-white);
+        margin-bottom: 1rem;
+    }
+
+    .earn-tips {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .tip-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: var(--text-light);
+        font-size: 0.9rem;
+    }
+
+    .tip-item i {
+        width: 18px;
+        height: 18px;
+        color: var(--primary);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .points-modal-content {
+            padding: 1.5rem;
+        }
+
+        .points-icon-large {
+            width: 60px;
+            height: 60px;
+        }
+
+        .points-icon-large i {
+            width: 30px;
+            height: 30px;
+        }
+
+        .points-modal-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .total-points span {
+            font-size: 1.5rem;
+        }
+
+        .category-header {
+            flex-wrap: wrap;
+        }
+
+        .category-points {
+            width: 100%;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+
+        .category-details {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+    }
+</style>
+
+<script>
+    // Points Modal JavaScript
+    document.addEventListener('DOMContentLoaded', () => {
+        // Open modal when clicking on nav points
+        const navPoints = document.getElementById('nav-points');
+        const pointsModal = document.getElementById('points-modal');
+        const closeModal = document.getElementById('close-points-modal');
+
+        if (navPoints && pointsModal) {
+            navPoints.addEventListener('click', () => {
+                openPointsModal();
+            });
+
+            navPoints.style.cursor = 'pointer';
+        }
+
+        if (closeModal) {
+            closeModal.addEventListener('click', () => {
+                pointsModal.classList.remove('active');
+            });
+        }
+
+        // Close on backdrop click
+        if (pointsModal) {
+            pointsModal.addEventListener('click', (e) => {
+                if (e.target === pointsModal) {
+                    pointsModal.classList.remove('active');
+                }
+            });
+        }
+
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && pointsModal && pointsModal.classList.contains('active')) {
+                pointsModal.classList.remove('active');
+            }
+        });
+    });
+
+    async function openPointsModal() {
+        const username = localStorage.getItem('gfg_handle');
+        const modal = document.getElementById('points-modal');
+
+        if (!username) {
+            showToast('Please set your GFG handle first');
+            return;
+        }
+
+        // Show modal immediately
+        modal.classList.add('active');
+        lucide.createIcons();
+
+        // Add loading state to values
+        const valueIds = ['modal-total-points', 'referral-points-value', 'post-points-value', 'question-points-value', 'gfg-score-value'];
+        valueIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.classList.add('loading');
+        });
+
+        try {
+            // Fetch points breakdown
+            const response = await fetch(`/api/points/${username}`);
+            const data = await response.json();
+
+            if (data.success) {
+                // Update modal with actual data
+                document.getElementById('modal-total-points').textContent = data.total_points || 0;
+                document.getElementById('referral-points-value').textContent = data.referral_points || 0;
+                document.getElementById('post-points-value').textContent = data.post_points || 0;
+                document.getElementById('question-points-value').textContent = data.question_points || 0;
+                document.getElementById('gfg-score-value').textContent = data.gfg_score || 0;
+            }
+        } catch (error) {
+            console.error('Error fetching points:', error);
+        } finally {
+            // Remove loading state
+            valueIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.remove('loading');
+            });
+        }
+    }
+</script>

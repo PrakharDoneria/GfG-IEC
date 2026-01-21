@@ -32,16 +32,76 @@
                 <li><a href="#leaderboard">Leaderboard</a></li>
                 <li><a href="#events">Events</a></li>
                 <li><a href="#courses">Courses</a></li>
+                <li><a href="{{ url_for('refer_page') }}">Refer & Earn</a></li>
                 <li><a href="#team">Team</a></li>
             </ul>
             <div class="nav-actions">
+                <div class="nav-points" id="nav-points">
+                    <i data-lucide="award"></i>
+                    <span id="nav-points-value">0</span>
+                </div>
                 <button id="profile-btn" class="btn-primary">
                     <i data-lucide="user"></i>
                     <span id="nav-username">Profile</span>
                 </button>
+                <button class="mobile-menu-btn" id="mobile-menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </div>
     </nav>
+
+    <!-- Mobile Side Drawer -->
+    <div class="mobile-drawer-backdrop" id="mobile-drawer-backdrop"></div>
+    <div class="mobile-drawer" id="mobile-drawer">
+        <div class="drawer-header">
+            <div class="drawer-user-info">
+                <div class="drawer-avatar">
+                    <i data-lucide="user"></i>
+                </div>
+                <div class="drawer-user-details">
+                    <span class="drawer-username" id="drawer-username">Guest User</span>
+                    <span class="drawer-points" id="drawer-points">0 Points</span>
+                </div>
+            </div>
+            <button class="drawer-close" id="drawer-close">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <nav class="drawer-nav">
+            <a href="#hero" class="drawer-link">
+                <i data-lucide="home"></i>
+                <span>Home</span>
+            </a>
+            <a href="#leaderboard" class="drawer-link">
+                <i data-lucide="trophy"></i>
+                <span>Leaderboard</span>
+            </a>
+            <a href="#events" class="drawer-link">
+                <i data-lucide="calendar"></i>
+                <span>Events</span>
+            </a>
+            <a href="#courses" class="drawer-link">
+                <i data-lucide="book-open"></i>
+                <span>Courses</span>
+            </a>
+            <a href="#team" class="drawer-link">
+                <i data-lucide="users"></i>
+                <span>Team</span>
+            </a>
+            <a href="{{ url_for('refer_page') }}" class="drawer-link">
+                <i data-lucide="gift"></i>
+                <span>Refer & Earn</span>
+            </a>
+            <div class="drawer-divider"></div>
+            <a href="#" class="drawer-link" id="drawer-profile-btn">
+                <i data-lucide="settings"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+    </div>
 
     <main>
         <!-- Hero Section -->
@@ -79,8 +139,15 @@
                 <h2>My Profile</h2>
                 <div class="profile-form">
                     <div class="input-group">
-                        <label for="username">GFG Handle</label>
-                        <input type="text" id="username-input" placeholder="Enter handle (e.g. gfg_user)">
+                        <label for="username">GFG Profile URL</label>
+                        <input type="text" id="username-input"
+                            placeholder="https://www.geeksforgeeks.org/profile/your-username">
+                        <span class="input-hint-modal">
+                            <i data-lucide="info"></i>
+                            Open <a href="https://www.geeksforgeeks.org/profile/" target="_blank"
+                                style="color: var(--primary); text-decoration: underline;">your GFG profile</a> and copy
+                            the URL
+                        </span>
                     </div>
                     <button id="save-profile" class="btn-primary">Save & Sync</button>
                 </div>
@@ -177,11 +244,6 @@
                 <img src="https://media.geeksforgeeks.org/gfg-gg-logo.svg" alt="GFG Logo">
                 <p>IEC College of Engineering & Technology</p>
             </div>
-            <div class="footer-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Contact Us</a>
-            </div>
             <div class="footer-socials">
                 <a href="#"><i data-lucide="github"></i></a>
                 <a href="#"><i data-lucide="linkedin"></i></a>
@@ -191,7 +253,20 @@
         <div class="footer-bottom">
             <p>&copy; 2026 GFG IEC Student Chapter. All Rights Reserved.</p>
         </div>
+        </div>
     </footer>
+
+    <!-- Points Modal -->
+    <div id="points-modal-container"></div>
+    <script>
+        // Load points modal dynamically
+        fetch('/static/templates/points.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('points-modal-container').innerHTML = html;
+                lucide.createIcons();
+            });
+    </script>
 
     <script src="static/js/main.js"></script>
     <script>
