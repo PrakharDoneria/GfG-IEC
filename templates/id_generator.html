@@ -1,0 +1,525 @@
+{% extends 'base.html' %}
+
+{% block title %}ID Card Generator{% endblock %}
+
+{% block content %}
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Space+Grotesk:wght@700&display=swap"
+    rel="stylesheet">
+
+<style>
+    .generator-section {
+        padding: 8rem 0 4rem;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at top right, rgba(47, 141, 70, 0.1), transparent 40%);
+    }
+
+    .generator-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3rem;
+        justify-content: center;
+        align-items: flex-start;
+        width: 100%;
+        max-width: 1200px;
+        padding: 0 2rem;
+    }
+
+    .form-card {
+        flex: 1;
+        min-width: 350px;
+        max-width: 500px;
+    }
+
+    .preview-card {
+        flex: 1;
+        min-width: 350px;
+        max-width: 500px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .canvas-wrapper {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        background: #fff;
+    }
+
+    canvas {
+        display: block;
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Form Styles */
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--text-light);
+        font-weight: 500;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-md);
+        color: var(--text-white);
+        font-family: inherit;
+        transition: var(--transition);
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .file-upload {
+        position: relative;
+        overflow: hidden;
+        padding: 2rem;
+        border: 2px dashed rgba(255, 255, 255, 0.2);
+        border-radius: var(--radius-md);
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition);
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .file-upload:hover {
+        border-color: var(--primary);
+        background: rgba(47, 141, 70, 0.05);
+    }
+
+    .file-upload input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .upload-label {
+        color: var(--text-muted);
+        pointer-events: none;
+    }
+
+    .upload-label i {
+        display: block;
+        margin: 0 auto 0.5rem;
+        width: 32px;
+        height: 32px;
+        color: var(--primary);
+    }
+
+    .loading-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-weight: 600;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+    }
+
+    .loading-overlay.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    /* Range slider for image adjustment */
+    .adjustment-controls {
+        display: none;
+        /* Shown when image is loaded */
+        margin-top: 1rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: var(--radius-md);
+    }
+
+    .adjustment-controls.visible {
+        display: block;
+    }
+
+    .range-group {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .range-group label {
+        min-width: 60px;
+        font-size: 0.85rem;
+        margin: 0;
+    }
+
+    input[type=range] {
+        flex: 1;
+    }
+</style>
+
+<section class="generator-section">
+    <div class="generator-container">
+
+        <!-- Input Form -->
+        <div class="form-card glass-card reveal-up">
+            <h2 class="section-title" style="margin-bottom: 2rem;">ID Card <span class="highlight">Generator</span></h2>
+
+            <div class="form-group">
+                <div class="file-upload" id="drop-zone">
+                    <input type="file" id="photo-input" accept="image/*">
+                    <div class="upload-label">
+                        <i data-lucide="upload-cloud"></i>
+                        <span id="file-name">Click or Drag to Upload Photo</span>
+                    </div>
+                </div>
+
+                <!-- Image Adjustments -->
+                <div class="adjustment-controls" id="adjustments">
+                    <h4 style="margin-bottom: 0.8rem; font-size: 0.9rem; color: var(--text-light);">Adjust Photo</h4>
+                    <div class="range-group">
+                        <label>Zoom</label>
+                        <input type="range" id="zoom-range" min="0.5" max="5" step="0.1" value="1">
+                    </div>
+                    <div class="range-group">
+                        <label>X-Pos</label>
+                        <input type="range" id="x-range" min="-300" max="300" value="0">
+                    </div>
+                    <div class="range-group">
+                        <label>Y-Pos</label>
+                        <input type="range" id="y-range" min="-300" max="300" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" id="name-input" class="form-control" placeholder="e.g. Prakhar Doneria">
+            </div>
+
+            <div class="form-group">
+                <label>Role</label>
+                <input type="text" id="role-input" class="form-control" placeholder="e.g. TECHNICAL LEAD">
+            </div>
+
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" id="phone-input" class="form-control" placeholder="+91 98765 43210">
+            </div>
+
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="email-input" class="form-control" placeholder="user@example.com">
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                <button id="download-btn" class="btn-glow" style="flex: 1;">
+                    <span>Download</span>
+                    <i data-lucide="download"></i>
+                </button>
+                <button id="linkedin-btn" class="btn-glow" style="flex: 1; background: #0077b5; border-color: #0077b5;">
+                    <span>Share</span>
+                    <i data-lucide="linkedin"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Canvas Preview -->
+        <div class="preview-card reveal-up" style="--delay: 0.2s">
+            <h3 style="color: var(--text-muted);">Live Preview</h3>
+            <div class="canvas-wrapper">
+                <canvas id="id-canvas"></canvas>
+                <div class="loading-overlay" id="canvas-loader">Generating...</div>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-dim); text-align: center;">
+                Generated client-side. No data is stored on our servers.
+            </p>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const canvas = document.getElementById('id-canvas');
+        const ctx = canvas.getContext('2d');
+        const inputs = ['name', 'role', 'phone', 'email'].map(id => document.getElementById(`${id}-input`));
+        const photoInput = document.getElementById('photo-input');
+        const downloadBtn = document.getElementById('download-btn');
+        const loader = document.getElementById('canvas-loader');
+
+        // --- URL Parameter Handling ---
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('name')) document.getElementById('name-input').value = urlParams.get('name');
+        if (urlParams.has('email')) document.getElementById('email-input').value = urlParams.get('email');
+        if (urlParams.has('number')) document.getElementById('phone-input').value = urlParams.get('number');
+        if (urlParams.has('role')) document.getElementById('role-input').value = urlParams.get('role');
+        if (urlParams.has('position')) document.getElementById('role-input').value = urlParams.get('position');
+
+        let templateImg = new Image();
+        let userImg = null;
+
+        // Transform State
+        let transform = {
+            scale: 1,
+            x: 0,
+            y: 0
+        };
+
+        // Load Template
+        templateImg.src = "{{ url_for('static', filename='assets/idcard.png') }}";
+
+        templateImg.onload = () => {
+            // Set canvas size to match template
+            // We might want to scale it down for display if it's huge, 
+            // but keep internal resolution high for download.
+            // Responsive CSS handles display size.
+            canvas.width = templateImg.width;
+            canvas.height = templateImg.height;
+            draw();
+        };
+
+        // Event Listeners
+        inputs.forEach(input => input.addEventListener('input', draw));
+
+        photoInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        userImg = img;
+                        // Reset transforms
+                        transform = { scale: 1, x: 0, y: 0 };
+                        document.getElementById('zoom-range').value = 1;
+                        document.getElementById('x-range').value = 0;
+                        document.getElementById('y-range').value = 0;
+
+                        document.getElementById('adjustments').classList.add('visible');
+                        document.getElementById('file-name').textContent = file.name;
+                        draw();
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Adjustment Listeners
+        document.getElementById('zoom-range').addEventListener('input', (e) => {
+            transform.scale = parseFloat(e.target.value);
+            draw();
+        });
+        document.getElementById('x-range').addEventListener('input', (e) => {
+            transform.x = parseInt(e.target.value);
+            draw();
+        });
+        document.getElementById('y-range').addEventListener('input', (e) => {
+            transform.y = parseInt(e.target.value);
+            draw();
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            const link = document.createElement('a');
+            const nameVal = document.getElementById('name-input').value || 'Card';
+            link.download = `GFG_ID_${nameVal.replace(/\s+/g, '_')}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+
+        document.getElementById('linkedin-btn').addEventListener('click', () => {
+            const role = document.getElementById('role-input').value || 'Member';
+            const text = `Excited to be selected as ${role} at GeeksforGeeks IEC Student Chapter! 🚀\n\n#GFG #IEC #StudentChapter #Growth`;
+            const linkedinUrl = `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(text)}`;
+
+            // Alert user to attach image
+            alert("Your post draft will open in a new tab.\n\nPlease don't forget to attach the ID Card image you just downloaded!");
+            window.open(linkedinUrl, '_blank');
+        });
+
+        function draw() {
+            if (!templateImg.complete) return;
+
+            // 1. Clear Canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Coordinates (Based on visual inspection of the uploaded image)
+            // Assuming image is roughly 1080x1920 (9:16 vertical)
+            // Center Circle: X=540, Y=700, R=250 (Approx)
+            const cw = canvas.width;
+            const ch = canvas.height;
+
+            // Dynamic percents if resolution varies
+            const circle = {
+                x: cw * 0.5,
+                y: ch * 0.385, // Adjusted based on visual ~38% down
+                r: cw * 0.22   // Radius approx 22% of width
+            };
+
+            // 2. Draw User Photo (Clipped) --------------------------
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(circle.x, circle.y, circle.r, 0, Math.PI * 2, true);
+            ctx.closePath();
+            ctx.clip();
+
+            if (userImg) {
+                // Calculate cover fit
+                const ratio = Math.max((circle.r * 2) / userImg.width, (circle.r * 2) / userImg.height);
+                const scaledW = userImg.width * ratio * transform.scale;
+                const scaledH = userImg.height * ratio * transform.scale;
+                const centerX = circle.x - (scaledW / 2) + transform.x;
+                const centerY = circle.y - (scaledH / 2) + transform.y;
+
+                ctx.drawImage(userImg, centerX, centerY, scaledW, scaledH);
+            } else {
+                // Placeholder Gray
+                ctx.fillStyle = '#f0f0f0';
+                ctx.fill();
+                ctx.fillStyle = '#ccc';
+                ctx.font = `bold ${cw * 0.05}px Inter`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('Upload Photo', circle.x, circle.y);
+            }
+            ctx.restore();
+
+            // 3. Draw Template Overlay ------------------------------
+            // We draw the template ON TOP if the template has transparency in the circle hole.
+            // IF the template provided has a white circle, we need to draw user photo on top?
+            // Usually ID card templates have a transparent hole.
+            // If the uploaded PNG has a white hole, we have a problem. 
+            // Strategy: The USER said "replace placeholder". 
+            // If the image is opaque, we must draw user photo ON TOP.
+            // Let's assume we draw photo ON TOP of template, masked by circle.
+            // Wait, if I draw photo on top, I might cover borders.
+            // Best approach without modifying template: 
+            // Draw Template -> Clip Circle -> Draw Photo? No, that erases template content in circle.
+            // Let's try: Draw Template. Then Draw Photo masked by circle.
+            // This works if the placeholder area is just empty space or doesn't matter.
+
+            // Re-draw strategy:
+            // 1. Draw Template
+            // 2. Draw User Photo (masked by circle)
+            ctx.drawImage(templateImg, 0, 0, cw, ch);
+
+            // Check if we need to redraw the photo on top (if template doesn't have a transparent hole)
+            // The visual shows a white/blue cloud placeholder. It is opaque.
+            // So we MUST draw the user photo on top of the template.
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(circle.x, circle.y, circle.r, 0, Math.PI * 2, true);
+            ctx.closePath();
+            // Optional: Add a border to the photo to blend it nicely if needed
+            // ctx.strokeStyle = '#2f8d46';
+            // ctx.lineWidth = 5;
+            // ctx.stroke();
+            ctx.clip();
+
+            if (userImg) {
+                const ratio = Math.max((circle.r * 2) / userImg.width, (circle.r * 2) / userImg.height);
+                const scaledW = userImg.width * ratio * transform.scale;
+                const scaledH = userImg.height * ratio * transform.scale;
+                const centerX = circle.x - (scaledW / 2) + transform.x;
+                const centerY = circle.y - (scaledH / 2) + transform.y;
+                ctx.drawImage(userImg, centerX, centerY, scaledW, scaledH);
+            }
+            ctx.restore();
+
+            // 4. Draw Text with Custom Fonts ------------------------------------------
+
+            const startX = cw * 0.25; // Consistent left margin
+
+            // A. Name (Large, Left Aligned)
+            const name = document.getElementById('name-input').value;
+            if (name) {
+                ctx.font = `900 ${cw * 0.05}px 'Poppins', sans-serif`;
+                ctx.fillStyle = '#2d2d2d';
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(name.toUpperCase(), startX, ch * 0.62);
+            }
+
+            // B. Role (Style Font, Left Aligned below Name)
+            const role = document.getElementById('role-input').value;
+            const nameVal = document.getElementById('name-input').value.trim().toLowerCase();
+
+            // Security Check
+            const restrictedWords = [
+                'cm', 'campus ambassador', 'campus mantri',
+                'leader', 'president', 'vice president',
+                'head', 'chairperson',
+                'organisr', 'organizer',
+                'team lead', 'lead'
+            ];
+            const authorizedName = 'prakhar doneria';
+
+            let displayRole = role;
+            let roleColor = '#2f8d46'; // Default GFG Green
+
+            if (role) {
+                const roleLower = role.toLowerCase();
+                const isRestricted = restrictedWords.some(word => roleLower.includes(word));
+                const isAuthorized = nameVal === authorizedName;
+
+                if (isRestricted && !isAuthorized) {
+                    displayRole = "⚠️ UNAUTHORIZED ROLE";
+                    roleColor = '#dc2626'; // Red for warning
+                }
+
+                ctx.font = `700 ${cw * 0.035}px 'Space Grotesk', sans-serif`;
+                ctx.fillStyle = roleColor;
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(displayRole.toUpperCase(), startX, ch * 0.67);
+            }
+
+            // C. Contact Info (Clean, Left Aligned)
+            const phone = document.getElementById('phone-input').value;
+            const email = document.getElementById('email-input').value;
+
+            ctx.font = `600 ${cw * 0.03}px 'Poppins', sans-serif`;
+            ctx.fillStyle = '#4a4a4a';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+
+            const contactStartY = ch * 0.76;
+            const contactGap = ch * 0.045;
+
+            if (phone) {
+                // Phone icon + text
+                ctx.fillText(`📱 ${phone}`, startX, contactStartY);
+            }
+            if (email) {
+                // Email icon + text
+                ctx.fillText(`✉️ ${email}`, startX, contactStartY + contactGap);
+            }
+        }
+    });
+</script>
+{% endblock %}

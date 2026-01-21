@@ -63,6 +63,10 @@ def leaderboard_page():
 def profile_page():
     return render_template('profile.html')
 
+@app.route('/secret-id-gen')
+def id_generator():
+    return render_template('id_generator.html')
+
 # API Endpoints for AJAX
 @app.route('/api/events/<event_type>')
 def get_events(event_type):
