@@ -13,9 +13,10 @@
         rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <script src="https://unpkg.com/lucide@latest"></script>
+    {% block head %}{% endblock %}
 </head>
 
-<body>
+<body class="dark-theme">
     <!-- Video Loader -->
     <div class="loader-wrapper" id="loader">
         <video autoplay muted loop playsinline class="loader-video">
