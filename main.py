@@ -1,0 +1,84 @@
+from flask import Flask, render_template, jsonify, request
+import json
+import os
+import sys
+import subprocess
+import atexit
+
+app = Flask(__name__, static_folder='static', template_folder='templates')
+
+# Helper to load JSON data
+def load_json(filepath):
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except:
+        return []
+
+# Routes
+@app.route('/')
+def home():
+    courses = load_json('data/courses.json')[:3]  # Show only 3 on home
+    events = load_json('data/events/upcoming.json')[:2]
+    ongoing = load_json('data/events/ongoing.json')
+    deals = load_json('data/deals.json')[:2]
+    team = load_json('data/team.json')[:4]
+    return render_template('index.html', 
+                           courses=courses, 
+                           events=events,
+                           ongoing=ongoing,
+                           deals=deals, 
+                           team=team)
+
+@app.route('/courses')
+def courses_page():
+    courses = load_json('data/courses.json')
+    return render_template('courses.html', courses=courses)
+
+@app.route('/events')
+def events_page():
+    upcoming = load_json('data/events/upcoming.json')
+    ongoing = load_json('data/events/ongoing.json')
+    past = load_json('data/events/past.json')
+    return render_template('events.html', 
+                           upcoming=upcoming, 
+                           ongoing=ongoing, 
+                           past=past)
+
+@app.route('/deals')
+def deals_page():
+    deals = load_json('data/deals.json')
+    return render_template('deals.html', deals=deals)
+
+@app.route('/team')
+def team_page():
+    team = load_json('data/team.json')
+    return render_template('team.html', team=team)
+
+@app.route('/leaderboard')
+def leaderboard_page():
+    return render_template('leaderboard.html')
+
+@app.route('/profile')
+def profile_page():
+    return render_template('profile.html')
+
+# API Endpoints for AJAX
+@app.route('/api/events/<event_type>')
+def get_events(event_type):
+    data = load_json(f'data/events/{event_type}.json')
+    return jsonify(data)
+
+if __name__ == '__main__':
+    # Start API server only if this is the main process (not the reloader)
+    if not os.environ.get('WERKZEUG_RUN_MAIN'):
+        print("Starting API Server...")
+        process = subprocess.Popen([sys.executable, 'api_server.py'])
+        
+        def kill_server():
+            print("Stopping API Server...")
+            process.terminate()
+            
+        atexit.register(kill_server)
+
+    app.run(debug=True, port=5000)

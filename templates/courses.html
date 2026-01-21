@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Courses{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="page-hero-bg">
+        <div class="gfg-orb orb-1"></div>
+    </div>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{{ url_for('home') }}">Home</a>
+            <i data-lucide="chevron-right"></i>
+            <span>Courses</span>
+        </div>
+        <h1 class="page-title reveal-up">Premium <span class="highlight">Courses</span></h1>
+        <p class="page-subtitle reveal-up">Master Data Structures, Algorithms, and more with GFG's best resources</p>
+    </div>
+</section>
+
+<section class="section-block">
+    <div class="container">
+        <div class="filter-bar glass-card">
+            <div class="filter-group">
+                <span class="filter-label">Filter by:</span>
+                <button class="filter-btn active">All</button>
+                <button class="filter-btn">DSA</button>
+                <button class="filter-btn">Web Dev</button>
+                <button class="filter-btn">Interview Prep</button>
+            </div>
+            <div class="search-box">
+                <i data-lucide="search"></i>
+                <input type="text" placeholder="Search courses...">
+            </div>
+        </div>
+
+        <div class="courses-grid courses-page-grid">
+            {% for course in courses %}
+            <div class="course-card glass-card reveal-item">
+                <div class="course-image-wrapper">
+                    <img src="{{ course.image }}" alt="{{ course.name }}" class="course-img">
+                    <div class="discount-badge">{{ course.discount }}</div>
+                    <div class="course-overlay">
+                        <a href="{{ course.link }}" target="_blank" rel="noopener noreferrer" class="overlay-btn">
+                            <i data-lucide="play"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="course-content">
+                    <div class="course-tags">
+                        <span class="tag">Self-Paced</span>
+                        <span class="tag">Certificate</span>
+                    </div>
+                    <h3 class="course-title">{{ course.name }}</h3>
+                    <div class="course-meta">
+                        <div class="meta-item">
+                            <i data-lucide="clock"></i>
+                            <span>Lifetime Access</span>
+                        </div>
+                        <div class="meta-item">
+                            <i data-lucide="users"></i>
+                            <span>10K+ Enrolled</span>
+                        </div>
+                    </div>
+                    <div class="price-row">
+                        <span class="old-price">{{ course.price }}</span>
+                        <span class="new-price">{{ course.final_price }}</span>
+                    </div>
+                    <a href="{{ course.link }}" target="_blank" rel="noopener noreferrer"
+                        class="btn-primary course-btn">
+                        <span>Enroll Now</span>
+                        <i data-lucide="external-link"></i>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

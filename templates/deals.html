@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Deals{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="page-hero-bg">
+        <div class="gfg-orb orb-1"></div>
+    </div>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{{ url_for('home') }}">Home</a>
+            <i data-lucide="chevron-right"></i>
+            <span>Deals</span>
+        </div>
+        <h1 class="page-title reveal-up">Exclusive <span class="highlight">Deals</span></h1>
+        <p class="page-subtitle reveal-up">Special discounts and offers for IEC Chapter members</p>
+    </div>
+</section>
+
+<section class="section-block">
+    <div class="container">
+        <div class="deals-info glass-card">
+            <div class="deals-info-icon">
+                <i data-lucide="info"></i>
+            </div>
+            <p>Click on any coupon code to copy it to your clipboard. Use these codes during checkout on GeeksforGeeks
+                courses.</p>
+        </div>
+
+        <div class="deals-grid deals-page-grid">
+            {% for deal in deals %}
+            <div class="deal-card glass-card reveal-item">
+                <div class="deal-ribbon">HOT DEAL</div>
+                <div class="deal-header">
+                    <div class="deal-icon-wrapper">
+                        <i data-lucide="ticket-percent"></i>
+                    </div>
+                </div>
+                <div class="deal-body">
+                    <h3 class="deal-title">{{ deal.title }}</h3>
+                    <p class="deal-benefit">{{ deal.benefit }}</p>
+                    <div class="coupon-box" onclick="copyCode('{{ deal.code }}')">
+                        <span class="coupon-code">{{ deal.code }}</span>
+                        <button class="copy-btn">
+                            <i data-lucide="copy"></i>
+                            <span>Copy</span>
+                        </button>
+                    </div>
+                    <div class="deal-footer">
+                        <div class="expiry-info">
+                            <i data-lucide="timer"></i>
+                            <span>Expires: {{ deal.expiry }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

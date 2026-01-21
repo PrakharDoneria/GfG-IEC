@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block title %}Events{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="page-hero-bg">
+        <div class="gfg-orb orb-1"></div>
+    </div>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{{ url_for('home') }}">Home</a>
+            <i data-lucide="chevron-right"></i>
+            <span>Events</span>
+        </div>
+        <h1 class="page-title reveal-up">Our <span class="highlight">Events</span></h1>
+        <p class="page-subtitle reveal-up">Workshops, hackathons, and coding competitions to boost your skills</p>
+    </div>
+</section>
+
+<section class="section-block">
+    <div class="container">
+        <div class="event-tabs-wrapper">
+            <div class="event-tabs glass-card">
+                <button class="tab-btn active" data-tab="upcoming">
+                    <i data-lucide="calendar-plus"></i>
+                    <span>Upcoming</span>
+                </button>
+                <button class="tab-btn" data-tab="ongoing">
+                    <i data-lucide="radio"></i>
+                    <span>Ongoing</span>
+                </button>
+                <button class="tab-btn" data-tab="past">
+                    <i data-lucide="calendar-check"></i>
+                    <span>Past</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Upcoming Events -->
+        <div class="tab-content active" id="upcoming">
+            <div class="events-grid events-page-grid">
+                {% for event in upcoming %}
+                <div class="event-card glass-card reveal-item">
+                    <div class="event-status upcoming">UPCOMING</div>
+                    <div class="event-date-badge">
+                        <span class="day">{{ event.date.split()[1].replace(',', '') }}</span>
+                        <span class="month">{{ event.date.split()[0][:3] }}</span>
+                    </div>
+                    <h3 class="event-title">{{ event.title }}</h3>
+                    <div class="event-meta">
+                        <div class="meta-item">
+                            <i data-lucide="clock"></i>
+                            <span>{{ event.time }}</span>
+                        </div>
+                        <div class="meta-item">
+                            <i data-lucide="map-pin"></i>
+                            <span>{{ event.venue }}</span>
+                        </div>
+                    </div>
+                    <p class="event-desc">{{ event.description }}</p>
+                    <div class="event-actions">
+                        <a href="{{ event.link }}" target="_blank" rel="noopener noreferrer"
+                            class="btn-primary event-btn">
+                            <span>Register Now</span>
+                            <i data-lucide="external-link"></i>
+                        </a>
+                        <button class="btn-icon" title="Add to Calendar">
+                            <i data-lucide="calendar-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% if not upcoming %}
+            <div class="empty-state glass-card">
+                <i data-lucide="calendar-x"></i>
+                <h3>No Upcoming Events</h3>
+                <p>Stay tuned! New events will be announced soon.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Ongoing Events -->
+        <div class="tab-content" id="ongoing">
+            <div class="events-grid events-page-grid">
+                {% for event in ongoing %}
+                <div class="event-card glass-card reveal-item live-event">
+                    <div class="event-status live">
+                        <span class="live-dot"></span>
+                        LIVE
+                    </div>
+                    <h3 class="event-title">{{ event.title }}</h3>
+                    <div class="event-meta">
+                        <div class="meta-item">
+                            <i data-lucide="clock"></i>
+                            <span>{{ event.date }}</span>
+                        </div>
+                    </div>
+                    <p class="event-desc">{{ event.description }}</p>
+                    <div class="event-actions">
+                        <a href="{{ event.link }}" target="_blank" rel="noopener noreferrer"
+                            class="btn-primary event-btn btn-live">
+                            <span>Join Now</span>
+                            <i data-lucide="external-link"></i>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% if not ongoing %}
+            <div class="empty-state glass-card">
+                <i data-lucide="radio"></i>
+                <h3>No Ongoing Events</h3>
+                <p>Check back later for live events!</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Past Events -->
+        <div class="tab-content" id="past">
+            <div class="events-grid events-page-grid">
+                {% for event in past %}
+                <div class="event-card glass-card reveal-item past-event">
+                    <div class="event-status past">COMPLETED</div>
+                    <h3 class="event-title">{{ event.title }}</h3>
+                    <div class="event-meta">
+                        <div class="meta-item">
+                            <i data-lucide="calendar-check"></i>
+                            <span>{{ event.date }}</span>
+                        </div>
+                    </div>
+                    <p class="event-desc">{{ event.description }}</p>
+                    <div class="event-actions">
+                        <a href="{{ event.highlight_link }}" target="_blank" rel="noopener noreferrer"
+                            class="btn-outline event-btn">
+                            <span>View Highlights</span>
+                            <i data-lucide="instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% if not past %}
+            <div class="empty-state glass-card">
+                <i data-lucide="calendar-check"></i>
+                <h3>No Past Events Yet</h3>
+                <p>Our journey is just beginning!</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

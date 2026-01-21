@@ -1,0 +1,326 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-bg-elements">
+        <div class="gfg-orb orb-1"></div>
+        <div class="gfg-orb orb-2"></div>
+        <div class="grid-pattern"></div>
+    </div>
+    <div class="hero-content">
+        <div class="hero-badge reveal-up">
+            <i data-lucide="zap"></i>
+            <span>Official GFG Student Chapter</span>
+        </div>
+        <h1 class="hero-title reveal-up">
+            <span class="line-1">Elevate Your</span>
+            <span class="line-2 text-gradient">Coding Journey</span>
+        </h1>
+        <p class="hero-subtitle reveal-up">
+            IEC College of Engineering & Technology
+        </p>
+        <div class="hero-stats reveal-up">
+            <div class="stat-item">
+                <span class="stat-number" data-count="500">0</span>
+                <span class="stat-plus">+</span>
+                <span class="stat-label">Members</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-number" data-count="50">0</span>
+                <span class="stat-plus">+</span>
+                <span class="stat-label">Events</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-number" data-count="1000">0</span>
+                <span class="stat-plus">+</span>
+                <span class="stat-label">Problems Solved</span>
+            </div>
+        </div>
+        <div class="hero-cta reveal-up">
+            <a href="{{ url_for('leaderboard_page') }}" class="btn-glow">
+                <span>Explore Leaderboard</span>
+                <i data-lucide="arrow-right"></i>
+            </a>
+            <a href="https://chat.whatsapp.com/LIn9ooUhHvjKWUm5s5tnDL" target="_blank" rel="noopener noreferrer"
+                class="btn-outline">
+                <span>Join Community</span>
+                <i data-lucide="users"></i>
+            </a>
+        </div>
+    </div>
+    <div class="scroll-indicator">
+        <div class="mouse"></div>
+        <span>Scroll to explore</span>
+    </div>
+</section>
+
+<!-- Ongoing Events Banner -->
+{% if ongoing and ongoing|length > 0 %}
+<section class="ongoing-banner">
+    <div class="container">
+        {% for event in ongoing %}
+        <div class="banner-card glass-card reveal-up">
+            <div class="banner-bg-gradient"></div>
+            <div class="banner-content">
+                <div class="banner-left">
+                    <div class="banner-status-badge">
+                        <div class="pulse-dot"></div>
+                        <span>{{ event.status }}</span>
+                    </div>
+                    <h2 class="banner-title">{{ event.title }}</h2>
+                    <p class="banner-description">{{ event.description }}</p>
+                    <div class="banner-meta">
+                        <div class="meta-item">
+                            <i data-lucide="calendar"></i>
+                            <span>{{ event.date }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="banner-right">
+                    <a href="{{ event.link }}" target="_blank" rel="noopener noreferrer" class="btn-glow banner-cta">
+                        <span>Join Now</span>
+                        <i data-lucide="arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- Upcoming Events Section -->
+<section class="section-block">
+    <div class="container">
+        <div class="section-header-row">
+            <div class="section-title-group">
+                <span class="section-tag">Don't Miss Out</span>
+                <h2 class="section-title">Upcoming <span class="highlight">Events</span></h2>
+            </div>
+            <a href="{{ url_for('events_page') }}" class="view-all-btn">
+                View All
+                <i data-lucide="arrow-right"></i>
+            </a>
+        </div>
+        <div class="events-grid">
+            {% for event in events %}
+            <div class="event-card glass-card reveal-item">
+                <div class="event-status live">UPCOMING</div>
+                <div class="event-icon">
+                    <i data-lucide="calendar-days"></i>
+                </div>
+                <h3 class="event-title">{{ event.title }}</h3>
+                <div class="event-meta">
+                    <div class="meta-item">
+                        <i data-lucide="clock"></i>
+                        <span>{{ event.date }} | {{ event.time }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i data-lucide="map-pin"></i>
+                        <span>{{ event.venue }}</span>
+                    </div>
+                </div>
+                <p class="event-desc">{{ event.description }}</p>
+                <button class="btn-primary event-btn">
+                    <span>Register</span>
+                    <i data-lucide="arrow-right"></i>
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- GFG Earn Points Section -->
+<section class="earn-points-section">
+    <div class="container">
+        <div class="earn-points-header reveal-up">
+            <span class="section-tag">Level Up</span>
+            <h2 class="section-title">Earn <span class="highlight">Points</span> on GFG!</h2>
+            <p class="section-subtitle">Complete these steps to climb the leaderboard</p>
+        </div>
+        <div class="earn-points-grid">
+            <div class="earn-card glass-card reveal-item" style="--delay: 0.1s">
+                <div class="earn-card-icon">
+                    <div class="icon-glow"></div>
+                    <i data-lucide="code-2"></i>
+                </div>
+                <div class="earn-card-step">Step 1</div>
+                <h3 class="earn-card-title">Solve Challenges</h3>
+                <p class="earn-card-desc">Practice DSA problems on the GFG platform to earn points based on difficulty.
+                </p>
+                <a href="https://www.geeksforgeeks.org/dsa/geeksforgeeks-practice-best-online-coding-platform/"
+                    target="_blank" rel="noopener" class="btn-primary earn-card-btn">
+                    <span>Start Practicing</span>
+                    <i data-lucide="external-link"></i>
+                </a>
+            </div>
+            <div class="earn-card glass-card reveal-item" style="--delay: 0.2s">
+                <div class="earn-card-icon">
+                    <div class="icon-glow"></div>
+                    <i data-lucide="share-2"></i>
+                </div>
+                <div class="earn-card-step">Step 2</div>
+                <h3 class="earn-card-title">Share on Connect</h3>
+                <p class="earn-card-desc">Post your solutions and insights on GFG Connect to earn community points.</p>
+                <a href="https://www.geeksforgeeks.org/connect/home" target="_blank" rel="noopener"
+                    class="btn-primary earn-card-btn">
+                    <span>Post Now</span>
+                    <i data-lucide="external-link"></i>
+                </a>
+            </div>
+            <div class="earn-card glass-card reveal-item" style="--delay: 0.3s">
+                <div class="earn-card-icon">
+                    <div class="icon-glow"></div>
+                    <i data-lucide="user-plus"></i>
+                </div>
+                <div class="earn-card-step">Step 3</div>
+                <h3 class="earn-card-title">Follow for Updates</h3>
+                <p class="earn-card-desc">Stay updated with tips, event announcements, and exclusive content.</p>
+                <a href="https://www.geeksforgeeks.org/profile/prakhardoneria" target="_blank" rel="noopener"
+                    class="btn-primary earn-card-btn">
+                    <span>Follow Now</span>
+                    <i data-lucide="external-link"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Deals Section -->
+<section class="section-block section-alt">
+    <div class="container">
+        <div class="section-header-row">
+            <div class="section-title-group">
+                <span class="section-tag">Save Big</span>
+                <h2 class="section-title">Exclusive <span class="highlight">Deals</span></h2>
+            </div>
+            <a href="{{ url_for('deals_page') }}" class="view-all-btn">
+                View All
+                <i data-lucide="arrow-right"></i>
+            </a>
+        </div>
+        <div class="deals-grid">
+            {% for deal in deals %}
+            <div class="deal-card glass-card reveal-item">
+                <div class="deal-header">
+                    <div class="deal-icon-wrapper">
+                        <i data-lucide="ticket-percent"></i>
+                    </div>
+                    <span class="deal-expiry">Expires: {{ deal.expiry }}</span>
+                </div>
+                <h3 class="deal-title">{{ deal.title }}</h3>
+                <p class="deal-benefit">{{ deal.benefit }}</p>
+                <div class="coupon-box" onclick="copyCode('{{ deal.code }}')">
+                    <span class="coupon-code">{{ deal.code }}</span>
+                    <button class="copy-btn">
+                        <i data-lucide="copy"></i>
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Featured Courses Section -->
+<section class="section-block">
+    <div class="container">
+        <div class="section-header-row">
+            <div class="section-title-group">
+                <span class="section-tag">Learn & Grow</span>
+                <h2 class="section-title">Featured <span class="highlight">Courses</span></h2>
+            </div>
+            <a href="{{ url_for('courses_page') }}" class="view-all-btn">
+                View All
+                <i data-lucide="arrow-right"></i>
+            </a>
+        </div>
+        <div class="courses-grid">
+            {% for course in courses %}
+            <div class="course-card glass-card reveal-item">
+                <div class="course-image-wrapper">
+                    <img src="{{ course.image }}" alt="{{ course.name }}" class="course-img">
+                    <div class="discount-badge">{{ course.discount }}</div>
+                </div>
+                <div class="course-content">
+                    <h3 class="course-title">{{ course.name }}</h3>
+                    <div class="price-row">
+                        <span class="old-price">{{ course.price }}</span>
+                        <span class="new-price">{{ course.final_price }}</span>
+                    </div>
+                    <a href="{{ course.link }}" target="_blank" rel="noopener noreferrer"
+                        class="btn-primary course-btn">
+                        <span>Enroll Now</span>
+                        <i data-lucide="external-link"></i>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Team Preview Section -->
+<section class="section-block section-alt">
+    <div class="container">
+        <div class="section-header-row">
+            <div class="section-title-group">
+                <span class="section-tag">Meet Us</span>
+                <h2 class="section-title">Our <span class="highlight">Team</span></h2>
+            </div>
+            <a href="{{ url_for('team_page') }}" class="view-all-btn">
+                View All
+                <i data-lucide="arrow-right"></i>
+            </a>
+        </div>
+        <div class="team-grid">
+            {% for member in team %}
+            <div class="team-card glass-card reveal-item">
+                <div class="team-avatar-wrapper">
+                    <img src="{{ member.image }}" alt="{{ member.name }}" class="team-avatar">
+                    <div class="avatar-ring"></div>
+                </div>
+                <h3 class="team-name">{{ member.name }}</h3>
+                <span class="team-role">{{ member.role }}</span>
+                <p class="team-details">{{ member.details }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content glass-card">
+            <div class="cta-text">
+                <h2>Ready to Level Up?</h2>
+                <p>Join our community and start your coding journey today!</p>
+            </div>
+            <a href="{{ url_for('profile_page') }}" class="btn-glow cta-btn">
+                <span>Get Started</span>
+                <i data-lucide="rocket"></i>
+            </a>
+            <div class="cta-extra-links"
+                style="margin-top:1rem; display:flex; gap:1rem; flex-wrap:wrap; justify-content:center;">
+                <a href="https://forms.gle/NGTVzxbYBkLuKgKZA" target="_blank" rel="noopener noreferrer"
+                    class="btn-outline cta-link">
+                    <i data-lucide="user-check"></i>
+                    <span>Core Team Application</span>
+                </a>
+                <a href="https://forms.gle/5WysV2vAoAr7svFd7" target="_blank" rel="noopener noreferrer"
+                    class="btn-outline cta-link">
+                    <i data-lucide="lightbulb"></i>
+                    <span>Submit Event Idea</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

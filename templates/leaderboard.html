@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}Leaderboard{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="page-hero-bg">
+        <div class="gfg-orb orb-1"></div>
+    </div>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{{ url_for('home') }}">Home</a>
+            <i data-lucide="chevron-right"></i>
+            <span>Leaderboard</span>
+        </div>
+        <h1 class="page-title reveal-up">Global <span class="highlight">Leaderboard</span></h1>
+        <p class="page-subtitle reveal-up">Top performers from IEC Chapter based on GFG activity</p>
+    </div>
+</section>
+
+<section class="section-block">
+    <div class="container">
+        <!-- My Rank Card -->
+        <div class="my-rank-card glass-card reveal-item" id="my-rank-section">
+            <div class="rank-icon">
+                <i data-lucide="trophy"></i>
+            </div>
+            <div class="rank-info">
+                <span class="rank-label">Your Rank</span>
+                <span class="rank-value" id="user-rank">#--</span>
+            </div>
+            <div class="rank-divider"></div>
+            <div class="rank-info">
+                <span class="rank-label">Your Score</span>
+                <span class="rank-value score" id="user-score">--</span>
+            </div>
+            <div class="rank-divider"></div>
+            <div class="rank-info">
+                <span class="rank-label">Tier</span>
+                <span class="rank-value tier" id="user-tier">--</span>
+            </div>
+            <a href="{{ url_for('profile_page') }}" class="btn-primary rank-action">
+                <span>Set Handle</span>
+                <i data-lucide="settings"></i>
+            </a>
+        </div>
+
+        <!-- Leaderboard Table -->
+        <div class="leaderboard-wrapper glass-card">
+            <div class="leaderboard-header">
+                <h3>Top Rankers</h3>
+                <button class="btn-outline refresh-btn" id="refresh-lb">
+                    <i data-lucide="refresh-cw"></i>
+                    <span>Refresh</span>
+                </button>
+            </div>
+            <div class="leaderboard-table-wrapper">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Handle</th>
+                            <th>Score</th>
+                            <th>Tier</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <!-- Placeholder rows -->
+                        <tr class="placeholder-row">
+                            <td colspan="4">
+                                <div class="loading-shimmer"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tier Legend -->
+        <div class="tier-legend glass-card reveal-item">
+            <h4>Tier System</h4>
+            <div class="tier-items">
+                <div class="tier-item">
+                    <span class="tier-badge diamond">💎</span>
+                    <div class="tier-info">
+                        <span class="tier-name">Diamond</span>
+                        <span class="tier-req">500+ points</span>
+                    </div>
+                </div>
+                <div class="tier-item">
+                    <span class="tier-badge gold">🥇</span>
+                    <div class="tier-info">
+                        <span class="tier-name">Gold</span>
+                        <span class="tier-req">200+ points</span>
+                    </div>
+                </div>
+                <div class="tier-item">
+                    <span class="tier-badge silver">🥈</span>
+                    <div class="tier-info">
+                        <span class="tier-name">Silver</span>
+                        <span class="tier-req">50+ points</span>
+                    </div>
+                </div>
+                <div class="tier-item">
+                    <span class="tier-badge bronze">🥉</span>
+                    <div class="tier-info">
+                        <span class="tier-name">Bronze</span>
+                        <span class="tier-req">0+ points</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
