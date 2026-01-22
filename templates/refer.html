@@ -6,133 +6,180 @@
 <section class="page-hero">
     <div class="page-hero-bg">
         <div class="gfg-orb orb-1"></div>
+        <div class="gfg-orb orb-2"></div>
+        <div class="grid-pattern"></div>
     </div>
-    <div class="container">
-        <div class="breadcrumb">
+    <div class="container hero-container">
+        <div class="breadcrumb reveal-up">
             <a href="{{ url_for('home') }}">Home</a>
             <i data-lucide="chevron-right"></i>
             <span>Refer & Earn</span>
         </div>
-        <h1 class="page-title reveal-up">Refer & <span class="highlight">Earn Points</span></h1>
-        <p class="page-subtitle reveal-up">Share your referral code and earn +5 points for each friend who joins!</p>
+        <div class="hero-content-split">
+            <div class="hero-text-side">
+                <h1 class="page-title reveal-up">Spread the <span class="highlight text-gradient">Knowledge</span></h1>
+                <p class="page-subtitle reveal-up">Invite your friends to the GFG IEC Chapter and unlock exclusive
+                    rewards together. More friends = More points!</p>
+                <div class="hero-actions reveal-up">
+                    <a href="#referral-section" class="btn-glow">Get Started <i data-lucide="arrow-down"></i></a>
+                </div>
+            </div>
+            <div class="hero-visual-side reveal-up">
+                <div class="premium-stats-preview">
+                    <div class="preview-card">
+                        <div class="preview-icon"><i data-lucide="users"></i></div>
+                        <div class="preview-info">
+                            <span class="preview-label">Community Growth</span>
+                            <span class="preview-value">+150 This Week</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
-<section class="section-block">
+<section class="section-block" id="referral-section">
     <div class="container">
-        <!-- Referral Code Card -->
-        <div class="referral-code-card glass-card reveal-item">
-            <div class="referral-header">
-                <div class="referral-icon">
-                    <i data-lucide="gift"></i>
-                </div>
-                <div class="referral-title-section">
-                    <h2>Your Referral Code</h2>
-                    <p>Share this code with your friends to earn points!</p>
-                </div>
-            </div>
+        <div class="referral-main-grid">
+            <!-- Referral Code Card -->
+            <div class="referral-card-container">
+                <div class="referral-code-card glass-card reveal-item">
+                    <div class="referral-header">
+                        <div class="referral-icon">
+                            <i data-lucide="gift"></i>
+                        </div>
+                        <div class="referral-title-section">
+                            <h2>Your Referral Code</h2>
+                            <p>Share this unique code to start earning points</p>
+                        </div>
+                    </div>
 
-            <div class="referral-code-display" id="referral-code-section">
-                <div class="code-box" id="code-box">
-                    <span class="code-text" id="referral-code-text">Loading...</span>
-                </div>
-                <button class="btn-primary copy-code-btn" id="copy-code-btn">
-                    <i data-lucide="copy"></i>
-                    <span>Copy</span>
-                </button>
-                <button class="btn-glow share-link-btn" id="share-link-btn">
-                    <i data-lucide="share-2"></i>
-                    <span>Share Link</span>
-                </button>
-            </div>
+                    <div class="referral-code-wrapper">
+                        <div class="code-box-premium" id="code-box">
+                            <span class="code-text" id="referral-code-text">Loading...</span>
+                            <div class="code-copy-overlay">
+                                <button class="copy-icon-btn" id="copy-code-btn" title="Copy Code">
+                                    <i data-lucide="copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="referral-stats">
-                <div class="stat-item">
-                    <i data-lucide="users"></i>
-                    <div class="stat-details">
-                        <span class="stat-value" id="referral-count">0</span>
-                        <span class="stat-label">Friends Referred</span>
+                    <div class="referral-actions-grid">
+                        <button class="btn-primary share-btn" id="share-link-btn">
+                            <i data-lucide="share-2"></i>
+                            <span>Share Link</span>
+                        </button>
+                        <div class="social-share-hints">
+                            <i data-lucide="zap"></i>
+                            <span>Instant +5 points per join</span>
+                        </div>
+                    </div>
+
+                    <div class="referral-stats-premium">
+                        <div class="stat-pill">
+                            <div class="pill-icon"><i data-lucide="users"></i></div>
+                            <div class="pill-content">
+                                <span class="pill-value" id="referral-count">0</span>
+                                <span class="pill-label">Referred</span>
+                            </div>
+                        </div>
+                        <div class="stat-pill highlight">
+                            <div class="pill-icon"><i data-lucide="award"></i></div>
+                            <div class="pill-content">
+                                <span class="pill-value" id="points-earned">0</span>
+                                <span class="pill-label">Earned</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="stat-item">
-                    <i data-lucide="award"></i>
-                    <div class="stat-details">
-                        <span class="stat-value" id="points-earned">0</span>
-                        <span class="stat-label">Points Earned</span>
-                    </div>
-                </div>
             </div>
-        </div>
 
-        <!-- Use Referral Code Card -->
-        <div class="use-referral-card glass-card reveal-item">
-            <h3>Have a Referral Code?</h3>
-            <p>Enter your friend's referral code to get +5 bonus points!</p>
+            <!-- Use Referral Code Card -->
+            <div class="redeem-card-container">
+                <div class="use-referral-card glass-card reveal-item">
+                    <div class="card-badge">Limited Time</div>
+                    <h3>Redeem Code</h3>
+                    <p>Enter a friend's code to claim your +5 points bonus instantly.</p>
 
-            <form id="use-referral-form" class="referral-form">
-                <div class="form-group">
-                    <label for="referral-code-input">
-                        <i data-lucide="ticket"></i>
-                        Enter Referral Code
-                    </label>
-                    <input type="text" id="referral-code-input" placeholder="e.g., PRK12345" autocomplete="off"
-                        maxlength="8">
-                    <span class="input-hint">
+                    <form id="use-referral-form" class="premium-form">
+                        <div class="input-wrapper">
+                            <i data-lucide="ticket" class="input-icon"></i>
+                            <input type="text" id="referral-code-input" placeholder="Enter Code Here" autocomplete="off"
+                                maxlength="8">
+                        </div>
+                        <button type="submit" class="btn-glow full-width">
+                            <span>Claim Bonus Points</span>
+                            <i data-lucide="arrow-right"></i>
+                        </button>
+                    </form>
+
+                    <div class="referral-status" id="referral-status"></div>
+
+                    <div class="form-footer-hint">
                         <i data-lucide="info"></i>
-                        You'll get +5 points instantly!
-                    </span>
+                        One-time bonus for new members
+                    </div>
                 </div>
-                <button type="submit" class="btn-glow">
-                    <i data-lucide="check-circle"></i>
-                    <span>Apply Code</span>
-                </button>
-            </form>
-
-            <div class="referral-status" id="referral-status"></div>
+            </div>
         </div>
 
-        <!-- How it Works -->
-        <div class="how-it-works glass-card reveal-item">
-            <h3>How Referral Works</h3>
-            <div class="steps-grid">
-                <div class="step-card">
-                    <div class="step-number">1</div>
-                    <div class="step-icon">
-                        <i data-lucide="user-plus"></i>
+        <!-- How it Works Modern -->
+        <div class="how-it-works-section reveal-up">
+            <div class="section-title-centered">
+                <span class="section-tag">Simple Process</span>
+                <h2>How It <span class="highlight">Works</span></h2>
+            </div>
+
+            <div class="modern-steps-grid">
+                <div class="modern-step-card">
+                    <div class="step-visual">
+                        <div class="step-num">01</div>
+                        <div class="step-icon-bg"><i data-lucide="send"></i></div>
                     </div>
-                    <h4>Share Your Code</h4>
-                    <p>Copy your unique referral code and share it with friends</p>
+                    <h4>Share Invite</h4>
+                    <p>Send your unique referral code or link to your friends.</p>
                 </div>
-                <div class="step-card">
-                    <div class="step-number">2</div>
-                    <div class="step-icon">
-                        <i data-lucide="user-check"></i>
+
+                <div class="step-connector"><i data-lucide="chevron-right"></i></div>
+
+                <div class="modern-step-card">
+                    <div class="step-visual">
+                        <div class="step-num">02</div>
+                        <div class="step-icon-bg"><i data-lucide="user-plus"></i></div>
                     </div>
                     <h4>Friend Joins</h4>
-                    <p>Your friend sets up their profile with a REAL GFG username</p>
+                    <p>They sign up and enter your code in their profile.</p>
                 </div>
-                <div class="step-card">
-                    <div class="step-number">3</div>
-                    <div class="step-icon">
-                        <i data-lucide="gift"></i>
+
+                <div class="step-connector"><i data-lucide="chevron-right"></i></div>
+
+                <div class="modern-step-card highlight">
+                    <div class="step-visual">
+                        <div class="step-num">03</div>
+                        <div class="step-icon-bg"><i data-lucide="gift"></i></div>
                     </div>
-                    <h4>Both Get Points!</h4>
-                    <p>You and your friend each receive +5 bonus points</p>
+                    <h4>Both Gain</h4>
+                    <p>You and your friend both receive +5 bonus points!</p>
                 </div>
             </div>
         </div>
 
-        <!-- Referrals List -->
-        <div class="referrals-list glass-card reveal-item" id="referrals-list-section" style="display: none;">
-            <h3>Your Referrals</h3>
-            <div class="referrals-table-wrapper">
-                <table class="referrals-table">
+        <!-- Referrals List Modern -->
+        <div class="referrals-list-container reveal-up" id="referrals-list-section" style="display: none;">
+            <div class="list-header">
+                <h3>Success Stories</h3>
+                <span class="list-count" id="list-count-badge">0 Friends</span>
+            </div>
+            <div class="premium-table-wrapper">
+                <table class="premium-table">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Username</th>
-                            <th>Date</th>
-                            <th>Points</th>
+                            <th>Member</th>
+                            <th>Date Joined</th>
+                            <th>Reward</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody id="referrals-tbody">
@@ -176,20 +223,31 @@
                 document.getElementById('referral-count').textContent = data.referral_count || 0;
                 document.getElementById('points-earned').textContent = (data.referral_count || 0) * 5;
 
+                const listCountBadge = document.getElementById('list-count-badge');
+                if (listCountBadge) {
+                    listCountBadge.textContent = `${data.referral_count || 0} Friends`;
+                }
+
                 if (data.referrals_made && data.referrals_made.length > 0) {
                     displayReferrals(data.referrals_made);
                 }
 
-                // If user was referred, hide the use referral section
+                // If user was referred, hide the use referral section or show success
                 if (data.was_referred_by) {
-                    document.querySelector('.use-referral-card').innerHTML = `
-                    <div class="success-message">
-                        <i data-lucide="check-circle"></i>
-                        <h3>You were referred by ${data.was_referred_by}</h3>
-                        <p>+5 bonus points added to your account!</p>
-                    </div>
-                `;
-                    lucide.createIcons();
+                    const redeemCard = document.querySelector('.use-referral-card');
+                    if (redeemCard) {
+                        redeemCard.innerHTML = `
+                            <div class="success-message-premium">
+                                <div class="success-icon">
+                                    <i data-lucide="check-circle"></i>
+                                </div>
+                                <h3>Bonus Claimed!</h3>
+                                <p>You were referred by <strong>${data.was_referred_by}</strong></p>
+                                <div class="points-badge-success">+5 Points Applied</div>
+                            </div>
+                        `;
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
+                    }
                 }
             }
         } catch (error) {
@@ -264,16 +322,26 @@
         const listSection = document.getElementById('referrals-list-section');
         const tbody = document.getElementById('referrals-tbody');
 
+        if (!listSection || !tbody) return;
+
         listSection.style.display = 'block';
 
         tbody.innerHTML = referrals.map((ref, index) => `
-        <tr>
-            <td>${index + 1}</td>
-            <td>${ref.new_user}</td>
-            <td>${new Date(ref.created_at).toLocaleDateString()}</td>
-            <td class="points-cell">+5</td>
-        </tr>
-    `).join('');
+            <tr class="reveal-item">
+                <td>
+                    <div class="member-info">
+                        <div class="member-avatar">${ref.new_user.charAt(0).toUpperCase()}</div>
+                        <span>${ref.new_user}</span>
+                    </div>
+                </td>
+                <td>${new Date(ref.created_at).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}</td>
+                <td><span class="points-pill">+5 Points</span></td>
+                <td><span class="status-pill-success">Completed</span></td>
+            </tr>
+        `).join('');
+
+        // Re-initialize animations if possible
+        if (typeof initRevealAnimations === 'function') initRevealAnimations();
     }
 
     function showToast(message) {
