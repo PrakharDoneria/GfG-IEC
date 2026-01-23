@@ -50,6 +50,39 @@ def fetch_gfg_data(handle: str):
         "post_points": stats["post_points"]
     }
 
+# --- Site Stats Helpers ---
+
+def get_member_count():
+    """Fetches member count from site_stats table for optimization"""
+    if not supabase: return 0
+    try:
+        res = supabase.table("site_stats").select("value").eq("key", "member_count").execute()
+        if res.data and len(res.data) > 0:
+            return res.data[0]["value"]
+        
+        # Fallback: Count from users table and initialize site_stats
+        count_res = supabase.table("users").select("handle", count="exact").execute()
+        count = count_res.count if count_res.count else 0
+        try:
+            supabase.table("site_stats").upsert({"key": "member_count", "value": count}).execute()
+        except: pass
+        return count
+    except Exception as e:
+        print(f"Error fetching member count: {e}")
+        return 0
+
+def update_member_count(delta):
+    """Increments or decrements member count atomically via RPC or fallback"""
+    if not supabase: return
+    try:
+        # Try calling RPC for atomicity
+        supabase.rpc("increment_stat", {"row_key": "member_count", "delta": delta}).execute()
+    except Exception as e:
+        print(f"Stat update RPC failed (might need to create the function): {e}")
+        # Manual fallback
+        current = get_member_count()
+        supabase.table("site_stats").upsert({"key": "member_count", "value": current + delta}).execute()
+
 # --- Page Routes ---
 
 
@@ -85,16 +118,8 @@ def home():
     deals = load_json('data/deals.json')[:2]
     team = load_json('data/team.json')[:4]
     
-    # Member Count
-    member_count = 0
-    if supabase:
-        try:
-            # We use count='exact' and head=True to avoid fetching data
-            count_res = supabase.table("users").select("handle", count="exact").execute()
-            member_count = count_res.count if count_res.count else 0
-        except Exception as e:
-            print(f"Error counting members: {e}")
-            member_count = 500 # Fallback
+    # Member Count (Optimized)
+    member_count = get_member_count()
             
     return render_template('index.html', 
                            courses=courses, 
@@ -170,7 +195,16 @@ def add_user(handle):
             "score": total_score,
             "tier": stats["tier"]
         }
+        
+        # Check if user is new to increment member count
+        user_exists = supabase.table("users").select("handle").eq("handle", handle).execute()
+        is_new_user = len(user_exists.data) == 0
+        
         response = supabase.table("users").upsert(data, on_conflict="handle").execute()
+        
+        if is_new_user and response.data:
+            update_member_count(1)
+            
         return jsonify({"message": f"User {handle} synced", "data": response.data})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -261,7 +295,14 @@ def get_my_rank(handle):
 def delete_user(handle):
     if not supabase: return jsonify({"error": "Database not connected"}), 500
     try:
-        supabase.table("users").delete().eq("handle", handle).execute()
+        # Check if user exists before deleting to know if we should decrement
+        user_exists = supabase.table("users").select("handle").eq("handle", handle).execute()
+        
+        res = supabase.table("users").delete().eq("handle", handle).execute()
+        
+        if len(user_exists.data) > 0 and res.data:
+            update_member_count(-1)
+            
         return jsonify({"message": f"User {handle} removed"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
