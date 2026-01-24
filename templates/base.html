@@ -43,12 +43,6 @@
                         class="nav-link {% if request.endpoint == 'events_page' %}active{% endif %}">Events</a></li>
                 <li><a href="{{ url_for('courses_page') }}"
                         class="nav-link {% if request.endpoint == 'courses_page' %}active{% endif %}">Courses</a></li>
-                <li><a href="{{ url_for('deals_page') }}"
-                        class="nav-link {% if request.endpoint == 'deals_page' %}active{% endif %}">Deals</a></li>
-                <li><a href="{{ url_for('team_page') }}"
-                        class="nav-link {% if request.endpoint == 'team_page' %}active{% endif %}">Team</a></li>
-                <li><a href="{{ url_for('refer_page') }}"
-                        class="nav-link {% if request.endpoint == 'refer_page' %}active{% endif %}">Refer</a></li>
             </ul>
             <div class="nav-actions">
                 <div class="nav-points" id="nav-points">
@@ -110,6 +104,10 @@
                 <i data-lucide="users"></i>
                 <span>Team</span>
             </a>
+            <a href="{{ url_for('student_id_page') }}" class="drawer-link">
+                <i data-lucide="credit-card"></i>
+                <span>ID Card</span>
+            </a>
             <a href="{{ url_for('refer_page') }}" class="drawer-link">
                 <i data-lucide="gift"></i>
                 <span>Refer & Earn</span>
@@ -146,6 +144,7 @@
             </div>
             <div class="footer-links-section">
                 <h4>Resources</h4>
+                <a href="{{ url_for('student_id_page') }}">ID Card Generator</a>
                 <a href="{{ url_for('deals_page') }}">Deals</a>
                 <a href="{{ url_for('team_page') }}">Our Team</a>
                 <a href="https://forms.gle/NGTVzxbYBkLuKgKZA" target="_blank" rel="noopener noreferrer">Core Team

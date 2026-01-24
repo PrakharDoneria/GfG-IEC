@@ -173,6 +173,10 @@ def id_generator():
 def refer_page():
     return render_template('refer.html')
 
+@app.route('/student-id')
+def student_id_page():
+    return render_template('student_id.html')
+
 @app.route('/geeksforgeeks')
 def gfg_core_page():
     # Simple privacy check: require a passkey in query params or just keep it unlinked
@@ -447,7 +451,9 @@ def get_points_breakdown(handle):
             "referral_points": referral_points,
             "post_points": gfg_stats["post_points"],
             "question_points": gfg_stats["question_points"],
-            "gfg_score": gfg_stats["total_gfg_score"]
+            "gfg_score": gfg_stats["total_gfg_score"],
+            "total_solved": gfg_stats.get("total_solved", 0),
+            "total_posts": gfg_stats.get("total_posts", 0)
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500

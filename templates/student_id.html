@@ -1,0 +1,715 @@
+{% extends 'base.html' %}
+
+{% block title %}Student ID Card{% endblock %}
+
+{% block content %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+    .generator-section {
+        padding: 8rem 0 4rem;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .generator-bg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: radial-gradient(circle at top right, rgba(47, 141, 70, 0.15), transparent 40%),
+            radial-gradient(circle at bottom left, rgba(47, 141, 70, 0.1), transparent 40%);
+        z-index: 0;
+    }
+
+    .generator-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3rem;
+        justify-content: center;
+        align-items: flex-start;
+        width: 100%;
+        max-width: 1300px;
+        padding: 0 2rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .form-card {
+        flex: 1;
+        min-width: 350px;
+        max-width: 450px;
+    }
+
+    .preview-card {
+        flex: 1.5;
+        min-width: 350px;
+        max-width: 700px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .canvas-wrapper {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: #fff;
+        line-height: 0;
+        width: 100%;
+    }
+
+    canvas {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    /* Form Styles */
+    .form-group {
+        margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--text-light);
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-md);
+        color: var(--text-white);
+        font-family: 'Inter', sans-serif;
+        transition: var(--transition);
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .form-control[readonly] {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    .file-upload {
+        position: relative;
+        overflow: hidden;
+        padding: 1.5rem;
+        border: 2px dashed rgba(255, 255, 255, 0.2);
+        border-radius: var(--radius-md);
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition);
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .file-upload:hover {
+        border-color: var(--primary);
+        background: rgba(47, 141, 70, 0.05);
+    }
+
+    .file-upload input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .upload-label {
+        color: var(--text-muted);
+        pointer-events: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .upload-label i {
+        width: 24px;
+        height: 24px;
+        color: var(--primary);
+    }
+
+    /* Range controls */
+    .adjustment-controls {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        margin-top: 1rem;
+        display: none;
+    }
+
+    .adjustment-controls.visible {
+        display: block;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .range-group {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .range-group:last-child {
+        margin-bottom: 0;
+    }
+
+    .range-group label {
+        min-width: 50px;
+        font-size: 0.8rem;
+        margin: 0;
+        color: var(--text-muted);
+    }
+
+    input[type=range] {
+        flex: 1;
+        accent-color: var(--primary);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .loading-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        color: white;
+        z-index: 10;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .loading-overlay.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    @media (max-width: 768px) {
+        .generator-section {
+            padding-top: 6rem;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<section class="generator-section">
+    <div class="generator-bg"></div>
+    <div class="generator-container">
+
+        <!-- Input Form -->
+        <div class="form-card glass-card reveal-up">
+            <div class="section-header-row" style="margin-bottom: 1.5rem;">
+                <div class="section-title-group">
+                    <span class="section-tag">Identity</span>
+                    <h2 class="section-title" style="font-size: 1.8rem;">Student <span class="highlight">Card</span>
+                    </h2>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="file-upload" id="drop-zone">
+                    <input type="file" id="photo-input" accept="image/*">
+                    <div class="upload-label">
+                        <i data-lucide="camera"></i>
+                        <span id="file-name">Upload ID Photo</span>
+                    </div>
+                </div>
+
+                <!-- Photo Adjustments -->
+                <div class="adjustment-controls" id="adjustments">
+                    <div class="range-group">
+                        <label>Zoom</label>
+                        <input type="range" id="zoom-range" min="0.1" max="3" step="0.1" value="1">
+                    </div>
+                    <div class="range-group">
+                        <label>Pan X</label>
+                        <input type="range" id="x-range" min="-200" max="200" value="0">
+                    </div>
+                    <div class="range-group">
+                        <label>Pan Y</label>
+                        <input type="range" id="y-range" min="-200" max="200" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Handle / Name</label>
+                <input type="text" id="name-input" class="form-control" placeholder="GFG Handle" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>ID Number</label>
+                <input type="text" id="id-input" class="form-control" placeholder="Generating..." readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Total Points</label>
+                <input type="number" id="points-input" class="form-control" value="0" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Questions Solved</label>
+                <input type="number" id="solved-input" class="form-control" value="0" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Post Writings</label>
+                <input type="number" id="posts-input" class="form-control" value="0" readonly>
+            </div>
+
+            <div class="action-buttons">
+                <button id="fetch-stats-btn" class="btn-outline" style="flex: 1;">
+                    <i data-lucide="refresh-cw"></i>
+                    <span>Fetch My Stats</span>
+                </button>
+                <button id="download-btn" class="btn-glow" style="flex: 1;">
+                    <i data-lucide="download"></i>
+                    <span>Download ID</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Preview -->
+        <div class="preview-card reveal-up" style="--delay: 0.2s">
+            <div class="canvas-wrapper">
+                <canvas id="card-canvas"></canvas>
+                <div class="loading-overlay" id="loading-overlay">
+                    <div class="pulse-dot" style="width: 40px; height: 40px; background: var(--primary);"></div>
+                    <span>Loading assets...</span>
+                </div>
+            </div>
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; max-width: 500px;">
+                <i data-lucide="info" style="width: 14px; height: 14px; vertical-align: middle; margin-right: 4px;"></i>
+                This card validates your membership in the GFG IEC Student Chapter.
+            </p>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const canvas = document.getElementById('card-canvas');
+        const ctx = canvas.getContext('2d');
+        const inputs = ['name', 'id', 'points', 'solved', 'posts'].map(id => document.getElementById(`${id}-input`));
+        const [nameIn, idIn, pointsIn, solvedIn, postsIn] = inputs;
+        const photoInput = document.getElementById('photo-input');
+        const zoomRange = document.getElementById('zoom-range');
+        const xRange = document.getElementById('x-range');
+        const yRange = document.getElementById('y-range');
+        const adjustmentsDiv = document.getElementById('adjustments');
+        const loadingOverlay = document.getElementById('loading-overlay');
+
+        // Config
+        const assets = {
+            template: "{{ url_for('static', filename='assets/student-id.png') }}",
+            fontFamily: "'Poppins', sans-serif"
+        };
+
+        let state = {
+            templateImg: new Image(),
+            userImg: null,
+            transform: { scale: 1, x: 0, y: 0 },
+            isLoaded: false,
+            rank: null // Store rank
+        };
+
+        // Initialize
+        init();
+
+        function init() {
+            // Load Template
+            state.templateImg.crossOrigin = "anonymous";
+            state.templateImg.src = assets.template;
+            state.templateImg.onload = () => {
+                canvas.width = state.templateImg.width;
+                canvas.height = state.templateImg.height;
+                state.isLoaded = true;
+                loadingOverlay.classList.remove('active');
+                draw();
+            };
+
+            // Check Login
+            const currentUser = localStorage.getItem('gfg_handle');
+            if (currentUser) {
+                nameIn.value = currentUser;
+                fetchStats(currentUser);
+            } else {
+                // Block access if no profile
+                document.querySelector('.generator-container').innerHTML = `
+                    <div class="glass-card reveal-up" style="text-align: center; padding: 3rem; max-width: 500px; margin: 0 auto; width: 100%;">
+                        <i data-lucide="lock" style="width: 48px; height: 48px; color: var(--primary); margin-bottom: 1rem;"></i>
+                        <h2 class="section-title" style="margin-bottom: 1rem;">Profile Required</h2>
+                        <p style="color: var(--text-muted); margin-bottom: 2rem;">
+                            To generate your verified GFG IEC Student ID Card, you must first save your GeeksforGeeks handle in your profile settings.
+                        </p>
+                        <a href="{{ url_for('profile_page') }}" class="btn-glow">
+                            <i data-lucide="user"></i>
+                            <span>Go to Profile</span>
+                        </a>
+                    </div>
+                `;
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            }
+        }
+
+        // --- State Management ---
+
+        async function fetchStats(handle) {
+            setLoading(true, 'Fetching Stats...');
+            try {
+                // Get stats from our API
+                const response = await fetch(`/api/rank/${handle}`);
+                const rankData = await response.json();
+
+                // Get detailed points breakdown
+                const pointsRes = await fetch(`/api/points/${handle}`);
+                const pointsData = await pointsRes.json();
+
+                if (rankData) {
+                    // Determine ID based on Rank or Hash
+                    const rank = rankData.rank || 999;
+                    state.rank = rank; // Store rank in state
+                    idIn.value = `IEC-GFG-${String(rank).padStart(3, '0')}`;
+                }
+
+                if (pointsData.success) {
+                    pointsIn.value = pointsData.total_points || 0;
+                    solvedIn.value = pointsData.total_solved || 0;
+                    postsIn.value = pointsData.total_posts || 0;
+                }
+
+                draw();
+            } catch (e) {
+                console.error(e);
+                showToast('Could not fetch stats');
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        function generateRandomID() {
+            const num = Math.floor(Math.random() * 1000);
+            idIn.value = `IEC-GFG-${String(num).padStart(3, '0')}`;
+        }
+
+        function setLoading(active, text) {
+            if (active) {
+                loadingOverlay.querySelector('span').textContent = text || 'Loading...';
+                loadingOverlay.classList.add('active');
+            } else {
+                loadingOverlay.classList.remove('active');
+            }
+        }
+
+        // --- Drawing Logic ---
+
+        function draw() {
+            if (!state.isLoaded) return;
+
+            // Clear
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Define Layout (Based on 1920x1080 approx assumption of provided image)
+            const W = canvas.width;
+            const H = canvas.height;
+
+            // 1. Draw Template Background
+            ctx.drawImage(state.templateImg, 0, 0, W, H);
+
+            // 2. Draw User Photo Inside Circle
+            const circle = {
+                x: W * 0.26, // Shifted left (was ~0.30-0.315)
+                y: H * 0.53,
+                r: H * 0.27  // Reduced size (was 0.32)
+            };
+
+            // Determine Top 3 Status
+            let badgeColor = null;
+            let badgeEmoji = null;
+            if (state.rank === 1) { badgeColor = '#fbbf24'; badgeEmoji = '🥇'; } // Gold
+            else if (state.rank === 2) { badgeColor = '#94a3b8'; badgeEmoji = '🥈'; } // Silver
+            else if (state.rank === 3) { badgeColor = '#d97706'; badgeEmoji = '🥉'; } // Bronze
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(circle.x, circle.y, circle.r, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.clip(); // Clip subsequent drawings to circle
+
+            if (state.userImg) {
+                // Draw User Image with Transform
+                const img = state.userImg;
+                // "Cover" fit logic
+                const scale = Math.max((circle.r * 2) / img.width, (circle.r * 2) / img.height) * state.transform.scale * 0.95;
+                const w = img.width * scale;
+                const h = img.height * scale;
+                const x = circle.x - w / 2 + state.transform.x;
+                const y = circle.y - h / 2 + state.transform.y;
+
+                ctx.drawImage(img, x, y, w, h);
+            } else {
+                // Draw Placeholder Gray
+                ctx.fillStyle = '#e5e7eb';
+                ctx.fillRect(0, 0, W, H);
+                ctx.fillStyle = '#9ca3af';
+                ctx.font = `600 ${H * 0.05}px 'Poppins'`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('Upload Photo', circle.x, circle.y);
+            }
+            ctx.restore();
+
+            // Top 3 Badge Ring
+            if (badgeColor) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(circle.x, circle.y, circle.r, 0, Math.PI * 2);
+                ctx.lineWidth = H * 0.025;
+                ctx.strokeStyle = badgeColor;
+                ctx.stroke();
+
+                // Add a glow effect
+                ctx.shadowColor = badgeColor;
+                ctx.shadowBlur = 20;
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            // Redraw Template?
+            // If the green ring is in the template, my image drawing might be overlapping it slightly if I'm not precise.
+            // Ideally, we would have a transparent cut-out template on top, but I only have one image.
+            // I'll assume the user draws "inside" the green ring.
+            // If needed, I could draw a ring on top to mask imperfect edges.
+
+            /*
+            // Optional: Redraw ring border to hide jagged edges
+            ctx.beginPath();
+            ctx.arc(circle.x, circle.y, circle.r, 0, Math.PI * 2);
+            ctx.lineWidth = H * 0.04; // Estimate ring thickness
+            ctx.strokeStyle = '#2f8d46'; // GFG Green
+            ctx.stroke();
+            */
+
+            // 3. Draw Text Fields
+            // Text Color: Dark Green/Teal from logo (#0f5132ish) or just Black/Grey
+            ctx.fillStyle = '#1f2937'; // Dark Grey
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+
+            // Font Sizes proportional to height
+            const labelSize = H * 0.06; // Labels ID NO: etc
+            const valueSize = H * 0.065; // The actual values
+
+            // Positions (Right Side)
+            const textX = W * 0.65; // Anchor for values
+
+            // A. ID NO
+            // Label is at ~30% height
+            // Value:
+            ctx.font = `800 ${valueSize}px 'Poppins'`;
+            ctx.fillStyle = '#2f8d46'; // Green for ID
+            ctx.fillText(idIn.value || '---', textX, H * 0.3);
+
+            // B. NAME
+            // Label at ~40%
+            ctx.font = `700 ${valueSize}px 'Poppins'`;
+            ctx.fillStyle = '#111827';
+            // Check for long names
+            let nameText = (nameIn.value || 'Student Name').toUpperCase();
+
+            // Append Medal for Top 3
+            if (badgeEmoji) {
+                nameText += ` ${badgeEmoji}`;
+            }
+
+            if (ctx.measureText(nameText).width > W * 0.3) {
+                ctx.font = `700 ${valueSize * 0.8}px 'Poppins'`;
+            }
+            ctx.fillText(nameText, textX, H * 0.41);
+
+            // C. Stats Section (Bottom Right)
+            const statsX = W * 0.78; // Value align
+            ctx.font = `700 ${valueSize * 0.9}px 'Poppins'`;
+            ctx.fillStyle = '#4b5563';
+
+            // Total Points (~65%)
+            ctx.fillText(pointsIn.value || '0', statsX, H * 0.645);
+
+            // Questions Solved (~72%)
+            ctx.fillText(solvedIn.value || '0', statsX, H * 0.725); // Adjusted gap
+
+            // Post Writings (~80%)
+            ctx.fillText(postsIn.value || '0', statsX, H * 0.805);
+
+            // 4. Draw Rank Badge (Below Photo Circle)
+            if (state.rank) {
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+
+                const badgeY = circle.y + circle.r + (H * 0.03); // Just below the circle
+
+                // Draw badge background
+                ctx.fillStyle = '#2f8d46';
+                const badgeHeight = H * 0.06;
+                const badgeWidth = W * 0.12;
+                const badgeX = circle.x - (badgeWidth / 2);
+
+                // Rounded rectangle for badge
+                const radius = badgeHeight / 2;
+                ctx.beginPath();
+                ctx.moveTo(badgeX + radius, badgeY);
+                ctx.lineTo(badgeX + badgeWidth - radius, badgeY);
+                ctx.quadraticCurveTo(badgeX + badgeWidth, badgeY, badgeX + badgeWidth, badgeY + radius);
+                ctx.lineTo(badgeX + badgeWidth, badgeY + badgeHeight - radius);
+                ctx.quadraticCurveTo(badgeX + badgeWidth, badgeY + badgeHeight, badgeX + badgeWidth - radius, badgeY + badgeHeight);
+                ctx.lineTo(badgeX + radius, badgeY + badgeHeight);
+                ctx.quadraticCurveTo(badgeX, badgeY + badgeHeight, badgeX, badgeY + badgeHeight - radius);
+                ctx.lineTo(badgeX, badgeY + radius);
+                ctx.quadraticCurveTo(badgeX, badgeY, badgeX + radius, badgeY);
+                ctx.closePath();
+                ctx.fill();
+
+                // Draw rank text on badge
+                ctx.fillStyle = 'white';
+                ctx.font = `700 ${valueSize * 0.55}px 'Poppins'`;
+                ctx.fillText(`Rank #${state.rank}`, circle.x, badgeY + (badgeHeight / 2));
+            }
+
+            // 5. Draw QR Code (Bottom Right Corner)
+            if (nameIn.value && state.rank) {
+                // Config
+                const qrSize = H * 0.13;
+                const padding = H * 0.04;
+                const qrX = W - qrSize - padding;
+                const qrY = H - qrSize - padding;
+
+                // Draw Green Circle Background
+                const qrRadius = (qrSize / 2) * 1.1;
+                const qrCenterX = qrX + (qrSize / 2);
+                const qrCenterY = qrY + (qrSize / 2);
+
+                ctx.beginPath();
+                ctx.arc(qrCenterX, qrCenterY, qrRadius, 0, Math.PI * 2);
+                ctx.fillStyle = '#2f8d46';
+                ctx.fill();
+
+                // Generate QR (White on Transparent)
+                const qr = new QRious({
+                    value: `https://geeksforgeeks.org/user/${nameIn.value}/`,
+                    size: 200,
+                    level: 'H',
+                    foreground: 'white',
+                    backgroundAlpha: 0
+                });
+
+                // Draw QR Image
+                ctx.drawImage(qr.image, qrX, qrY, qrSize, qrSize);
+            }
+        }
+
+        // --- Input Handling ---
+
+        // Text Inputs
+        inputs.forEach(input => input.addEventListener('input', draw));
+
+        // Photo Upload
+        const handleFile = (file) => {
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    state.userImg = img;
+                    state.transform = { scale: 1, x: 0, y: 0 };
+                    // Reset sliders
+                    zoomRange.value = 1;
+                    xRange.value = 0;
+                    yRange.value = 0;
+                    adjustmentsDiv.classList.add('visible');
+                    document.getElementById('file-name').textContent = file.name.substring(0, 20) + '...';
+                    draw();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        };
+
+        photoInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+
+        // Drag and Drop
+        const dropZone = document.getElementById('drop-zone');
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = 'var(--primary)';
+        });
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = 'rgba(255,255,255,0.2)';
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = 'rgba(255,255,255,0.2)';
+            handleFile(e.dataTransfer.files[0]);
+        });
+
+        // Adjustments
+        zoomRange.addEventListener('input', (e) => { state.transform.scale = parseFloat(e.target.value); draw(); });
+        xRange.addEventListener('input', (e) => { state.transform.x = parseFloat(e.target.value); draw(); });
+        yRange.addEventListener('input', (e) => { state.transform.y = parseFloat(e.target.value); draw(); });
+
+        // Buttons
+        document.getElementById('fetch-stats-btn').addEventListener('click', () => {
+            const handle = nameIn.value;
+            if (handle) fetchStats(handle);
+            else showToast('Please enter a handle');
+        });
+
+        document.getElementById('download-btn').addEventListener('click', () => {
+            if (!state.isLoaded) return;
+            const link = document.createElement('a');
+            const fname = nameIn.value || 'Student';
+            link.download = `GFG_ID_${fname}.png`;
+            link.href = canvas.toDataURL('image/png', 1.0);
+            link.click();
+            showToast('ID Card Downloaded!');
+        });
+    });
+</script>
+{% endblock %}

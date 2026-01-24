@@ -20,29 +20,46 @@
 
 <section class="section-block">
     <div class="container">
-        <!-- My Rank Card -->
-        <div class="my-rank-card glass-card reveal-item" id="my-rank-section">
-            <div class="rank-icon">
-                <i data-lucide="trophy"></i>
+        <!-- Boost Your Rank Options -->
+        <div class="boost-rank-section reveal-up">
+            <div class="section-header-row center-align">
+                <div class="section-title-group">
+                    <span class="section-tag">Climb Higher</span>
+                    <h2 class="section-title">Boost Your <span class="highlight">Ranking</span></h2>
+                    <p class="section-subtitle">Multiply your points and climb the leaderboard faster</p>
+                </div>
             </div>
-            <div class="rank-info">
-                <span class="rank-label">Your Rank</span>
-                <span class="rank-value" id="user-rank">#--</span>
+            <div class="boost-cards">
+                <div class="boost-card glass-card">
+                    <div class="boost-icon" style="background: linear-gradient(135deg, #2f8d46, #3da856);">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <h3>Refer Friends</h3>
+                    <p>Invite your batchmates to join the IEC Chapter.</p>
+                    <div class="boost-reward">+5 Points</div>
+                    <a href="{{ url_for('refer_page') }}" class="btn-primary btn-sm">Refer Now</a>
+                </div>
+                <div class="boost-card glass-card">
+                    <div class="boost-icon" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);">
+                        <i data-lucide="file-text"></i>
+                    </div>
+                    <h3>Write Articles</h3>
+                    <p>Share your knowledge by writing technical blogs.</p>
+                    <div class="boost-reward">+10 Points</div>
+                    <a href="https://www.geeksforgeeks.org/connect/home" target="_blank" class="btn-outline btn-sm">Start
+                        Writing</a>
+                </div>
+                <div class="boost-card glass-card">
+                    <div class="boost-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+                        <i data-lucide="code-2"></i>
+                    </div>
+                    <h3>Solve Problems</h3>
+                    <p>Practice coding problems on GFG platform.</p>
+                    <div class="boost-reward">+2-8 Points</div>
+                    <a href="https://practice.geeksforgeeks.org/explore?page=1&sortBy=submissions" target="_blank"
+                        class="btn-outline btn-sm">Practice Now</a>
+                </div>
             </div>
-            <div class="rank-divider"></div>
-            <div class="rank-info">
-                <span class="rank-label">Your Score</span>
-                <span class="rank-value score" id="user-score">--</span>
-            </div>
-            <div class="rank-divider"></div>
-            <div class="rank-info">
-                <span class="rank-label">Tier</span>
-                <span class="rank-value tier" id="user-tier">--</span>
-            </div>
-            <a href="{{ url_for('profile_page') }}" class="btn-primary rank-action">
-                <span>Set Handle</span>
-                <i data-lucide="settings"></i>
-            </a>
         </div>
 
         <!-- Leaderboard Table -->

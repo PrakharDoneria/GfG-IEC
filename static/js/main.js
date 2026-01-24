@@ -476,10 +476,6 @@ async function fetchUserStats(handle) {
         const profileTierText = document.getElementById('profile-tier-text');
         const displayTier = document.getElementById('display-tier');
 
-        // Update Leaderboard Page IDs
-        const userRank = document.getElementById('user-rank');
-        const userScore = document.getElementById('user-score');
-        const userTier = document.getElementById('user-tier');
 
         // Apply updates
         const rankFormatted = `#${data.rank}`;
@@ -498,10 +494,6 @@ async function fetchUserStats(handle) {
         if (profileScore) profileScore.textContent = scoreFormatted;
         if (profileTierText) profileTierText.textContent = tierName;
         if (displayTier) displayTier.textContent = tierBadges[tierName] || `🥉 ${tierName}`;
-
-        if (userRank) userRank.textContent = rankFormatted;
-        if (userScore) userScore.textContent = scoreFormatted;
-        if (userTier) userTier.textContent = tierName;
 
         // Update nav points and drawer
         updateNavPoints(scoreFormatted);
@@ -554,18 +546,70 @@ async function loadLeaderboard() {
         const data = await response.json();
 
         if (data && Array.isArray(data) && data.length > 0) {
-            leaderboardBody.innerHTML = data.map((user, index) => `
-                <tr class="${index === 0 ? 'first-place' : ''} reveal-item">
-                    <td>
-                        <span class="rank-badge">#${index + 1}</span>
-                    </td>
-                    <td>
-                        <span class="handle-name">${user.handle}</span>
-                    </td>
-                    <td class="score-cell">${user.score}</td>
-                    <td>${user.tier}</td>
-                </tr>
-            `).join('');
+            let html = data.map((user, index) => {
+                const rank = index + 1;
+                let rankClass = '';
+                let rankEmoji = '';
+
+                if (rank === 1) {
+                    rankClass = 'rank-1';
+                    rankEmoji = '🥇';
+                } else if (rank === 2) {
+                    rankClass = 'rank-2';
+                    rankEmoji = '🥈';
+                } else if (rank === 3) {
+                    rankClass = 'rank-3';
+                    rankEmoji = '🥉';
+                }
+
+                return `
+                    <tr class="${rankClass} ${user.handle === currentUser ? 'user-row' : ''} reveal-item">
+                        <td>
+                            <div class="rank-container">
+                                <span class="rank-badge">#${rank}</span>
+                                ${rankEmoji ? `<span class="rank-emoji">${rankEmoji}</span>` : ''}
+                            </div>
+                        </td>
+                        <td>
+                            <span class="handle-name">${user.handle}</span>
+                            ${user.handle === currentUser ? '<span class="you-badge">You</span>' : ''}
+                        </td>
+                        <td class="score-cell">${user.score}</td>
+                        <td>${user.tier}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Check if user is in top 10
+            const userInTop10 = data.some(user => user.handle === currentUser);
+
+            if (currentUser && !userInTop10) {
+                // Fetch user's actual rank
+                try {
+                    const userRes = await fetch(`${API_BASE}/rank/${currentUser}`);
+                    if (userRes.ok) {
+                        const userData = await userRes.json();
+                        html += `
+                            <tr class="user-row-divider"><td colspan="4"></td></tr>
+                            <tr class="user-row reveal-item">
+                                <td>
+                                    <span class="rank-badge">#${userData.rank}</span>
+                                </td>
+                                <td>
+                                    <span class="handle-name">${userData.handle}</span>
+                                    <span class="you-badge">You</span>
+                                </td>
+                                <td class="score-cell">${userData.score}</td>
+                                <td>${userData.tier}</td>
+                            </tr>
+                        `;
+                    }
+                } catch (rankErr) {
+                    console.error('Error fetching user rank:', rankErr);
+                }
+            }
+
+            leaderboardBody.innerHTML = html;
 
             // Re-initialize reveal animations for new rows
             initRevealAnimations();
