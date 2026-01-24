@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Core Dashboard | GFG IEC</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #2f8d46;
+            --primary-glow: rgba(47, 141, 70, 0.4);
+            --bg-dark: #0a0c10;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #e0e0e0;
+            --text-dim: #a0a0a0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+        }
+
+        .header-info h1 {
+            font-size: 2rem;
+            margin: 0;
+            background: linear-gradient(135deg, #fff 0%, #2f8d46 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-info p {
+            color: var(--text-dim);
+            margin: 5px 0 0 0;
+        }
+
+        .status-badge {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            padding: 24px;
+            border-radius: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .stat-card i {
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .stat-card .value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            display: block;
+        }
+
+        .stat-card .label {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .students-table-container {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(47, 141, 70, 0.1);
+            padding: 18px 24px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        td {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.95rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .user-handle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary) 0%, #1e5a2d 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+        }
+
+        .tier-badge {
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .tier-diamond {
+            background: rgba(0, 150, 255, 0.1);
+            color: #0096ff;
+            border: 1px solid rgba(0, 150, 255, 0.2);
+        }
+
+        .tier-gold {
+            background: rgba(255, 215, 0, 0.1);
+            color: #ffd700;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .tier-silver {
+            background: rgba(192, 192, 192, 0.1);
+            color: #c0c0c0;
+            border: 1px solid rgba(192, 192, 192, 0.2);
+        }
+
+        .tier-bronze {
+            background: rgba(205, 127, 50, 0.1);
+            color: #cd7f32;
+            border: 1px solid rgba(205, 127, 50, 0.2);
+        }
+
+        .btn-cta {
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cta:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .count-badge {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .header-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            th:nth-child(4),
+            td:nth-child(4),
+            th:nth-child(5),
+            td:nth-child(5) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="dark-theme">
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loader-content">
+            <div class="loading-percentage" id="load-pct">0%</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="load-progress"></div>
+            </div>
+            <div class="loading-status" id="load-status">Initializing Data Sync...</div>
+            <p style="color: var(--text-dim); font-size: 0.8rem; margin-top: 20px;">
+                <i data-lucide="info" size="14"></i>
+                Please do not close this tab while we fetch real-time data from GeeksforGeeks API.
+            </p>
+        </div>
+    </div>
+
+    <script id="students-data" type="application/json">
+        {{ students|tojson|safe }}
+    </script>
+    <div class="dashboard-container">
+        <header class="header-section">
+            <div class="header-info">
+                <h1>Core Team <span style="-webkit-text-fill-color: var(--text-main);">Dashboard</span></h1>
+                <p>Real-time analytics for all students in IEC GFG Chapter</p>
+            </div>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <button id="sync-all-btn" class="btn-cta"
+                    style="background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border);">
+                    <i data-lucide="refresh-cw"></i> Sync All
+                </button>
+                <div class="status-badge">
+                    <i data-lucide="lock"></i>
+                    PRIVATE ACCESS
+                </div>
+            </div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i data-lucide="users" size="24"></i>
+                <span class="value">{{ students|length }}</span>
+                <span class="label">Total Students</span>
+            </div>
+            <div class="stat-card">
+                <i data-lucide="layers" size="24"></i>
+                <span class="value">
+                    {% set total_posts = namespace(value=0) %}
+                    {% for student in students %}
+                    {% set total_posts.value = total_posts.value + (student.posts or 0) %}
+                    {% endfor %}
+                    {{ total_posts.value }}
+                </span>
+                <span class="label">Total Posts</span>
+            </div>
+            <div class="stat-card">
+                <i data-lucide="check-circle" size="24"></i>
+                <span class="value">
+                    {% set total_solved = namespace(value=0) %}
+                    {% for student in students %}
+                    {% set total_solved.value = total_solved.value + (student.solved or 0) %}
+                    {% endfor %}
+                    {{ total_solved.value }}
+                </span>
+                <span class="label">Questions Solved</span>
+            </div>
+        </div>
+
+        <div class="students-table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student / Handle</th>
+                        <th>Score</th>
+                        <th>Tier</th>
+                        <th>Posts</th>
+                        <th>Solved</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>
+                            <div class="user-handle">
+                                <div class="user-avatar">
+                                    {{ student.handle[:2]|upper }}
+                                </div>
+                                <span>{{ student.handle }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="highlight" style="font-weight: 700;">{{ student.score }}</span>
+                        </td>
+                        <td>
+                            <span
+                                class="tier-badge tier-{{ (student.tier or 'bronze')|lower|replace('🥉 ', '')|replace('🥈 ', '')|replace('🥇 ', '')|replace('💎 ', '') }}">
+                                {{ student.tier or 'Bronze' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="count-badge">{{ student.posts or 0 }}</span>
+                        </td>
+                        <td>
+                            <span class="count-badge"
+                                style="background: rgba(47, 141, 70, 0.1); color: var(--primary);">{{ student.solved or
+                                0 }}</span>
+                        </td>
+                        <td>
+                            <a href="https://www.geeksforgeeks.org/profile/{{ student.handle }}" target="_blank"
+                                class="btn-cta">
+                                Profile <i data-lucide="external-link" size="14"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const studentData = JSON.parse(document.getElementById('students-data').textContent);
+
+        async function syncAll(isAuto = false) {
+            const overlay = document.getElementById('loading-overlay');
+            const progress = document.getElementById('load-progress');
+            const pct = document.getElementById('load-pct');
+            const status = document.getElementById('load-status');
+
+            if (!isAuto && !confirm('Syncing all data will fetch information for each student through GFG APIs. This may take 1-2 minutes. Continue?')) return;
+
+            overlay.classList.add('active');
+            let completed = 0;
+            const total = studentData.length;
+
+            for (const student of studentData) {
+                status.innerText = `Fetching data for ${student.handle}...`;
+                try {
+                    // We use the add_user API endpoint as it performs a full sync
+                    await fetch(`/api/user/${student.handle}`, { method: 'POST' });
+                } catch (e) {
+                    console.error(`Failed to sync ${student.handle}`, e);
+                }
+                completed++;
+                const percentage = Math.round((completed / total) * 100);
+                progress.style.width = percentage + '%';
+                pct.innerText = percentage + '%';
+            }
+
+            status.innerText = 'Sync complete! Refreshing...';
+            setTimeout(() => location.reload(), 1000);
+        }
+
+        // Auto-sync if all data is zero (migration case or fresh columns)
+        const totalPosts = studentData.reduce((sum, s) => sum + (s.posts || 0), 0);
+        const totalSolved = studentData.reduce((sum, s) => sum + (s.solved || 0), 0);
+
+        if (studentData.length > 0 && totalPosts === 0 && totalSolved === 0) {
+            console.log("Auto-syncing because data is empty...");
+            syncAll(true);
+        }
+
+        document.getElementById('sync-all-btn').addEventListener('click', () => syncAll(false));
+        lucide.createIcons();
+    </script>
+    <style>
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loader-content {
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: var(--primary);
+            box-shadow: 0 0 15px var(--primary-glow);
+            transition: width 0.3s ease;
+        }
+
+        .loading-status {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .loading-percentage {
+            color: white;
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .spin {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</body>
+
+</html>

@@ -47,7 +47,9 @@ def fetch_gfg_data(handle: str):
         "score": stats["total_gfg_score"],
         "tier": stats["tier"],
         "question_points": stats["question_points"],
-        "post_points": stats["post_points"]
+        "post_points": stats["post_points"],
+        "total_posts": stats.get("total_posts", 0),
+        "total_solved": stats.get("total_solved", 0)
     }
 
 # --- Site Stats Helpers ---
@@ -171,6 +173,24 @@ def id_generator():
 def refer_page():
     return render_template('refer.html')
 
+@app.route('/geeksforgeeks')
+def gfg_core_page():
+    # Simple privacy check: require a passkey in query params or just keep it unlinked
+    # For better privacy, we could use a fixed passkey
+    passkey = request.args.get('key')
+    if passkey != "iec_core_2026":
+        return "Unauthorized Access. Please provide the correct key.", 403
+        
+    if not supabase:
+        return "Database not connected", 500
+        
+    try:
+        # Fetch all users with their full data
+        response = supabase.table("users").select("*").order("score", desc=True).execute()
+        return render_template('geeksforgeeks/index.html', students=response.data)
+    except Exception as e:
+        return f"Error: {str(e)}", 500
+
 # --- API Routes ---
 
 @app.route('/api/events/<event_type>')
@@ -193,7 +213,9 @@ def add_user(handle):
         data = {
             "handle": handle,
             "score": total_score,
-            "tier": stats["tier"]
+            "tier": stats["tier"],
+            "posts": stats.get("total_posts", 0),
+            "solved": stats.get("total_solved", 0)
         }
         
         # Check if user is new to increment member count
@@ -228,7 +250,9 @@ def edit_user(old_handle):
         response = supabase.table("users").update({
             "handle": new_handle, 
             "score": total_score, 
-            "tier": stats["tier"]
+            "tier": stats["tier"],
+            "posts": stats.get("total_posts", 0),
+            "solved": stats.get("total_solved", 0)
         }).eq("handle", old_handle).execute()
         
         if not response.data:
@@ -304,6 +328,41 @@ def delete_user(handle):
             update_member_count(-1)
             
         return jsonify({"message": f"User {handle} removed"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/admin/sync-all", methods=['POST'])
+def sync_all_users():
+    passkey = request.args.get('key')
+    if passkey != "iec_core_2026":
+        return jsonify({"error": "Unauthorized"}), 403
+        
+    if not supabase: return jsonify({"error": "Database not connected"}), 500
+    
+    try:
+        users_res = supabase.table("users").select("handle").execute()
+        handles = [u['handle'] for u in users_res.data]
+        
+        synced_count = 0
+        for handle in handles:
+            try:
+                stats = fetch_gfg_data(handle)
+                # Get referral points
+                ref_data = refer.get_user_points(handle)
+                referral_points = ref_data.get('referral_points', 0) if ref_data else 0
+                total_score = stats["score"] + referral_points
+                
+                supabase.table("users").update({
+                    "score": total_score,
+                    "tier": stats["tier"],
+                    "posts": stats["total_posts"],
+                    "solved": stats["total_solved"]
+                }).eq("handle", handle).execute()
+                synced_count += 1
+            except:
+                continue
+                
+        return jsonify({"message": f"Successfully synced {synced_count} users"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

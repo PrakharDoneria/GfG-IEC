@@ -29,11 +29,13 @@ def fetch_gfg_detailed_stats(handle: str):
 
     # Calculate Question Points (p_score)
     p_score = 0
+    total_solved = 0
     if practice_res.get("status") == "success":
         res = practice_res.get("result", {})
         # Sum up points for each difficulty level
         for lvl, points in PRACTICE_POINTS.items():
             solved_count = len(res.get(lvl, {}))
+            total_solved += solved_count
             p_score += solved_count * points
 
     # Calculate Post Points (c_score)
@@ -49,13 +51,13 @@ def fetch_gfg_detailed_stats(handle: str):
     total_gfg_score = p_score + c_score
     
     # Determine Tier
-    tier = "🥉 Bronze"
+    tier = "Bronze" # Default if no score
     if total_gfg_score >= 500: 
-        tier = "💎 Diamond"
+        tier = "Diamond"
     elif total_gfg_score >= 200: 
-        tier = "🥇 Gold"
+        tier = "Gold"
     elif total_gfg_score >= 50:  
-        tier = "🥈 Silver"
+        tier = "Silver"
 
     return {
         "handle": handle,
@@ -64,5 +66,6 @@ def fetch_gfg_detailed_stats(handle: str):
         "total_gfg_score": total_gfg_score,
         "tier": tier,
         "total_posts": total_posts,
-        "total_likes": total_likes
+        "total_likes": total_likes,
+        "total_solved": total_solved
     }
