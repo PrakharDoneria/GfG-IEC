@@ -35,7 +35,7 @@
         "name": "Sahil Patel",
         "role": "Technical Role",
         "details": "Core Team Member",
-        "image": "https://ui-avatars.com/api/?name=Sahil+Patel&background=random",
+        "image": "static/assets/photos/sahil.png",
         "linkedin": "",
         "email": "sahilpatel9472@gmail.com"
     },
@@ -43,7 +43,7 @@
         "name": "Praveen Kumar",
         "role": "Volunteer",
         "details": "Core Team Member",
-        "image": "static/assets/photos/praveen.png",
+        "image": "static/assets/photos/praveen.jpeg",
         "linkedin": "",
         "email": "praveenyadavv04@gmail.com"
     },
