@@ -1,0 +1,164 @@
+/* ===================================
+   Leaderboard
+   =================================== */
+.my-rank-card {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.rank-icon {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--accent-gold), #f59e0b);
+    border-radius: var(--radius-lg);
+}
+
+.rank-icon i {
+    width: 32px;
+    height: 32px;
+    color: white;
+}
+
+.rank-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.rank-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.3rem;
+}
+
+.rank-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text-white);
+}
+
+.rank-value.score {
+    color: var(--primary);
+}
+
+.rank-divider {
+    width: 1px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.rank-action {
+    margin-left: auto;
+}
+
+.leaderboard-wrapper {
+    margin-bottom: 2rem;
+}
+
+.leaderboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.leaderboard-header h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.refresh-btn {
+    padding: 0.6rem 1rem;
+}
+
+.leaderboard-table-wrapper {
+    overflow-x: auto;
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.leaderboard-table th {
+    text-align: left;
+    padding: 1.2rem 1.5rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.leaderboard-table td {
+    padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: var(--transition);
+}
+
+.leaderboard-table tbody tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.leaderboard-table tbody tr:first-child td {
+    background: rgba(251, 191, 36, 0.05);
+}
+
+.loading-shimmer {
+    height: 20px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius-sm);
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.tier-legend {
+    padding: 1.5rem 2rem;
+}
+
+.tier-legend h4 {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.tier-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.tier-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.tier-badge {
+    font-size: 1.5rem;
+}
+
+.tier-name {
+    font-weight: 600;
+    color: var(--text-white);
+}
+
+.tier-req {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}

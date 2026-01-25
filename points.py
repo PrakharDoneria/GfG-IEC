@@ -6,6 +6,16 @@ from dotenv import load_dotenv
 # Points configuration
 PRACTICE_POINTS = {"Hard": 8, "Medium": 4, "Easy": 2, "Basic": 1}
 
+def calculate_tier(score: int):
+    """Determines tier based on total score."""
+    if score >= 500: 
+        return "Diamond"
+    elif score >= 200: 
+        return "Gold"
+    elif score >= 50:  
+        return "Silver"
+    return "Bronze"
+
 def fetch_gfg_detailed_stats(handle: str):
     """
     Fetches detailed GFG stats using practice and community APIs.
@@ -61,19 +71,13 @@ def fetch_gfg_detailed_stats(handle: str):
     if community_res and "results" in community_res:
         total_posts = community_res.get("count", 0)
         total_likes = sum(p.get("like_count", 0) for p in community_res.get("results", []))
-        # Points: 5 per post, 2 per like
-        c_score = (total_posts * 5) + (total_likes * 2)
+        # Points: 10 per post, 2 per like
+        c_score = (total_posts * 10) + (total_likes * 2)
 
     total_gfg_score = p_score + c_score
     
     # Determine Tier
-    tier = "Bronze" # Default if no score
-    if total_gfg_score >= 500: 
-        tier = "Diamond"
-    elif total_gfg_score >= 200: 
-        tier = "Gold"
-    elif total_gfg_score >= 50:  
-        tier = "Silver"
+    tier = calculate_tier(total_gfg_score)
 
     return {
         "handle": handle,

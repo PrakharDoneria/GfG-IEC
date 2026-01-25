@@ -1,0 +1,139 @@
+/* ===================================
+   Deal Cards
+   =================================== */
+.deals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.deal-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.deal-ribbon {
+    position: absolute;
+    top: 20px;
+    right: -30px;
+    background: var(--accent-red);
+    color: white;
+    padding: 0.3rem 2rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    transform: rotate(45deg);
+}
+
+.deal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.deal-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border-radius: var(--radius-md);
+}
+
+.deal-icon-wrapper i {
+    width: 28px;
+    height: 28px;
+    color: white;
+}
+
+.deal-expiry {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+}
+
+.deal-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text-white);
+}
+
+.deal-benefit {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.coupon-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(47, 141, 70, 0.1);
+    border: 2px dashed var(--primary);
+    padding: 1rem 1.2rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.coupon-box:hover {
+    background: rgba(47, 141, 70, 0.2);
+    transform: scale(1.02);
+}
+
+.coupon-code {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: 2px;
+}
+
+.copy-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.copy-btn:hover {
+    color: var(--primary);
+}
+
+.deals-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1rem 1.5rem;
+}
+
+.deals-info-icon {
+    color: var(--primary);
+}
+
+.deals-info p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.deal-footer {
+    margin-top: 1rem;
+}
+
+.expiry-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+}
+
+.expiry-info i {
+    width: 16px;
+    height: 16px;
+}

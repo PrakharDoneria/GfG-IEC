@@ -1,0 +1,44 @@
+/* ===================================
+   Section Blocks
+   =================================== */
+.section-block {
+    padding: 6rem 0;
+    position: relative;
+}
+
+.section-alt {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.section-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.section-title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.section-tag {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-white);
+}
+
+.highlight {
+    color: var(--primary);
+}

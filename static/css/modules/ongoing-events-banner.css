@@ -1,0 +1,176 @@
+/* ===================================
+   Ongoing Events Banner
+   =================================== */
+.ongoing-banner {
+    padding: 3rem 0;
+    position: relative;
+}
+
+.banner-card {
+    position: relative;
+    overflow: hidden;
+    padding: 2.5rem 3rem;
+    border: 1px solid rgba(47, 141, 70, 0.3);
+    background: linear-gradient(135deg, rgba(47, 141, 70, 0.1) 0%, rgba(20, 30, 48, 0.8) 100%);
+}
+
+.banner-card:hover {
+    border-color: rgba(47, 141, 70, 0.5);
+    box-shadow: 0 0 40px rgba(47, 141, 70, 0.2);
+}
+
+.banner-bg-gradient {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    background: radial-gradient(ellipse at right, rgba(47, 141, 70, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.banner-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.banner-left {
+    flex: 1;
+    min-width: 280px;
+}
+
+.banner-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.5rem 1rem;
+    background: rgba(47, 141, 70, 0.2);
+    border: 1px solid rgba(47, 141, 70, 0.4);
+    border-radius: 50px;
+    margin-bottom: 1rem;
+}
+
+.pulse-dot {
+    width: 10px;
+    height: 10px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 10px #22c55e;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.3);
+        opacity: 0.7;
+    }
+}
+
+.banner-status-badge span {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #22c55e;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.banner-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-white);
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+}
+
+.banner-description {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    max-width: 500px;
+}
+
+.banner-meta {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.banner-meta .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+}
+
+.banner-meta .meta-item i {
+    width: 16px;
+    height: 16px;
+    color: var(--primary);
+}
+
+.banner-right {
+    display: flex;
+    align-items: center;
+}
+
+.banner-cta {
+    padding: 1.2rem 2.5rem;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.banner-cta i {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+}
+
+.banner-cta:hover i {
+    transform: translateX(5px);
+}
+
+/* Responsive adjustments for banner */
+@media (max-width: 768px) {
+    .banner-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .banner-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .banner-left {
+        min-width: 100%;
+    }
+
+    .banner-title {
+        font-size: 1.5rem;
+    }
+
+    .banner-description {
+        max-width: 100%;
+    }
+
+    .banner-meta {
+        justify-content: center;
+    }
+
+    .banner-cta {
+        width: 100%;
+        justify-content: center;
+    }
+}

@@ -1,0 +1,238 @@
+/* ===================================
+   Leaderboard Specific Styles
+   =================================== */
+/* My Rank Card */
+.my-rank-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.rank-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background: var(--primary-glow);
+    border-radius: var(--radius-md);
+}
+
+.rank-icon i {
+    width: 32px;
+    height: 32px;
+    color: var(--primary);
+}
+
+.rank-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+}
+
+.rank-label {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.rank-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-white);
+}
+
+.rank-value.score {
+    color: var(--primary);
+}
+
+.rank-value.tier {
+    font-size: 1.5rem;
+}
+
+.rank-divider {
+    width: 1px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.rank-action {
+    margin-left: auto;
+}
+
+/* Leaderboard Wrapper */
+.leaderboard-wrapper {
+    padding: 0;
+    overflow: hidden;
+}
+
+.leaderboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.leaderboard-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--text-white);
+}
+
+.refresh-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.leaderboard-table-wrapper {
+    overflow-x: auto;
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.leaderboard-table thead tr {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.leaderboard-table th {
+    padding: 1rem 2rem;
+    text-align: left;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.leaderboard-table td {
+    padding: 1.25rem 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    vertical-align: middle;
+}
+
+.leaderboard-table tbody tr {
+    transition: var(--transition-fast);
+}
+
+.leaderboard-table tbody tr:hover {
+    background: rgba(47, 141, 70, 0.05);
+}
+
+.leaderboard-table tbody tr.first-place {
+    background: linear-gradient(90deg, rgba(251, 191, 36, 0.1) 0%, transparent 100%);
+}
+
+.leaderboard-table tbody tr.first-place:hover {
+    background: linear-gradient(90deg, rgba(251, 191, 36, 0.15) 0%, rgba(47, 141, 70, 0.05) 100%);
+}
+
+.rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
+    padding: 0.5rem 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--primary);
+}
+
+.first-place .rank-badge {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: #1a1a1a;
+}
+
+.handle-name {
+    font-weight: 600;
+    color: var(--text-white);
+    font-size: 1.05rem;
+}
+
+.score-cell {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 1.1rem;
+}
+
+/* Tier Legend */
+.tier-legend {
+    margin-top: 2rem;
+    padding: 2rem;
+}
+
+.tier-legend h4 {
+    margin: 0 0 1.5rem 0;
+    font-size: 1.25rem;
+    color: var(--text-white);
+}
+
+.tier-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.tier-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: var(--transition-fast);
+}
+
+.tier-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.tier-badge {
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.tier-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.tier-name {
+    font-weight: 600;
+    color: var(--text-white);
+    font-size: 1rem;
+}
+
+.tier-req {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+/* Loading Shimmer */
+.loading-shimmer {
+    height: 60px;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.02) 0%,
+            rgba(255, 255, 255, 0.08) 50%,
+            rgba(255, 255, 255, 0.02) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius-sm);
+}

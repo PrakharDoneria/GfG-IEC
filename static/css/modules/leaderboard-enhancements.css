@@ -1,0 +1,116 @@
+/* ===================================
+   Leaderboard Enhancements
+   =================================== */
+.boost-rank-section {
+    margin-bottom: 4rem;
+}
+
+.boost-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.boost-card {
+    text-align: center;
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    transition: var(--transition);
+}
+
+.boost-card:hover {
+    transform: translateY(-10px);
+}
+
+.boost-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.boost-icon i {
+    width: 30px;
+    height: 30px;
+}
+
+.boost-card h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-white);
+}
+
+.boost-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.boost-reward {
+    font-weight: 800;
+    color: var(--primary);
+    font-size: 1.2rem;
+    background: rgba(47, 141, 70, 0.1);
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    margin: 0.5rem 0;
+}
+
+/* User Row Highlight */
+.user-row {
+    background: rgba(47, 141, 70, 0.08) !important;
+    border-left: 4px solid var(--primary) !important;
+}
+
+.user-row-divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    margin: 0.5rem 0;
+}
+
+.you-badge {
+    background: var(--primary);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.leaderboard-table tr.user-row td {
+    color: var(--text-white);
+    font-weight: 600;
+}
+
+.btn-sm {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.85rem;
+}
+
+.center-align {
+    text-align: center;
+    justify-content: center !important;
+}
+
+.center-align .section-title-group {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.section-subtitle {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+    max-width: 600px;
+}

@@ -1,0 +1,83 @@
+/* ===================================
+   GFG IEC - Premium Design System
+   =================================== */
+:root {
+    /* GFG Brand Colors */
+    --primary: #2f8d46;
+    --primary-light: #3da856;
+    --primary-dark: #267138;
+    --primary-glow: rgba(47, 141, 70, 0.4);
+
+    /* Backgrounds */
+    --bg-dark: #0a0f1a;
+    --bg-darker: #050810;
+    --bg-card: rgba(20, 30, 48, 0.6);
+    --bg-card-hover: rgba(30, 45, 70, 0.8);
+
+    /* Text Colors */
+    --text-white: #f8fafc;
+    --text-light: #e2e8f0;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+
+    /* Accent Colors */
+    --accent-red: #ef4444;
+    --accent-gold: #fbbf24;
+    --accent-blue: #3b82f6;
+
+    /* Transitions */
+    --transition-fast: all 0.2s ease;
+    --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Shadows */
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 40px var(--primary-glow);
+
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 30px;
+}
+
+/* Reset & Base */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-white);
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}

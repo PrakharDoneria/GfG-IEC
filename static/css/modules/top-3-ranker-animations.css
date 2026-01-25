@@ -1,0 +1,101 @@
+/* ===================================
+   Top 3 Ranker Animations
+   =================================== */
+.rank-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.rank-emoji {
+    font-size: 1.5rem;
+    animation: bounce 2s infinite ease-in-out;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0) scale(1);
+    }
+
+    50% {
+        transform: translateY(-5px) scale(1.1);
+    }
+}
+
+.rank-1 {
+    background: linear-gradient(90deg, rgba(251, 191, 36, 0.1) 0%, transparent 100%) !important;
+    border-left: 4px solid #fbbf24 !important;
+}
+
+.rank-1 .rank-badge {
+    background: #fbbf24;
+    color: #000;
+    font-weight: 900;
+}
+
+.rank-1 .handle-name {
+    color: #fbbf24 !important;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.rank-2 {
+    background: linear-gradient(90deg, rgba(148, 163, 184, 0.1) 0%, transparent 100%) !important;
+    border-left: 4px solid #94a3b8 !important;
+}
+
+.rank-2 .rank-badge {
+    background: #94a3b8;
+    color: #000;
+}
+
+.rank-3 {
+    background: linear-gradient(90deg, rgba(217, 119, 6, 0.1) 0%, transparent 100%) !important;
+    border-left: 4px solid #d97706 !important;
+}
+
+.rank-3 .rank-badge {
+    background: #d97706;
+    color: #000;
+}
+
+/* Row hover effect for top 3 */
+.rank-1:hover,
+.rank-2:hover,
+.rank-3:hover {
+    transform: scale(1.02) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+}
+
+/* Glitter effect for Rank 1 */
+.rank-1 {
+    position: relative;
+    overflow: hidden;
+}
+
+.rank-1::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg,
+            transparent 25%,
+            rgba(251, 191, 36, 0.05) 50%,
+            transparent 75%);
+    background-size: 200% 200%;
+    animation: shine 3s infinite linear;
+    pointer-events: none;
+}
+
+@keyframes shine {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}

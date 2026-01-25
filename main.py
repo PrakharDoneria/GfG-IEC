@@ -217,7 +217,7 @@ def add_user(handle):
         data = {
             "handle": handle,
             "score": total_score,
-            "tier": stats["tier"],
+            "tier": points.calculate_tier(total_score),
             "posts": stats.get("total_posts", 0),
             "solved": stats.get("total_solved", 0)
         }
@@ -254,7 +254,7 @@ def edit_user(old_handle):
         response = supabase.table("users").update({
             "handle": new_handle, 
             "score": total_score, 
-            "tier": stats["tier"],
+            "tier": points.calculate_tier(total_score),
             "posts": stats.get("total_posts", 0),
             "solved": stats.get("total_solved", 0)
         }).eq("handle", old_handle).execute()
@@ -282,33 +282,26 @@ def get_leaderboard():
 def get_my_rank(handle):
     if not supabase: return jsonify({"error": "Database not connected"}), 500
     try:
-        # Get GFG Score
+        # Get Total Score from DB (which already includes GFG + Referral points)
         user_res = supabase.table("users").select("score").eq("handle", handle).execute()
         if not user_res.data:
             return jsonify({"error": "User not found"}), 404
         
-        gfg_score = user_res.data[0]["score"]
+        total_score = user_res.data[0]["score"]
         
-        # Get Referral Points
-        referral_points = 0
-        try:
-            ref_res = supabase.table("user_points").select("referral_points").eq("username", handle).execute()
-            if ref_res.data:
-                referral_points = ref_res.data[0].get('referral_points', 0)
-        except:
-            pass
-            
-        total_score = gfg_score + referral_points
-
-        # Calculate Rank (based on GFG score for now as leaderboard is GFG based)
-        # Ideally this should be based on total_score but requires DB schema change
-        rank_res = supabase.table("users").select("count", count="exact").gt("score", gfg_score).execute()
+        # Calculate Rank based on total score
+        rank_res = supabase.table("users").select("count", count="exact").gt("score", total_score).execute()
         rank = (rank_res.count or 0) + 1
         
-        user_tier = "🥉 Bronze"
-        if total_score >= 500: user_tier = "💎 Diamond"
-        elif total_score >= 200: user_tier = "🥇 Gold"
-        elif total_score >= 50:  user_tier = "🥈 Silver"
+        # Use helper for tier display (with emojis for UI)
+        tier_name = points.calculate_tier(total_score)
+        tier_emojis = {
+            "Diamond": "💎 Diamond",
+            "Gold": "🥇 Gold",
+            "Silver": "🥈 Silver",
+            "Bronze": "� Bronze"
+        }
+        user_tier = tier_emojis.get(tier_name, "� Bronze")
 
         return jsonify({
             "handle": handle,
@@ -358,7 +351,7 @@ def sync_all_users():
                 
                 supabase.table("users").update({
                     "score": total_score,
-                    "tier": stats["tier"],
+                    "tier": points.calculate_tier(total_score),
                     "posts": stats["total_posts"],
                     "solved": stats["total_solved"]
                 }).eq("handle", handle).execute()

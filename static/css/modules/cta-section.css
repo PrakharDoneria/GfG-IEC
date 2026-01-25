@@ -1,0 +1,31 @@
+/* ===================================
+   CTA Section
+   =================================== */
+.cta-section {
+    padding: 4rem 0;
+}
+
+.cta-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    background: linear-gradient(135deg, rgba(47, 141, 70, 0.1), rgba(47, 141, 70, 0.05));
+    border-color: rgba(47, 141, 70, 0.3);
+}
+
+.cta-text h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.cta-text p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+.cta-btn {
+    padding: 1.2rem 2.5rem;
+}

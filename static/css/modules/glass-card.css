@@ -1,0 +1,16 @@
+/* ===================================
+   Glass Card
+   =================================== */
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    transition: var(--transition);
+}
+
+.glass-card:hover {
+    border-color: rgba(47, 141, 70, 0.3);
+    background: var(--bg-card-hover);
+}

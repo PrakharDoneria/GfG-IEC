@@ -1,0 +1,145 @@
+/* ===================================
+   Course Cards
+   =================================== */
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+}
+
+.course-card {
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.course-card:hover {
+    transform: translateY(-10px);
+}
+
+.course-image-wrapper {
+    position: relative;
+    margin: -2rem -2rem 1.5rem -2rem;
+    overflow: hidden;
+}
+
+.course-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.course-card:hover .course-img {
+    transform: scale(1.05);
+}
+
+.discount-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--accent-red);
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.course-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.course-card:hover .course-overlay {
+    opacity: 1;
+}
+
+.overlay-btn {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary);
+    border-radius: 50%;
+    color: white;
+    transform: scale(0.8);
+    transition: var(--transition);
+}
+
+.course-card:hover .overlay-btn {
+    transform: scale(1);
+}
+
+.course-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.course-tags {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.tag {
+    padding: 0.3rem 0.8rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.course-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-white);
+    line-height: 1.4;
+}
+
+.course-meta {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.meta-item i {
+    width: 16px;
+    height: 16px;
+}
+
+.price-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.old-price {
+    font-size: 1rem;
+    color: var(--text-dim);
+    text-decoration: line-through;
+}
+
+.new-price {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.course-btn {
+    margin-top: 0.5rem;
+    width: 100%;
+}
