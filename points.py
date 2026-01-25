@@ -19,6 +19,13 @@ def fetch_gfg_detailed_stats(handle: str):
         print(f"Error fetching practice data: {e}")
         practice_res = {}
     
+    # Check if handle is real - GFG returns "error" status or non-success for invalid handles
+    if not practice_res or practice_res.get("status") != "success":
+        # If practice API fails, it might be an invalid handle OR API is down.
+        # But for validation, we'll treat it as invalid if it explicitly says so.
+        if practice_res.get("status") == "error":
+             raise ValueError(f"GFG Handle '{handle}' not found or is invalid.")
+    
     # 2. Fetch Community (Posts) Data
     community_url = f"https://communityapi.geeksforgeeks.org/post/user/{handle}/"
     try:
@@ -32,11 +39,20 @@ def fetch_gfg_detailed_stats(handle: str):
     total_solved = 0
     if practice_res.get("status") == "success":
         res = practice_res.get("result", {})
+        # Check if result is empty or handle mismatch which might happen
+        if not res:
+            # Some handles might exist but have 0 problems. That's fine.
+            pass
+        
         # Sum up points for each difficulty level
         for lvl, points in PRACTICE_POINTS.items():
             solved_count = len(res.get(lvl, {}))
             total_solved += solved_count
             p_score += solved_count * points
+    else:
+        # If status wasn't success, we already raised error above if it was an explicit error.
+        # If it was just a silent failure, we assume 0 points.
+        pass
 
     # Calculate Post Points (c_score)
     c_score = 0

@@ -281,15 +281,16 @@ function initProfile() {
             if (input) {
                 let handle = extractUsernameFromURL(input);
                 if (handle) {
-                    saveHandle(handle);
+                    const success = await saveHandle(handle);
+                    if (success) {
+                        // Show stats in modal
+                        if (modalUserStats) modalUserStats.classList.remove('hidden');
 
-                    // Show stats in modal
-                    if (modalUserStats) modalUserStats.classList.remove('hidden');
-
-                    // Close modal after short delay
-                    setTimeout(() => {
-                        if (modal) modal.classList.remove('active');
-                    }, 1000);
+                        // Close modal after short delay
+                        setTimeout(() => {
+                            if (modal) modal.classList.remove('active');
+                        }, 1000);
+                    }
                 } else {
                     showToast('Please use a valid GFG profile URL. If you don\'t have an account, please make one on GFG and come back!');
                 }
@@ -307,12 +308,14 @@ function initProfile() {
             if (input) {
                 let handle = extractUsernameFromURL(input);
                 if (handle) {
-                    await saveHandle(handle);
+                    const success = await saveHandle(handle);
 
-                    // Show success on profile page
-                    if (syncStatus) {
-                        syncStatus.classList.add('show');
-                        setTimeout(() => syncStatus.classList.remove('show'), 3000);
+                    if (success) {
+                        // Show success on profile page
+                        if (syncStatus) {
+                            syncStatus.classList.add('show');
+                            setTimeout(() => syncStatus.classList.remove('show'), 3000);
+                        }
                     }
                 } else {
                     showToast('Please use a valid GFG profile URL. If you don\'t have an account, please make one on GFG and come back!');
@@ -325,15 +328,22 @@ function initProfile() {
 
     // Clear data handler
     if (clearBtn) {
-        clearBtn.addEventListener('click', () => {
+        clearBtn.addEventListener('click', async () => {
             if (confirm('Are you sure you want to clear your data?')) {
+                showValidationModal('Clearing Profile...');
+
+                // Simulate brief delay for UX
+                await new Promise(r => setTimeout(r, 800));
+
                 localStorage.removeItem(STORAGE_KEY);
                 currentUser = null;
                 if (modalInput) modalInput.value = '';
                 if (profileInput) profileInput.value = '';
                 updateProfileDisplay(null);
                 updateNavUsername('Profile');
-                showToast('Data cleared');
+
+                hideValidationModal();
+                showToast('Data cleared successfully');
             }
         });
     }
@@ -388,26 +398,72 @@ async function redeemReferral(username, code) {
     }
 }
 
-// Shared save logic
+// Shared save logic with validation
 async function saveHandle(handle) {
-    localStorage.setItem(STORAGE_KEY, handle);
-    currentUser = handle;
+    showValidationModal('Verifying Profile...');
 
-    // Update UI
-    updateProfileDisplay(handle);
-    updateNavUsername(handle);
+    try {
+        // Validate and Sync with Backend
+        const response = await fetch(`${API_BASE}/user/${handle}`, { method: 'POST' });
+        const result = await response.json();
 
-    // Sync with backend
-    await syncUserWithBackend(handle);
+        if (!response.ok || result.error) {
+            hideValidationModal();
+            showToast(result.error || 'Invalid GFG handle. Please make sure your profile is public and username is correct.');
+            return false;
+        }
 
-    // Check for pending referral
-    const pendingReferral = localStorage.getItem('pending_referral');
-    if (pendingReferral) {
-        await redeemReferral(handle, pendingReferral);
+        // Delay for smooth UX
+        await new Promise(r => setTimeout(r, 1000));
+
+        // Fetch stats
+        await fetchUserStats(handle);
+
+        // If successful, save locally
+        localStorage.setItem(STORAGE_KEY, handle);
+        currentUser = handle;
+
+        // Update UI
+        updateProfileDisplay(handle);
+        updateNavUsername(handle);
+
+        // Check for pending referral
+        const pendingReferral = localStorage.getItem('pending_referral');
+        if (pendingReferral) {
+            await redeemReferral(handle, pendingReferral);
+        }
+
+        await new Promise(r => setTimeout(r, 600));
+        hideValidationModal();
+        showToast(`Profile verified & saved: ${handle}`);
+        return true;
+
+    } catch (err) {
+        console.error("Validation failed:", err);
+        hideValidationModal();
+        showToast('Connection error. Please try again later.');
+        return false;
     }
+}
 
-    // Show success message
-    showToast(`Profile saved: ${handle}`);
+// Validation Modal Helpers
+function showValidationModal(text = 'Processing...') {
+    const modal = document.getElementById('validation-modal');
+    if (modal) {
+        const title = document.getElementById('validation-title');
+        if (title) title.textContent = text;
+
+        modal.classList.add('active');
+
+        if (typeof lucide !== 'undefined') {
+            setTimeout(() => lucide.createIcons(), 100);
+        }
+    }
+}
+
+function hideValidationModal() {
+    const modal = document.getElementById('validation-modal');
+    if (modal) modal.classList.remove('active');
 }
 
 // Extract username from GFG profile URL

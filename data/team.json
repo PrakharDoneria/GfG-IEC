@@ -9,10 +9,170 @@
     },
     {
         "name": "Prakhar Doneria",
-        "role": "President",
+        "role": "Chapter Lead",
         "details": "Tech Lead & Organizer",
         "image": "static/assets/photos/prakhardoneria.jpg",
         "linkedin": "https://www.linkedin.com/in/prakhar-doneria/",
-        "email": "prakhard.btech2024@ieccollege.com"
+        "email": "prakhar.btech2024@ieccollege.com"
+    },
+    {
+        "name": "Ayush Pathak",
+        "role": "Volunteer",
+        "details": "Core Team Member",
+        "image": "static/assets/photos/ayush.jpeg",
+        "linkedin": "",
+        "email": "ayushpathak120808@gmail.com"
+    },
+    {
+        "name": "Ritik Kumar",
+        "role": "PR and Promotions",
+        "details": "Core Team Member",
+        "image": "static/assets/photos/ritik.jpg",
+        "linkedin": "",
+        "email": "ritikkumar20756548@gmail.com"
+    },
+    {
+        "name": "Sahil Patel",
+        "role": "Technical Role",
+        "details": "Core Team Member",
+        "image": "https://ui-avatars.com/api/?name=Sahil+Patel&background=random",
+        "linkedin": "",
+        "email": "sahilpatel9472@gmail.com"
+    },
+    {
+        "name": "Praveen Kumar",
+        "role": "Volunteer",
+        "details": "Core Team Member",
+        "image": "static/assets/photos/praveen.png",
+        "linkedin": "",
+        "email": "praveenyadavv04@gmail.com"
+    },
+    {
+        "name": "Ashutosh Singh",
+        "role": "PR and Promotions",
+        "details": "Core Team Member",
+        "image": "static/assets/photos/ashutosh.jpg",
+        "linkedin": "",
+        "email": "ashutoshpc123op@gmail.com"
+    },
+    {
+        "name": "Aastha Jha",
+        "role": "PR and Promotions, Technical Role, Speaker",
+        "details": "Core Team Member",
+        "image": "static/assets/photos/aastha.jpeg",
+        "linkedin": "",
+        "email": "aasthajha366@gmail.com"
+    },
+    {
+        "name": "Deepanshu Singh",
+        "role": "Technical Role",
+        "details": "Core Team Member",
+        "image": "https://ui-avatars.com/api/?name=Deepanshu+Singh&background=random",
+        "linkedin": "",
+        "email": "dorilalmaurya03@gmail.com"
+    },
+    {
+        "name": "Ashish Raj",
+        "role": "Website Developer",
+        "details": "Core Team Member",
+        "image": "https://ui-avatars.com/api/?name=Ashish+Raj&background=random",
+        "linkedin": "",
+        "email": "ashishhere013@gmail.com"
+    },
+    {
+        "name": "Shreya Kumari",
+        "role": "Graphics",
+        "details": "Core Team Member",
+        "image": "https://ui-avatars.com/api/?name=Shreya+Kumari&background=random",
+        "linkedin": "",
+        "email": "shreyaak012@gmail.com"
+    },
+    {
+        "name": "Om Pal",
+        "role": "Video Editing, Social Media Manager",
+        "details": "Core Team Member",
+        "image": "https://ui-avatars.com/api/?name=Om+Pal&background=random",
+        "linkedin": "",
+        "email": "ompal989546@gmail.com"
+    },
+    {
+        "name": "Devesh Singh",
+        "role": "Video Editing",
+        "details": "Core Team Member",
+        "image": "static/assets/photos/divesh.jpeg",
+        "linkedin": "",
+        "email": "zero2march@gmail.com"
+    },
+    {
+        "name": "Arsh Malik",
+        "role": "PR and Promotions",
+        "details": "Core Team Member",
+        "image": "static/assets/photos/arsh.jpeg",
+        "linkedin": "",
+        "email": "arsh.malik.ali@gmail.com"
+    },
+    {
+        "name": "Raj Verma",
+        "role": "Technical Role",
+        "details": "Core Team Member",
+        "image": "static/assets/photos/rajver.jpg",
+        "linkedin": "",
+        "email": "rajver3655@gmail.com"
+    },
+    {
+        "name": "Saksham",
+        "role": "Social Media Manager",
+        "details": "Core Team Member",
+        "image": "https://ui-avatars.com/api/?name=Saksham&background=random",
+        "linkedin": "",
+        "email": "sakshamsharma0629@gmail.com"
+    },
+    {
+        "name": "Ayush Kumar Shahi",
+        "role": "Treasurer",
+        "details": "Core Team Member",
+        "image": "static/assets/photos/ayush-kumar.jpeg",
+        "linkedin": "",
+        "email": "ayushkshahi13@gmail.com"
+    },
+    {
+        "name": "Padmesh Kumar Singh",
+        "role": "Technical Role, Speaker, Volunteer",
+        "details": "Core Team Member",
+        "image": "static/assets/photos/padmesh.png",
+        "linkedin": "",
+        "email": "singhpadmesh90@gmail.com"
+    },
+    {
+        "name": "Harsh",
+        "role": "PR and Promotions",
+        "details": "Core Team Member",
+        "image": "static/assets/photos/harsh-sharma.jpg",
+        "linkedin": "",
+        "email": "yahooharsh1012@gmail.com"
+    },
+    {
+        "name": "Prince Kunal",
+        "role": "Technical Role, Speaker, Volunteer",
+        "details": "Core Team Member",
+        "image": "static/assets/photos/prince-kunal.jpg",
+        "linkedin": "",
+        "email": "sharmakumaramit601@gmail.com"
+    },
+    {
+        "name": "Ayush Singh",
+        "role": "Speaker",
+        "details": "Core Team Member",
+        "image": "static/assets/photos/ayush-singh.jpeg",
+        "linkedin": "",
+        "email": "aayushhsinghh001@gmail.com"
+    },
+    {
+        "name": "RAJARSHDEV PANDEY",
+        "role": "Volunteer, Content Writing",
+        "details": "Core Team Member",
+        "image": "static/assets/photos/prajarsh.jpg",
+        "linkedin": "",
+        "email": "prajarshdev@gmail.com"
     }
 ]

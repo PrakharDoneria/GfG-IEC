@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/validation-modal.css') }}">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
@@ -177,6 +178,25 @@
 
     <!-- Points Breakdown Modal -->
     {% include 'points.html' %}
+
+    <!-- Validation Modal -->
+    <div class="validation-modal" id="validation-modal">
+        <div class="validation-backdrop"></div>
+        <div class="validation-content">
+            <div class="validation-loader">
+                <div class="loader-circle"></div>
+                <div class="loader-eye">
+                    <i data-lucide="eye"></i>
+                </div>
+                <div class="loader-dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+            <h3 id="validation-title">Verifying Profile...</h3>
+        </div>
+    </div>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script>

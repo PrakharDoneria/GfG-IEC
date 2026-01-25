@@ -1,0 +1,162 @@
+/* ===================================
+   Validation Modal (Premium)
+   =================================== */
+.validation-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.validation-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.validation-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 8, 16, 0.9);
+    backdrop-filter: blur(10px);
+}
+
+.validation-content {
+    position: relative;
+    z-index: 10002;
+    width: 90%;
+    max-width: 350px;
+    padding: 3rem 2rem;
+    text-align: center;
+    background: rgba(20, 30, 48, 0.95);
+    border: 1px solid rgba(47, 141, 70, 0.4);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(47, 141, 70, 0.15);
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.validation-modal.active .validation-content {
+    transform: scale(1) translateY(0);
+}
+
+.validation-loader {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loader-circle {
+    position: absolute;
+    inset: 0;
+    border: 3px solid rgba(47, 141, 70, 0.15);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1.5s linear infinite;
+}
+
+.loader-eye {
+    position: relative;
+    z-index: 2;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, rgba(47, 141, 70, 0.2), rgba(47, 141, 70, 0.05));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    animation: eyePulse 2.5s ease-in-out infinite;
+    box-shadow: 0 0 30px rgba(47, 141, 70, 0.2);
+}
+
+.loader-eye i {
+    width: 28px;
+    height: 28px;
+}
+
+.loader-dots {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    animation: dotsRotate 3s linear infinite;
+}
+
+.dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--primary);
+    border-radius: 50%;
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.dot:nth-child(1) {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.dot:nth-child(2) {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.dot:nth-child(3) {
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+}
+
+.validation-content h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(135deg, #fff, var(--text-light));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes eyePulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.9;
+    }
+
+    50% {
+        transform: scale(1.15);
+        opacity: 1;
+        box-shadow: 0 0 40px rgba(47, 141, 70, 0.4);
+    }
+}
+
+@keyframes dotsRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
