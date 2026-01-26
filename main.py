@@ -161,6 +161,16 @@ def team_page():
 def leaderboard_page():
     return render_template('leaderboard.html')
 
+@app.route('/partners')
+def partners_page():
+    partners = load_json('data/partners.json')
+    return render_template('partners.html', partners=partners)
+
+@app.route('/sponsors')
+def sponsors_page():
+    sponsors = load_json('data/sponsors.json')
+    return render_template('sponsors.html', sponsors=sponsors)
+
 @app.route('/profile')
 def profile_page():
     return render_template('profile.html')

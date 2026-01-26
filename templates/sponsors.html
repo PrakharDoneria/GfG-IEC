@@ -1,0 +1,284 @@
+{% extends 'base.html' %}
+
+{% block title %}Our Sponsors{% endblock %}
+
+{% block content %}
+<style>
+    .premium-sponsor-card {
+        position: relative;
+        padding: 2.5rem;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .premium-sponsor-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: -1;
+    }
+
+    .premium-sponsor-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        border-color: var(--secondary-color);
+        box-shadow: 0 25px 70px rgba(46, 213, 115, 0.25);
+    }
+
+    .premium-sponsor-card:hover::before {
+        opacity: 0.08;
+    }
+
+    .sponsor-logo-container {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 1.5rem;
+        position: relative;
+        border-radius: 20px;
+        background: linear-gradient(135deg, rgba(46, 213, 115, 0.15), rgba(0, 184, 148, 0.15));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.4s ease;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .premium-sponsor-card:hover .sponsor-logo-container {
+        transform: scale(1.15) rotate(-5deg);
+        box-shadow: 0 15px 40px rgba(46, 213, 115, 0.4);
+        border-color: var(--secondary-color);
+    }
+
+    .sponsor-logo-container img {
+        width: 90px;
+        height: 90px;
+        object-fit: contain;
+        border-radius: 16px;
+    }
+
+    .sponsor-name {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .premium-sponsor-card:hover .sponsor-name {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .tier-badge {
+        display: inline-block;
+        padding: 0.5rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .tier-platinum {
+        background: linear-gradient(135deg, #E8E8E8, #B8B8B8);
+        color: #1a1a1a;
+        box-shadow: 0 5px 20px rgba(232, 232, 232, 0.4);
+    }
+
+    .tier-gold {
+        background: linear-gradient(135deg, #FFD700, #FFA500);
+        color: #1a1a1a;
+        box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
+    }
+
+    .tier-silver {
+        background: linear-gradient(135deg, #C0C0C0, #A8A8A8);
+        color: #1a1a1a;
+        box-shadow: 0 5px 20px rgba(192, 192, 192, 0.4);
+    }
+
+    .premium-sponsor-card:hover .tier-badge {
+        transform: scale(1.1);
+    }
+
+    .sponsor-grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2.5rem;
+        margin-top: 3rem;
+    }
+
+    .whatsapp-sponsor-cta {
+        position: relative;
+        background: linear-gradient(135deg, #0072ff, #00c6ff);
+        padding: 4rem 2rem;
+        border-radius: 30px;
+        text-align: center;
+        overflow: hidden;
+        box-shadow: 0 25px 70px rgba(0, 114, 255, 0.35);
+    }
+
+    .whatsapp-sponsor-cta::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+        animation: rotate-glow 8s linear infinite;
+    }
+
+    @keyframes rotate-glow {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .whatsapp-mega-icon {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 2rem;
+        background: rgba(255, 255, 255, 0.25);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: bounce-float 2s ease-in-out infinite;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    @keyframes bounce-float {
+
+        0%,
+        100% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-15px);
+        }
+    }
+
+    .whatsapp-sponsor-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+        background: white;
+        color: #0072ff;
+        padding: 1.25rem 3rem;
+        border-radius: 60px;
+        font-weight: 800;
+        font-size: 1.2rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        position: relative;
+        z-index: 1;
+    }
+
+    .whatsapp-sponsor-btn:hover {
+        transform: scale(1.08);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    @media (max-width: 768px) {
+        .sponsor-grid-container {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<section class="hero-section">
+    <div class="hero-bg-elements">
+        <div class="gfg-orb orb-1"></div>
+        <div class="gfg-orb orb-2" style="background: var(--secondary-color);"></div>
+        <div class="grid-pattern"></div>
+    </div>
+    <div class="hero-content">
+        <h1 class="hero-title reveal-up">
+            <span class="line-1">Fueling Our</span>
+            <span class="line-2 text-gradient">Mission</span>
+        </h1>
+        <p class="hero-subtitle reveal-up">
+            Our sponsors enable us to host high-quality events and provide resources to our student community.
+        </p>
+    </div>
+</section>
+
+<section class="section-block">
+    <div class="container">
+        <div class="section-header-row reveal-up">
+            <div class="section-title-group">
+                <span class="section-tag">Support</span>
+                <h2 class="section-title">Valued <span class="highlight">Sponsors</span></h2>
+            </div>
+        </div>
+
+        <div class="sponsor-grid-container">
+            {% for sponsor in sponsors %}
+            <a href="{{ sponsor.website }}" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
+                <div class="premium-sponsor-card reveal-item">
+                    <div class="sponsor-logo-container">
+                        <img src="{{ sponsor.logo }}" alt="{{ sponsor.name }}">
+                    </div>
+                    <h3 class="sponsor-name">{{ sponsor.name }}</h3>
+                    <span class="tier-badge tier-{{ sponsor.tier|lower }}">{{ sponsor.tier }}</span>
+                </div>
+            </a>
+            {% endfor %}
+
+            {% if sponsors|length == 0 %}
+            <div class="premium-sponsor-card reveal-item"
+                style="border: 2px dashed rgba(255,255,255,0.2); cursor: default;">
+                <div class="sponsor-logo-container" style="background: rgba(255,255,255,0.05);">
+                    <i data-lucide="award" style="width: 50px; height: 50px; color: var(--secondary-color);"></i>
+                </div>
+                <h3 class="sponsor-name" style="opacity: 0.5;">Your Brand Here</h3>
+                <span class="tier-badge tier-platinum" style="opacity: 0.5;">Platinum</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="section-block" style="padding-top: 2rem;">
+    <div class="container">
+        <div class="whatsapp-sponsor-cta reveal-up">
+            <div class="whatsapp-mega-icon">
+                <i data-lucide="mail" style="width: 50px; height: 50px; color: white;"></i>
+            </div>
+            <h2 style="color: white; font-size: 2.5rem; margin-bottom: 1rem; font-weight: 900;">Become a Sponsor</h2>
+            <p
+                style="color: rgba(255,255,255,0.95); font-size: 1.2rem; margin-bottom: 2.5rem; max-width: 700px; margin-left: auto; margin-right: auto; line-height: 1.8;">
+                Support the next generation of developers and get your brand in front of hundreds of talented students.
+                Multiple sponsorship tiers available with exclusive benefits!
+            </p>
+            <a href="mailto:gfg.ieccet@gmail.com?subject=Sponsorship Inquiry&body=Hi! I'm interested in sponsoring GFG IEC events"
+                class="whatsapp-sponsor-btn">
+                <i data-lucide="mail" style="width: 28px; height: 28px;"></i>
+                <span>gfg.ieccet@gmail.com</span>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

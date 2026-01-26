@@ -1,0 +1,14 @@
+[
+    {
+        "name": "GeeksForGeeks",
+        "logo": "https://media.geeksforgeeks.org/wp-content/uploads/20230403183704/gfg_logo.png",
+        "description": "Campus Ambassador Program.",
+        "website": "https://www.geeksforgeeks.org"
+    },
+    {
+        "name": "Techmania Club",
+        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1mCKBN6STvgWMZvBKoxIeBUfxdB0htPoiAw&s",
+        "description": "Official Technical Club of IEC College of Engineering & Technology.",
+        "website": ""
+    }
+]

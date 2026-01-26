@@ -113,6 +113,14 @@
                 <i data-lucide="gift"></i>
                 <span>Refer & Earn</span>
             </a>
+            <a href="{{ url_for('partners_page') }}" class="drawer-link">
+                <i data-lucide="handshake"></i>
+                <span>Our Partners</span>
+            </a>
+            <a href="{{ url_for('sponsors_page') }}" class="drawer-link">
+                <i data-lucide="award"></i>
+                <span>Our Sponsors</span>
+            </a>
             <div class="drawer-divider"></div>
             <a href="{{ url_for('profile_page') }}" class="drawer-link" id="drawer-profile-btn">
                 <i data-lucide="settings"></i>
@@ -126,54 +134,554 @@
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer -->
-    <footer class="main-footer">
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="GFG Logo" class="footer-logo">
-                <h3>GFG Student Chapter</h3>
-                <p>IEC College of Engineering & Technology</p>
-                <p class="footer-tagline">Empowering Future Coders</p>
-            </div>
-            <div class="footer-links-section">
-                <h4>Quick Links</h4>
-                <a href="{{ url_for('home') }}">Home</a>
-                <a href="{{ url_for('leaderboard_page') }}">Leaderboard</a>
-                <a href="{{ url_for('events_page') }}">Events</a>
-                <a href="{{ url_for('courses_page') }}">Courses</a>
-                <a href="{{ url_for('refer_page') }}">Refer & Earn</a>
-            </div>
-            <div class="footer-links-section">
-                <h4>Resources</h4>
-                <a href="{{ url_for('student_id_page') }}">ID Card Generator</a>
-                <a href="{{ url_for('deals_page') }}">Deals</a>
-                <a href="{{ url_for('team_page') }}">Our Team</a>
-                <a href="https://forms.gle/NGTVzxbYBkLuKgKZA" target="_blank" rel="noopener noreferrer">Core Team
-                    Application</a>
-                <a href="https://chat.whatsapp.com/LIn9ooUhHvjKWUm5s5tnDL" target="_blank"
-                    rel="noopener noreferrer">Join Community</a>
-                <a href="https://forms.gle/5WysV2vAoAr7svFd7" target="_blank" rel="noopener noreferrer">Submit Event
-                    Idea</a>
-                <a href="{{ url_for('profile_page') }}">Profile</a>
-                <a href="https://www.geeksforgeeks.org/" target="_blank">GFG Main</a>
-            </div>
-            <div class="footer-social">
-                <h4>Connect With Us</h4>
-                <div class="social-icons">
+    <!-- Creative Footer -->
+    <footer class="creative-footer">
+        <!-- Decorative Top Wave -->
+        <div class="footer-wave">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,0 C150,100 350,0 600,50 C850,100 1050,0 1200,50 L1200,120 L0,120 Z"
+                    fill="url(#footer-gradient)"></path>
+                <defs>
+                    <linearGradient id="footer-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:var(--primary-color);stop-opacity:0.3" />
+                        <stop offset="50%" style="stop-color:var(--secondary-color);stop-opacity:0.5" />
+                        <stop offset="100%" style="stop-color:var(--primary-color);stop-opacity:0.3" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
 
-                    <a href="https://www.linkedin.com/company/gfg-iec-campus-body/" class="social-icon" target="_blank"
-                        rel="noopener noreferrer"><i data-lucide="linkedin"></i></a>
-                    <a href="https://www.instagram.com/geeksforgeeks_ieccet/" class="social-icon" target="_blank"
-                        rel="noopener noreferrer"><i data-lucide="instagram"></i></a>
+        <div class="footer-container">
+            <!-- Brand Section with Animation -->
+            <div class="footer-brand-card">
+                <div class="brand-logo-wrapper">
+                    <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="GFG Logo"
+                        class="footer-logo-animated">
+                    <div class="logo-glow"></div>
+                </div>
+                <h3 class="brand-title">GFG Student Chapter</h3>
+                <p class="brand-subtitle">IEC College of Engineering & Technology</p>
+                <div class="brand-tagline">
+                    <i data-lucide="code-2" class="tagline-icon"></i>
+                    <span>Empowering Future Coders</span>
+                </div>
 
+                <!-- Social Icons -->
+                <div class="footer-social-grid">
+                    <a href="https://www.linkedin.com/company/gfg-iec-campus-body/" target="_blank"
+                        rel="noopener noreferrer" class="social-bubble linkedin">
+                        <i data-lucide="linkedin"></i>
+                        <span class="social-label">LinkedIn</span>
+                    </a>
+                    <a href="https://www.instagram.com/geeksforgeeks_ieccet/" target="_blank" rel="noopener noreferrer"
+                        class="social-bubble instagram">
+                        <i data-lucide="instagram"></i>
+                        <span class="social-label">Instagram</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Links Grid with Cards -->
+            <div class="footer-links-grid">
+                <!-- Quick Navigation Card -->
+                <div class="footer-link-card">
+                    <div class="card-header">
+                        <i data-lucide="compass" class="header-icon"></i>
+                        <h4>Quick Navigation</h4>
+                    </div>
+                    <div class="link-list">
+                        <a href="{{ url_for('home') }}" class="footer-link">
+                            <i data-lucide="home"></i>
+                            <span>Home</span>
+                        </a>
+                        <a href="{{ url_for('leaderboard_page') }}" class="footer-link">
+                            <i data-lucide="trophy"></i>
+                            <span>Leaderboard</span>
+                        </a>
+                        <a href="{{ url_for('events_page') }}" class="footer-link">
+                            <i data-lucide="calendar"></i>
+                            <span>Events</span>
+                        </a>
+                        <a href="{{ url_for('courses_page') }}" class="footer-link">
+                            <i data-lucide="book-open"></i>
+                            <span>Courses</span>
+                        </a>
+                        <a href="{{ url_for('refer_page') }}" class="footer-link">
+                            <i data-lucide="gift"></i>
+                            <span>Refer & Earn</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Resources Card -->
+                <div class="footer-link-card">
+                    <div class="card-header">
+                        <i data-lucide="layers" class="header-icon"></i>
+                        <h4>Resources</h4>
+                    </div>
+                    <div class="link-list">
+                        <a href="{{ url_for('student_id_page') }}" class="footer-link">
+                            <i data-lucide="credit-card"></i>
+                            <span>ID Generator</span>
+                        </a>
+                        <a href="{{ url_for('deals_page') }}" class="footer-link">
+                            <i data-lucide="ticket-percent"></i>
+                            <span>Deals</span>
+                        </a>
+                        <a href="{{ url_for('partners_page') }}" class="footer-link">
+                            <i data-lucide="handshake"></i>
+                            <span>Our Partners</span>
+                        </a>
+                        <a href="{{ url_for('sponsors_page') }}" class="footer-link">
+                            <i data-lucide="award"></i>
+                            <span>Our Sponsors</span>
+                        </a>
+                        <a href="{{ url_for('profile_page') }}" class="footer-link">
+                            <i data-lucide="user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Community Card -->
+                <div class="footer-link-card">
+                    <div class="card-header">
+                        <i data-lucide="users" class="header-icon"></i>
+                        <h4>Join Community</h4>
+                    </div>
+                    <div class="link-list">
+                        <a href="https://forms.gle/NGTVzxbYBkLuKgKZA" target="_blank" rel="noopener noreferrer"
+                            class="footer-link">
+                            <i data-lucide="user-check"></i>
+                            <span>Core Team Application</span>
+                        </a>
+                        <a href="https://chat.whatsapp.com/LIn9ooUhHvjKWUm5s5tnDL" target="_blank"
+                            rel="noopener noreferrer" class="footer-link">
+                            <i data-lucide="message-circle"></i>
+                            <span>WhatsApp Group</span>
+                        </a>
+                        <a href="https://forms.gle/5WysV2vAoAr7svFd7" target="_blank" rel="noopener noreferrer"
+                            class="footer-link">
+                            <i data-lucide="lightbulb"></i>
+                            <span>Submit Event Idea</span>
+                        </a>
+                        <a href="https://www.geeksforgeeks.org/" target="_blank" rel="noopener noreferrer"
+                            class="footer-link">
+                            <i data-lucide="external-link"></i>
+                            <span>GFG Main</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="footer-bottom">
+
+        <!-- Footer Bottom with Gradient -->
+        <div class="footer-bottom-creative">
             <div class="footer-bottom-content">
-                <p>&copy; 2026 GFG IEC Student Chapter. All Rights Reserved.</p>
+                <p class="copyright">
+                    <i data-lucide="heart" class="heart-icon"></i>
+                    <span>Made with passion by GFG IEC Team</span>
+                </p>
+                <p class="year">© 2026 All Rights Reserved</p>
             </div>
         </div>
+    </footer>
+
+    <style>
+        .creative-footer {
+            position: relative;
+            background: linear-gradient(180deg, rgba(10, 10, 15, 0.95) 0%, rgba(5, 5, 10, 1) 100%);
+            margin-top: 5rem;
+            overflow: hidden;
+        }
+
+        .footer-wave {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            transform: translateY(-99%);
+            z-index: 1;
+        }
+
+        .footer-wave svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Brand Card */
+        .footer-brand-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .footer-brand-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(46, 213, 115, 0.1) 0%, transparent 70%);
+            animation: rotate-glow 15s linear infinite;
+        }
+
+        @keyframes rotate-glow {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .brand-logo-wrapper {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .footer-logo-animated {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            position: relative;
+            z-index: 2;
+            animation: float-logo 3s ease-in-out infinite;
+        }
+
+        @keyframes float-logo {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .logo-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle, var(--secondary-color) 0%, transparent 70%);
+            opacity: 0.3;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            50% {
+                opacity: 0.6;
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+        }
+
+        .brand-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .brand-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .brand-tagline {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(46, 213, 115, 0.1);
+            border-radius: 50px;
+            border: 1px solid rgba(46, 213, 115, 0.3);
+            color: var(--secondary-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .tagline-icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Social Bubbles */
+        .footer-social-grid {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .social-bubble {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            flex: 1;
+            max-width: 150px;
+        }
+
+        .social-bubble i {
+            width: 28px;
+            height: 28px;
+            color: white;
+        }
+
+        .social-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .social-bubble.linkedin:hover {
+            background: linear-gradient(135deg, #0077B5, #005582);
+            border-color: #0077B5;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 119, 181, 0.4);
+        }
+
+        .social-bubble.instagram:hover {
+            background: linear-gradient(135deg, #E1306C, #C13584);
+            border-color: #E1306C;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(225, 48, 108, 0.4);
+        }
+
+        /* Links Grid */
+        .footer-links-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .footer-link-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .footer-link-card:hover {
+            border-color: var(--secondary-color);
+            box-shadow: 0 10px 40px rgba(46, 213, 115, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(46, 213, 115, 0.2);
+        }
+
+        .header-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--secondary-color);
+        }
+
+        .card-header h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .link-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            background: transparent;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border: 1px solid transparent;
+        }
+
+        .footer-link i {
+            width: 18px;
+            height: 18px;
+            color: var(--secondary-color);
+            transition: all 0.3s ease;
+        }
+
+        .footer-link:hover {
+            background: rgba(46, 213, 115, 0.1);
+            border-color: rgba(46, 213, 115, 0.3);
+            color: var(--text-primary);
+            transform: translateX(5px);
+        }
+
+        .footer-link:hover i {
+            transform: scale(1.2);
+        }
+
+        /* Footer Bottom */
+        .footer-bottom-creative {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
+            border-top: 1px solid rgba(46, 213, 115, 0.2);
+            padding: 1.5rem 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer-bottom-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .copyright {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .heart-icon {
+            width: 16px;
+            height: 16px;
+            color: #ff6b6b;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            25% {
+                transform: scale(1.2);
+            }
+
+            50% {
+                transform: scale(1);
+            }
+        }
+
+        .year {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .footer-links-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .footer-container {
+                grid-template-columns: 1fr;
+                padding: 3rem 1.5rem 1.5rem;
+                gap: 2rem;
+            }
+
+            .footer-links-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-link-card {
+                padding: 1.5rem;
+            }
+
+            .footer-brand-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .footer-social-grid {
+                flex-direction: row;
+            }
+
+            .social-bubble {
+                max-width: none;
+            }
+
+            .footer-bottom-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+
+            .brand-title {
+                font-size: 1.5rem;
+            }
+
+            .footer-wave {
+                height: 80px;
+            }
+        }
+    </style>
+
     </footer>
 
     <!-- Points Breakdown Modal -->

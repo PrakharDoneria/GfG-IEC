@@ -1,0 +1,276 @@
+{% extends 'base.html' %}
+
+{% block title %}Our Partners{% endblock %}
+
+{% block content %}
+<style>
+    .premium-partner-card {
+        position: relative;
+        padding: 2.5rem;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .premium-partner-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        z-index: -1;
+    }
+
+    .premium-partner-card:hover {
+        transform: translateY(-8px);
+        border-color: var(--secondary-color);
+        box-shadow: 0 20px 60px rgba(46, 213, 115, 0.2);
+    }
+
+    .premium-partner-card:hover::before {
+        opacity: 0.05;
+    }
+
+    .partner-logo-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 1.5rem;
+        position: relative;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(46, 213, 115, 0.1), rgba(0, 184, 148, 0.1));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.4s ease;
+    }
+
+    .premium-partner-card:hover .partner-logo-wrapper {
+        transform: scale(1.1) rotate(5deg);
+        box-shadow: 0 10px 30px rgba(46, 213, 115, 0.3);
+    }
+
+    .partner-logo-wrapper img {
+        width: 70px;
+        height: 70px;
+        object-fit: contain;
+        border-radius: 50%;
+    }
+
+    .partner-name {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.75rem;
+        transition: color 0.3s ease;
+    }
+
+    .premium-partner-card:hover .partner-name {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .partner-desc {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+
+    .partner-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--secondary-color);
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        padding: 0.5rem 1rem;
+        border-radius: 12px;
+        background: rgba(46, 213, 115, 0.1);
+    }
+
+    .partner-link:hover {
+        background: rgba(46, 213, 115, 0.2);
+        transform: translateX(5px);
+    }
+
+    .whatsapp-cta-card {
+        position: relative;
+        background: linear-gradient(135deg, #0072ff, #00c6ff);
+        padding: 3rem;
+        border-radius: 24px;
+        text-align: center;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0, 114, 255, 0.3);
+    }
+
+    .whatsapp-cta-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        animation: pulse-glow 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+
+        0%,
+        100% {
+            transform: scale(1);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+    }
+
+    .whatsapp-icon-large {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 1.5rem;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    .whatsapp-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: white;
+        color: #0072ff;
+        padding: 1rem 2.5rem;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .whatsapp-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .partner-grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
+    @media (max-width: 768px) {
+        .partner-grid-container {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<section class="hero-section">
+    <div class="hero-bg-elements">
+        <div class="gfg-orb orb-1"></div>
+        <div class="gfg-orb orb-2"></div>
+        <div class="grid-pattern"></div>
+    </div>
+    <div class="hero-content">
+        <h1 class="hero-title reveal-up">
+            <span class="line-1">Our Strategic</span>
+            <span class="line-2 text-gradient">Partners</span>
+        </h1>
+        <p class="hero-subtitle reveal-up">
+            Collaborating with industry leaders and student communities to foster innovation and growth.
+        </p>
+    </div>
+</section>
+
+<section class="section-block">
+    <div class="container">
+        <div class="section-header-row reveal-up">
+            <div class="section-title-group">
+                <span class="section-tag">Network</span>
+                <h2 class="section-title">Community <span class="highlight">Partners</span></h2>
+            </div>
+        </div>
+
+        <div class="partner-grid-container">
+            {% for partner in partners %}
+            <div class="premium-partner-card reveal-item">
+                <div class="partner-logo-wrapper">
+                    <img src="{{ partner.logo }}" alt="{{ partner.name }}">
+                </div>
+                <h3 class="partner-name">{{ partner.name }}</h3>
+                <p class="partner-desc">{{ partner.description }}</p>
+                <a href="{{ partner.website }}" target="_blank" class="partner-link">
+                    <span>Visit Website</span>
+                    <i data-lucide="external-link" style="width: 16px; height: 16px;"></i>
+                </a>
+            </div>
+            {% endfor %}
+
+            {% if partners|length == 0 %}
+            <div class="premium-partner-card reveal-item"
+                style="border: 2px dashed rgba(255,255,255,0.2); cursor: default;">
+                <div class="partner-logo-wrapper" style="background: rgba(255,255,255,0.05);">
+                    <i data-lucide="plus-circle" style="width: 40px; height: 40px; color: var(--secondary-color);"></i>
+                </div>
+                <h3 class="partner-name" style="opacity: 0.5;">Your Logo Here</h3>
+                <p class="partner-desc">Become our partner and grow together</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="section-block" style="padding-top: 2rem;">
+    <div class="container">
+        <div class="whatsapp-cta-card reveal-up">
+            <div class="whatsapp-icon-large">
+                <i data-lucide="mail" style="width: 40px; height: 40px; color: white;"></i>
+            </div>
+            <h2 style="color: white; font-size: 2rem; margin-bottom: 1rem; font-weight: 800;">Interested in Partnering?
+            </h2>
+            <p
+                style="color: rgba(255,255,255,0.9); font-size: 1.1rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Let's collaborate on events, workshops, and initiatives. Reach out to us via email!
+            </p>
+            <a href="mailto:gfg.ieccet@gmail.com?subject=Partnership Inquiry&body=Hi! I'm interested in partnering with GFG IEC"
+                class="whatsapp-btn">
+                <i data-lucide="mail" style="width: 24px; height: 24px;"></i>
+                <span>gfg.ieccet@gmail.com</span>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
