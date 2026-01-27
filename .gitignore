@@ -17,4 +17,4 @@ __pycache__/
 .idea/
 
 # Local database history (from previous version)
-leaderboard_history.json
+leaderboard_history.json.env.test
