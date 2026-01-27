@@ -10,7 +10,7 @@ from flask import request, jsonify
 class RateLimiter:
     def __init__(self):
         # Token buckets: {identifier: {'tokens': count, 'last_update': timestamp}}
-        self.buckets = defaultdict(lambda: {'tokens': 0, 'last_update': time.time()})
+        self.buckets = {}
         self.global_bucket = {'tokens': 0, 'last_update': time.time()}
     
     def _refill_bucket(self, bucket, capacity, refill_rate):
@@ -31,6 +31,13 @@ class RateLimiter:
         capacity: max tokens
         refill_rate: tokens per second
         """
+        # Initialize bucket if doesn't exist (start with full capacity)
+        if identifier not in self.buckets:
+            self.buckets[identifier] = {
+                'tokens': capacity,
+                'last_update': time.time()
+            }
+        
         bucket = self.buckets[identifier]
         
         # Refill bucket
@@ -45,6 +52,10 @@ class RateLimiter:
     
     def is_globally_allowed(self, capacity=100, refill_rate=1.0):
         """Global rate limit for all requests"""
+        # Initialize if needed
+        if self.global_bucket['tokens'] == 0 and self.global_bucket['last_update'] == time.time():
+            self.global_bucket['tokens'] = capacity
+        
         available_tokens = self._refill_bucket(
             self.global_bucket, 
             capacity, 
