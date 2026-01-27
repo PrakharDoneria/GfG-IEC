@@ -217,6 +217,8 @@ The application includes a maintenance mode feature that allows you to temporari
 
 ### Documentation
 
-For detailed documentation on maintenance mode, including customization options and troubleshooting, see [MAINTENANCE_MODE.md](./MAINTENANCE_MODE.md).
+For detailed documentation on maintenance mode, including customization options and troubleshooting, see:
+- [MAINTENANCE_MODE.md](./MAINTENANCE_MODE.md) - Complete documentation
+- [MAINTENANCE_EXAMPLES.md](./MAINTENANCE_EXAMPLES.md) - Practical examples and quick start guide
 
 ---
