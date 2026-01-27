@@ -265,8 +265,9 @@ def gfg_core_page():
 
 @app.route('/maintenance')
 def maintenance_page():
-    """Maintenance page route - always accessible even when maintenance mode is off"""
-    return render_template('maintenance.html'), 503
+    """Maintenance page route - returns 200 when maintenance is off, 503 when on"""
+    status_code = 503 if MAINTENANCE_MODE else 200
+    return render_template('maintenance.html'), status_code
 
 # --- API Routes ---
 

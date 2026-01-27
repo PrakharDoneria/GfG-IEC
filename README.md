@@ -61,6 +61,12 @@ Before running the project, ensure you have the following installed:
     SUPABASE_KEY=your_supabase_anon_key
     ```
 
+    **Optional**: Enable maintenance mode (see [Maintenance Mode](#-maintenance-mode) section below):
+
+    ```env
+    MAINTENANCE_MODE=true
+    ```
+
 ## 🏃‍♂️ Usage
 
 To start the application, simply run the `main.py` script. This will automatically start the Flask web server (Frontend) and spawn the FastAPI backend server as a subprocess.
@@ -175,3 +181,42 @@ Tiers are automatically assigned based on total calculated score:
 *   **🥇 Gold**: 200 - 499 Points
 *   **🥈 Silver**: 50 - 199 Points
 *   **🥉 Bronze**: 0 - 49 Points
+
+---
+
+## 🔧 Maintenance Mode
+
+The application includes a maintenance mode feature that allows you to temporarily redirect all traffic to a maintenance page. This is useful during updates, database migrations, or scheduled maintenance.
+
+### Quick Start
+
+**To enable maintenance mode:**
+
+1. Set the environment variable:
+   ```env
+   MAINTENANCE_MODE=true
+   ```
+
+2. For Vercel deployments:
+   - Go to **Project Settings** → **Environment Variables**
+   - Add `MAINTENANCE_MODE` with value `true`
+   - Redeploy or wait for next deployment
+
+**To disable maintenance mode:**
+
+- Set `MAINTENANCE_MODE=false` or remove the variable entirely
+- Restart the application (local) or redeploy (Vercel)
+
+### Features
+
+- ✅ Redirects all traffic to a styled maintenance page
+- ✅ Returns HTTP 503 (Service Unavailable) status code
+- ✅ Static files still served for proper page rendering
+- ✅ Easy toggle via environment variable
+- ✅ No code changes required to enable/disable
+
+### Documentation
+
+For detailed documentation on maintenance mode, including customization options and troubleshooting, see [MAINTENANCE_MODE.md](./MAINTENANCE_MODE.md).
+
+---

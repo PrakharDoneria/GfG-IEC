@@ -165,16 +165,18 @@
     </style>
 </head>
 <body>
-    <!-- Animated particles background -->
     <script>
-        for (let i = 0; i < 30; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 8 + 's';
-            particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
-            document.body.appendChild(particle);
-        }
+        // Wait for DOM to be ready before creating particles
+        document.addEventListener('DOMContentLoaded', function() {
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                document.body.appendChild(particle);
+            }
+        });
     </script>
 
     <div class="maintenance-container">
