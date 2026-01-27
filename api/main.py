@@ -1,10 +1,15 @@
 from flask import Flask, render_template, jsonify, request, abort
 import json
 import os
+import sys
 import requests
 from pathlib import Path
 from dotenv import load_dotenv
 from supabase import create_client, Client
+
+# Add parent directory to path so we can import modules from root
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 import points
 import refer
 from rate_limiter import rate_limit
@@ -12,10 +17,12 @@ from cache_manager import cache
 from request_throttler import throttle_request, with_circuit_breaker
 
 # --- Configuration & Setup ---
-env_path = Path(__file__).parent / ".env"
+# Get the root directory (parent of api/)
+ROOT_DIR = Path(__file__).parent.parent
+env_path = ROOT_DIR / ".env"
 load_dotenv(dotenv_path=env_path)
 
-app = Flask(__name__, static_folder='static', template_folder='templates')
+app = Flask(__name__, static_folder=str(ROOT_DIR / 'static'), template_folder=str(ROOT_DIR / 'templates'))
 
 # Cache Setup - ULTRA-AGGRESSIVE FOR MARCH 2026 TARGET
 import time
@@ -59,8 +66,8 @@ def load_json(filepath):
         return JSON_CACHE[filepath]
         
     try:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        full_path = os.path.join(base_dir, filepath)
+        # Use ROOT_DIR since data files are in the parent directory
+        full_path = ROOT_DIR / filepath
         with open(full_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
             JSON_CACHE[filepath] = data # Store in cache
