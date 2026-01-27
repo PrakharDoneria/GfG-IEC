@@ -11,6 +11,8 @@ on:
 jobs:
   sync-users:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read  # Minimal permissions for reading repo
     
     steps:
       - name: Checkout code
