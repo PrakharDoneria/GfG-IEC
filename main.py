@@ -14,6 +14,13 @@ load_dotenv(dotenv_path=env_path)
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
+# Cache Setup
+import time
+RESPONSE_CACHE_TTL = 3600 # 1 hour for static content
+MEMBER_COUNT_TTL = 3600   # 1 hour for DB count
+JSON_CACHE = {}            # Global in-memory cache for JSON files
+MEMBER_COUNT_CACHE = {"value": 0, "timestamp": 0}
+
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
@@ -32,11 +39,17 @@ PRACTICE_POINTS = {"Hard": 8, "Medium": 4, "Easy": 2, "Basic": 1}
 # --- Helper Functions ---
 
 def load_json(filepath):
+    # Check cache first
+    if filepath in JSON_CACHE:
+        return JSON_CACHE[filepath]
+        
     try:
         base_dir = os.path.dirname(os.path.abspath(__file__))
         full_path = os.path.join(base_dir, filepath)
         with open(full_path, 'r', encoding='utf-8') as f:
-            return json.load(f)
+            data = json.load(f)
+            JSON_CACHE[filepath] = data # Store in cache
+            return data
     except Exception as e:
         print(f"Error loading {filepath}: {e}")
         return []
@@ -55,38 +68,64 @@ def fetch_gfg_data(handle: str):
 # --- Site Stats Helpers ---
 
 def get_member_count():
-    """Fetches member count from site_stats table for optimization"""
+    """Fetches member count with in-memory caching"""
+    global MEMBER_COUNT_CACHE
+    current_time = time.time()
+    
+    # Return cached value if valid
+    if current_time - MEMBER_COUNT_CACHE["timestamp"] < MEMBER_COUNT_TTL and MEMBER_COUNT_CACHE["value"] > 0:
+        return MEMBER_COUNT_CACHE["value"]
+
     if not supabase: return 0
+    
+    count = 0
     try:
+        # Try fetching from site_stats
         res = supabase.table("site_stats").select("value").eq("key", "member_count").execute()
         if res.data and len(res.data) > 0:
-            return res.data[0]["value"]
-        
-        # Fallback: Count from users table and initialize site_stats
-        count_res = supabase.table("users").select("handle", count="exact").execute()
-        count = count_res.count if count_res.count else 0
-        try:
-            supabase.table("site_stats").upsert({"key": "member_count", "value": count}).execute()
-        except: pass
+            count = res.data[0]["value"]
+        else:
+            # Fallback: Count from users table
+            count_res = supabase.table("users").select("handle", count="exact").execute()
+            count = count_res.count if count_res.count else 0
+            
+            # Initialize site_stats
+            try:
+                supabase.table("site_stats").upsert({"key": "member_count", "value": count}).execute()
+            except: pass
+            
+        # Update cache
+        MEMBER_COUNT_CACHE = {"value": count, "timestamp": current_time}
         return count
     except Exception as e:
         print(f"Error fetching member count: {e}")
-        return 0
+        return MEMBER_COUNT_CACHE["value"] # Return stale value if error
 
 def update_member_count(delta):
-    """Increments or decrements member count atomically via RPC or fallback"""
+    """Increments or decrements member count"""
+    global MEMBER_COUNT_CACHE
     if not supabase: return
     try:
-        # Try calling RPC for atomicity
         supabase.rpc("increment_stat", {"row_key": "member_count", "delta": delta}).execute()
+        # Invalidate cache so next read fetches fresh
+        MEMBER_COUNT_CACHE["timestamp"] = 0 
     except Exception as e:
-        print(f"Stat update RPC failed (might need to create the function): {e}")
+        print(f"Stat update failed: {e}")
         # Manual fallback
-        current = get_member_count()
-        supabase.table("site_stats").upsert({"key": "member_count", "value": current + delta}).execute()
+        current = get_member_count() # This will use cache or fetch
+        new_val = current + delta
+        supabase.table("site_stats").upsert({"key": "member_count", "value": new_val}).execute()
+        MEMBER_COUNT_CACHE = {"value": new_val, "timestamp": time.time()}
 
 # --- Page Routes ---
 
+@app.after_request
+def add_header(response):
+    """Add caching headers to static content and safe GET requests"""
+    if request.method == 'GET' and (request.path.startswith('/static') or request.endpoint in ['home', 'courses_page', 'events_page', 'deals_page', 'team_page', 'partners_page', 'sponsors_page']):
+        response.cache_control.public = True
+        response.cache_control.max_age = RESPONSE_CACHE_TTL
+    return response
 
 def format_count(count):
     """Formats count to show ranges like 15+, 50+"""
@@ -111,7 +150,7 @@ def home():
     # Event Counts
     events_list = load_json('data/events/upcoming.json')
     ongoing_list = load_json('data/events/ongoing.json')
-    past_list = load_json('data/events/past.json') # Load past to get accurate total events
+    past_list = load_json('data/events/past.json') 
     
     total_events = len(events_list) + len(ongoing_list) + len(past_list)
     
@@ -120,7 +159,7 @@ def home():
     deals = load_json('data/deals.json')[:2]
     team = load_json('data/team.json')[:4]
     
-    # Member Count (Optimized)
+    # Member Count (Cached)
     member_count = get_member_count()
             
     return render_template('index.html', 

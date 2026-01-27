@@ -219,7 +219,7 @@
         "name": "RAJARSHDEV PANDEY",
         "role": "Volunteer, Content Writing",
         "details": "Core Team Member",
-        "image": "static/assets/photos/prajarsh.jpg",
+        "image": "static/assets/photos/prajarsh.jpeg",
         "linkedin": "",
         "email": "prajarshdev@gmail.com"
     },
@@ -232,11 +232,11 @@
         "email": "akashkrishna91708@gmail.com"
     },
     {
-        "name": "Aryansh Singh",
-        "role": "Technical Role",
+        "name": "Prasansha Kashyap",
+        "role": "Speaker",
         "details": "Core Team Member",
-        "image": "https://ui-avatars.com/api/?name=Aryansh+Singh&background=random",
+        "image": "static/assets/photos/prasansha.jpeg",
         "linkedin": "",
-        "email": "aryansh0005@gmail.com"
+        "email": "kashyapprasansha@gmail.com"
     }
 ]

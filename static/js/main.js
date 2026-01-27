@@ -102,18 +102,32 @@ function initNavigation() {
         updateNavUsername(currentUser);
         updateDrawerUserInfo(currentUser);
 
-        // Initial fetch from DB
+        // Initial fetch from DB (Cheap read)
         fetchUserStats(currentUser).then(() => {
-            // Background sync from GFG API to DB
-            syncUserWithBackend(currentUser).then(() => {
-                // Refresh UI with latest data from DB after sync
-                fetchUserStats(currentUser);
+            // Check if we need to sync with GFG (Expensive write)
+            const lastSync = localStorage.getItem('last_user_sync');
+            const now = Date.now();
+            const ONE_DAY = 24 * 60 * 60 * 1000;
 
-                // If on leaderboard page, refresh it to show updated stats
+            if (!lastSync || (now - parseInt(lastSync)) > ONE_DAY) {
+                console.log("Syncing user data with GFG...");
+                syncUserWithBackend(currentUser).then(() => {
+                    // Refresh UI with latest data from DB after sync
+                    fetchUserStats(currentUser);
+                    localStorage.setItem('last_user_sync', now.toString());
+
+                    // If on leaderboard page, refresh it to show updated stats
+                    if (document.getElementById('leaderboard-body')) {
+                        loadLeaderboard();
+                    }
+                });
+            } else {
+                console.log("User data is fresh. Skipping sync.");
+                // If on leaderboard page, still load it (it uses DB)
                 if (document.getElementById('leaderboard-body')) {
                     loadLeaderboard();
                 }
-            });
+            }
         });
     }
 }
