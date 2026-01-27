@@ -18,3 +18,4 @@ __pycache__/
 
 # Local database history (from previous version)
 leaderboard_history.json
+.env.test

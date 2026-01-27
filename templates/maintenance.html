@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Under Maintenance - GFG IEC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .maintenance-container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 600px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .logo img {
+            width: 120px;
+            height: auto;
+            filter: drop-shadow(0 10px 30px rgba(46, 213, 115, 0.3));
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #2ed573 0%, #1e90ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: #a0a0a0;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .message {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #d0d0d0;
+            margin-bottom: 2.5rem;
+            padding: 0 1rem;
+        }
+
+        .icon-container {
+            margin-bottom: 2rem;
+        }
+
+        .maintenance-icon {
+            font-size: 5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .contact-info {
+            font-size: 0.9rem;
+            color: #808080;
+            margin-top: 2rem;
+        }
+
+        .contact-info a {
+            color: #2ed573;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .contact-info a:hover {
+            color: #1e90ff;
+        }
+
+        /* Background animated particles */
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #2ed573;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: particleFloat 8s infinite;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .message {
+                font-size: 0.9rem;
+            }
+
+            .maintenance-icon {
+                font-size: 4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Wait for DOM to be ready before creating particles
+        document.addEventListener('DOMContentLoaded', function() {
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                document.body.appendChild(particle);
+            }
+        });
+    </script>
+
+    <div class="maintenance-container">
+        <div class="logo">
+            <img src="https://media.geeksforgeeks.org/gfg-gg-logo.svg" alt="GFG Logo">
+        </div>
+        
+        <div class="icon-container">
+            <div class="maintenance-icon">🔧</div>
+        </div>
+
+        <h1>We'll Be Back Soon!</h1>
+        
+        <p class="subtitle">Site Under Maintenance</p>
+        
+        <div class="message">
+            <p>We're currently performing scheduled maintenance to improve your experience.</p>
+            <p>Our team is working hard to get everything back up and running.</p>
+            <p><strong>Thank you for your patience!</strong></p>
+        </div>
+
+        <div class="contact-info">
+            <p>Need immediate assistance?</p>
+            <p>Contact us: <a href="mailto:support@gfgiec.com">support@gfgiec.com</a></p>
+        </div>
+    </div>
+</body>
+</html>

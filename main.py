@@ -14,6 +14,9 @@ load_dotenv(dotenv_path=env_path)
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
+# Maintenance Mode Configuration
+MAINTENANCE_MODE = os.getenv("MAINTENANCE_MODE", "false").lower() == "true"
+
 # Cache Setup
 import time
 RESPONSE_CACHE_TTL = 3600 # 1 hour for static content
@@ -37,6 +40,22 @@ else:
 PRACTICE_POINTS = {"Hard": 8, "Medium": 4, "Easy": 2, "Basic": 1}
 
 # --- Helper Functions ---
+
+@app.before_request
+def check_maintenance_mode():
+    """
+    Middleware to redirect all traffic to maintenance page when MAINTENANCE_MODE is enabled.
+    Exempts static files to allow maintenance page styling.
+    """
+    if MAINTENANCE_MODE:
+        # Allow static files to be served for maintenance page styling
+        if request.path.startswith('/static/'):
+            return None
+        # Allow direct access to maintenance page itself
+        if request.endpoint == 'maintenance_page':
+            return None
+        # Redirect all other requests to maintenance page
+        return render_template('maintenance.html'), 503
 
 def load_json(filepath):
     # Check cache first
@@ -243,6 +262,12 @@ def gfg_core_page():
         return render_template('geeksforgeeks/index.html', students=response.data)
     except Exception as e:
         return f"Error: {str(e)}", 500
+
+@app.route('/maintenance')
+def maintenance_page():
+    """Maintenance page route - returns 200 when maintenance is off, 503 when on"""
+    status_code = 503 if MAINTENANCE_MODE else 200
+    return render_template('maintenance.html'), status_code
 
 # --- API Routes ---
 
