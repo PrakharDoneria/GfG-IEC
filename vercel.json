@@ -3,13 +3,32 @@
     "builds": [
         {
             "src": "main.py",
-            "use": "@vercel/python"
+            "use": "@vercel/python",
+            "config": {
+                "maxLambdaSize": "15mb"
+            }
         }
     ],
     "routes": [
         {
+            "src": "/static/(.*)",
+            "headers": {
+                "Cache-Control": "public, max-age=31536000, immutable"
+            },
+            "dest": "/static/$1"
+        },
+        {
             "src": "/(.*)",
             "dest": "main.py"
         }
-    ]
+    ],
+    "env": {
+        "PYTHON_VERSION": "3.9"
+    },
+    "functions": {
+        "main.py": {
+            "memory": 512,
+            "maxDuration": 10
+        }
+    }
 }

@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 from supabase import create_client, Client
 import points
 import refer
+from rate_limiter import rate_limit
+from cache_manager import cache
 
 # --- Configuration & Setup ---
 env_path = Path(__file__).parent / ".env"
@@ -14,11 +16,11 @@ load_dotenv(dotenv_path=env_path)
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
-# Cache Setup
+# Cache Setup - OPTIMIZED FOR VERCEL RESOURCE CONSERVATION
 import time
-RESPONSE_CACHE_TTL = 3600 # 1 hour for static content
-MEMBER_COUNT_TTL = 3600   # 1 hour for DB count
-JSON_CACHE = {}            # Global in-memory cache for JSON files
+RESPONSE_CACHE_TTL = 14400  # 4 hours for static content (increased from 1 hour)
+MEMBER_COUNT_TTL = 21600    # 6 hours for DB count (increased from 1 hour)
+JSON_CACHE = {}             # Global in-memory cache for JSON files (permanent cache)
 MEMBER_COUNT_CACHE = {"value": 0, "timestamp": 0}
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -252,6 +254,7 @@ def get_events(event_type):
     return jsonify(data)
 
 @app.route("/api/user/<handle>", methods=['POST'])
+@rate_limit(capacity=5, refill_rate=0.05)  # Max 5 requests, refills at 1 per 20 seconds
 def add_user(handle):
     if not supabase: return jsonify({"error": "Database not connected"}), 500
     try:
@@ -285,6 +288,7 @@ def add_user(handle):
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/user/<old_handle>", methods=['PUT'])
+@rate_limit(capacity=5, refill_rate=0.05)  # Max 5 requests, refills at 1 per 20 seconds
 def edit_user(old_handle):
     if not supabase: return jsonify({"error": "Database not connected"}), 500
     new_handle = request.args.get('new_handle')
@@ -315,6 +319,7 @@ def edit_user(old_handle):
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/leaderboard", methods=['GET'])
+@rate_limit(capacity=30, refill_rate=0.5)  # More generous for read-only operations
 def get_leaderboard():
     if not supabase: return jsonify({"error": "Database not connected"}), 500
     try:
@@ -328,6 +333,7 @@ def get_leaderboard():
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/rank/<handle>", methods=['GET'])
+@rate_limit(capacity=20, refill_rate=0.2)  # 20 requests, refills at 1 per 5 seconds
 def get_my_rank(handle):
     if not supabase: return jsonify({"error": "Database not connected"}), 500
     try:
@@ -379,43 +385,21 @@ def delete_user(handle):
 
 @app.route("/api/admin/sync-all", methods=['POST'])
 def sync_all_users():
-    passkey = request.args.get('key')
-    if passkey != "iec_core_2026":
-        return jsonify({"error": "Unauthorized"}), 403
-        
-    if not supabase: return jsonify({"error": "Database not connected"}), 500
-    
-    try:
-        users_res = supabase.table("users").select("handle").execute()
-        handles = [u['handle'] for u in users_res.data]
-        
-        synced_count = 0
-        for handle in handles:
-            try:
-                stats = fetch_gfg_data(handle)
-                # Get referral points
-                ref_data = refer.get_user_points(handle)
-                referral_points = ref_data.get('referral_points', 0) if ref_data else 0
-                total_score = stats["score"] + referral_points
-                
-                supabase.table("users").update({
-                    "score": total_score,
-                    "tier": points.calculate_tier(total_score),
-                    "posts": stats["total_posts"],
-                    "solved": stats["total_solved"]
-                }).eq("handle", handle).execute()
-                synced_count += 1
-            except:
-                continue
-                
-        return jsonify({"message": f"Successfully synced {synced_count} users"})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    """
+    DISABLED: This endpoint consumed too many Vercel resources.
+    Use the GitHub Actions CRON job instead: .github/workflows/sync-users.yml
+    """
+    return jsonify({
+        "error": "This endpoint has been disabled to conserve Vercel resources.",
+        "message": "User syncing now happens automatically via scheduled CRON jobs.",
+        "info": "Individual users can still be synced via POST /api/user/<handle>"
+    }), 410  # 410 Gone - resource permanently removed
 
 # --- Referral API Routes ---
 import refer
 
 @app.route("/api/referral/stats/<handle>", methods=['GET'])
+@rate_limit(capacity=15, refill_rate=0.25)  # 15 requests, refills at 1 per 4 seconds
 def get_referral_stats(handle):
     """Get referral statistics for a user"""
     if not supabase:
@@ -445,6 +429,7 @@ def get_referral_stats(handle):
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/referral/use", methods=['POST'])
+@rate_limit(capacity=3, refill_rate=0.02)  # Very strict: 3 requests, refills at 1 per 50 seconds
 def use_referral():
     """Apply a referral code"""
     if not supabase:
@@ -471,6 +456,7 @@ def use_referral():
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/points/<handle>", methods=['GET'])
+@rate_limit(capacity=20, refill_rate=0.2)  # 20 requests, refills at 1 per 5 seconds
 def get_points_breakdown(handle):
     """Get detailed points breakdown for a user"""
     if not supabase:
@@ -499,6 +485,30 @@ def get_points_breakdown(handle):
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+# --- Cache Management Endpoint ---
+
+@app.route("/api/cache/stats", methods=['GET'])
+def get_cache_stats():
+    """Get cache statistics for monitoring"""
+    passkey = request.args.get('key')
+    if passkey != "iec_core_2026":
+        return jsonify({"error": "Unauthorized"}), 403
+    
+    return jsonify({
+        "cache_stats": cache.get_stats(),
+        "message": "Cache is helping reduce API calls and Vercel resource usage"
+    })
+
+@app.route("/api/cache/clear", methods=['POST'])
+def clear_cache():
+    """Clear cache (admin only)"""
+    passkey = request.args.get('key')
+    if passkey != "iec_core_2026":
+        return jsonify({"error": "Unauthorized"}), 403
+    
+    cache.clear()
+    return jsonify({"message": "Cache cleared successfully"})
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
