@@ -2,6 +2,7 @@ import requests
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from cache_manager import cached
 
 # Points configuration
 PRACTICE_POINTS = {"Hard": 8, "Medium": 4, "Easy": 2, "Basic": 1}
@@ -16,10 +17,12 @@ def calculate_tier(score: int):
         return "Silver"
     return "Bronze"
 
+@cached(ttl=21600)  # Cache for 6 hours - ULTRA-AGGRESSIVE for March 2026
 def fetch_gfg_detailed_stats(handle: str):
     """
     Fetches detailed GFG stats using practice and community APIs.
     Returns a dictionary with breakdown of points.
+    CACHED: Results cached for 6 hours (tripled from 2h) to minimize API calls.
     """
     # 1. Fetch Practice (Questions) Data
     practice_url = "https://practiceapi.geeksforgeeks.org/api/v1/user/problems/submissions/"

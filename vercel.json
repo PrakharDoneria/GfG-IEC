@@ -1,15 +1,21 @@
 {
-    "version": 2,
-    "builds": [
-        {
-            "src": "main.py",
-            "use": "@vercel/python"
-        }
-    ],
     "routes": [
+        {
+            "src": "/static/(.*)",
+            "headers": {
+                "Cache-Control": "public, max-age=31536000, immutable"
+            },
+            "dest": "/static/$1"
+        },
         {
             "src": "/(.*)",
             "dest": "main.py"
         }
-    ]
+    ],
+    "functions": {
+        "main.py": {
+            "memory": 512,
+            "maxDuration": 5
+        }
+    }
 }

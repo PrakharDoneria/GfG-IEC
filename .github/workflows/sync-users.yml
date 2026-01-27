@@ -1,0 +1,106 @@
+name: Sync GFG Users (Bi-Weekly - Ultra Conservative)
+
+# Runs every 2 weeks on Sunday at 2 AM UTC - ULTRA-AGGRESSIVE for March 2026
+# Reduced from weekly to bi-weekly to minimize Vercel resource consumption
+on:
+  schedule:
+    # Runs at 02:00 UTC every other Sunday (1st and 3rd Sunday of month)
+    - cron: '0 2 1-7 * 0'   # First Sunday of month
+    - cron: '0 2 15-21 * 0' # Third Sunday of month
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  sync-users:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read  # Minimal permissions for reading repo
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install requests python-dotenv supabase
+      
+      - name: Sync all users
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          python - <<'EOF'
+          import os
+          import sys
+          import time
+          from supabase import create_client
+          
+          # Add current directory to path
+          sys.path.insert(0, os.getcwd())
+          import points
+          import refer
+          
+          # Initialize Supabase
+          SUPABASE_URL = os.getenv('SUPABASE_URL')
+          SUPABASE_KEY = os.getenv('SUPABASE_KEY')
+          
+          if not SUPABASE_URL or not SUPABASE_KEY:
+              print("ERROR: Supabase credentials not found")
+              sys.exit(1)
+          
+          supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+          
+          # Fetch all users
+          print("Fetching users from database...")
+          users_res = supabase.table("users").select("handle").execute()
+          handles = [u['handle'] for u in users_res.data]
+          
+          print(f"Found {len(handles)} users to sync")
+          
+          synced_count = 0
+          failed_count = 0
+          
+          # Sync users with delay to avoid rate limits
+          for i, handle in enumerate(handles, 1):
+              try:
+                  print(f"[{i}/{len(handles)}] Syncing {handle}...")
+                  
+                  # Fetch GFG stats
+                  stats = points.fetch_gfg_detailed_stats(handle)
+                  
+                  # Get referral points
+                  ref_data = refer.get_user_points(handle)
+                  referral_points = ref_data.get('referral_points', 0) if ref_data else 0
+                  
+                  total_score = stats["total_gfg_score"] + referral_points
+                  
+                  # Update database
+                  supabase.table("users").update({
+                      "score": total_score,
+                      "tier": points.calculate_tier(total_score),
+                      "posts": stats["total_posts"],
+                      "solved": stats["total_solved"]
+                  }).eq("handle", handle).execute()
+                  
+                  synced_count += 1
+                  
+                  # Add delay to avoid overwhelming GFG APIs (2 seconds between requests)
+                  time.sleep(2)
+                  
+              except Exception as e:
+                  print(f"  ERROR syncing {handle}: {e}")
+                  failed_count += 1
+                  continue
+          
+          print(f"\n✅ Sync complete: {synced_count} succeeded, {failed_count} failed")
+          EOF
+      
+      - name: Report completion
+        if: always()
+        run: |
+          echo "Weekly user sync completed"
+          echo "Check logs above for detailed results"

@@ -18,3 +18,6 @@ __pycache__/
 
 # Local database history (from previous version)
 leaderboard_history.json
+
+# Optimization scripts (temporary)
+optimize-images.sh

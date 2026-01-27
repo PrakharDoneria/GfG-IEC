@@ -7,6 +7,9 @@ from dotenv import load_dotenv
 from supabase import create_client, Client
 import points
 import refer
+from rate_limiter import rate_limit
+from cache_manager import cache
+from request_throttler import throttle_request, with_circuit_breaker
 
 # --- Configuration & Setup ---
 env_path = Path(__file__).parent / ".env"
@@ -14,12 +17,24 @@ load_dotenv(dotenv_path=env_path)
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
-# Cache Setup
+# Cache Setup - ULTRA-AGGRESSIVE FOR MARCH 2026 TARGET
 import time
-RESPONSE_CACHE_TTL = 3600 # 1 hour for static content
-MEMBER_COUNT_TTL = 3600   # 1 hour for DB count
-JSON_CACHE = {}            # Global in-memory cache for JSON files
+RESPONSE_CACHE_TTL = 28800   # 8 hours for static content (doubled from 4h)
+MEMBER_COUNT_TTL = 43200     # 12 hours for DB count (doubled from 6h)
+JSON_CACHE = {}              # Global in-memory cache for JSON files (permanent cache)
 MEMBER_COUNT_CACHE = {"value": 0, "timestamp": 0}
+
+# Rate Limiting Configuration - ULTRA-STRICT FOR MARCH 2026
+RATE_LIMITS = {
+    'user_write': {'capacity': 3, 'refill_rate': 0.025},      # POST/PUT user: 3 requests, 40s cooldown (was 5/20s)
+    'referral_use': {'capacity': 2, 'refill_rate': 0.01},     # POST referral: 2 requests, 100s cooldown (was 3/50s)
+    'leaderboard': {'capacity': 15, 'refill_rate': 0.25},     # GET leaderboard: 15 requests, 4s cooldown (was 30/2s)
+    'user_read': {'capacity': 10, 'refill_rate': 0.1},        # GET user data: 10 requests, 10s cooldown (was 20/5s)
+    'referral_stats': {'capacity': 8, 'refill_rate': 0.125},  # GET referral stats: 8 requests, 8s cooldown (was 15/4s)
+}
+
+# Request Throttling - NEW: Minimum delay between any requests
+REQUEST_THROTTLE_MS = 500  # 500ms minimum between requests globally
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
@@ -252,6 +267,9 @@ def get_events(event_type):
     return jsonify(data)
 
 @app.route("/api/user/<handle>", methods=['POST'])
+@throttle_request(min_delay_ms=500)  # Ultra-aggressive: 500ms global throttle
+@with_circuit_breaker  # Prevent cascading failures
+@rate_limit(**RATE_LIMITS['user_write'])
 def add_user(handle):
     if not supabase: return jsonify({"error": "Database not connected"}), 500
     try:
@@ -285,6 +303,9 @@ def add_user(handle):
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/user/<old_handle>", methods=['PUT'])
+@throttle_request(min_delay_ms=500)
+@with_circuit_breaker
+@rate_limit(**RATE_LIMITS['user_write'])
 def edit_user(old_handle):
     if not supabase: return jsonify({"error": "Database not connected"}), 500
     new_handle = request.args.get('new_handle')
@@ -315,6 +336,8 @@ def edit_user(old_handle):
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/leaderboard", methods=['GET'])
+@throttle_request(min_delay_ms=500)
+@rate_limit(**RATE_LIMITS['leaderboard'])
 def get_leaderboard():
     if not supabase: return jsonify({"error": "Database not connected"}), 500
     try:
@@ -328,6 +351,8 @@ def get_leaderboard():
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/rank/<handle>", methods=['GET'])
+@throttle_request(min_delay_ms=500)
+@rate_limit(**RATE_LIMITS['user_read'])
 def get_my_rank(handle):
     if not supabase: return jsonify({"error": "Database not connected"}), 500
     try:
@@ -379,43 +404,22 @@ def delete_user(handle):
 
 @app.route("/api/admin/sync-all", methods=['POST'])
 def sync_all_users():
-    passkey = request.args.get('key')
-    if passkey != "iec_core_2026":
-        return jsonify({"error": "Unauthorized"}), 403
-        
-    if not supabase: return jsonify({"error": "Database not connected"}), 500
-    
-    try:
-        users_res = supabase.table("users").select("handle").execute()
-        handles = [u['handle'] for u in users_res.data]
-        
-        synced_count = 0
-        for handle in handles:
-            try:
-                stats = fetch_gfg_data(handle)
-                # Get referral points
-                ref_data = refer.get_user_points(handle)
-                referral_points = ref_data.get('referral_points', 0) if ref_data else 0
-                total_score = stats["score"] + referral_points
-                
-                supabase.table("users").update({
-                    "score": total_score,
-                    "tier": points.calculate_tier(total_score),
-                    "posts": stats["total_posts"],
-                    "solved": stats["total_solved"]
-                }).eq("handle", handle).execute()
-                synced_count += 1
-            except:
-                continue
-                
-        return jsonify({"message": f"Successfully synced {synced_count} users"})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    """
+    DISABLED: This endpoint consumed too many Vercel resources.
+    Use the GitHub Actions CRON job instead: .github/workflows/sync-users.yml
+    """
+    return jsonify({
+        "error": "This endpoint has been disabled to conserve Vercel resources.",
+        "message": "User syncing now happens automatically via scheduled CRON jobs.",
+        "info": "Individual users can still be synced via POST /api/user/<handle>"
+    }), 410  # 410 Gone - resource permanently removed
 
 # --- Referral API Routes ---
 import refer
 
 @app.route("/api/referral/stats/<handle>", methods=['GET'])
+@throttle_request(min_delay_ms=500)
+@rate_limit(**RATE_LIMITS['referral_stats'])
 def get_referral_stats(handle):
     """Get referral statistics for a user"""
     if not supabase:
@@ -445,6 +449,9 @@ def get_referral_stats(handle):
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/referral/use", methods=['POST'])
+@throttle_request(min_delay_ms=500)
+@with_circuit_breaker
+@rate_limit(**RATE_LIMITS['referral_use'])
 def use_referral():
     """Apply a referral code"""
     if not supabase:
@@ -471,6 +478,8 @@ def use_referral():
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/points/<handle>", methods=['GET'])
+@throttle_request(min_delay_ms=500)
+@rate_limit(**RATE_LIMITS['user_read'])
 def get_points_breakdown(handle):
     """Get detailed points breakdown for a user"""
     if not supabase:
@@ -499,6 +508,42 @@ def get_points_breakdown(handle):
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+# --- Cache Management Endpoint ---
+
+@app.route("/api/cache/stats", methods=['GET'])
+def get_cache_stats():
+    """Get cache statistics for monitoring"""
+    passkey = request.args.get('key')
+    if passkey != "iec_core_2026":
+        return jsonify({"error": "Unauthorized"}), 403
+    
+    from request_throttler import get_throttle_stats
+    
+    return jsonify({
+        "cache_stats": cache.get_stats(),
+        "throttle_stats": get_throttle_stats(),
+        "message": "Ultra-aggressive mode active for March 2026 target",
+        "config": {
+            "cache_ttl": {
+                "response": f"{RESPONSE_CACHE_TTL}s (8 hours)",
+                "member_count": f"{MEMBER_COUNT_TTL}s (12 hours)",
+                "gfg_api": "21600s (6 hours)"
+            },
+            "rate_limits": RATE_LIMITS,
+            "throttle": f"{REQUEST_THROTTLE_MS}ms minimum delay"
+        }
+    })
+
+@app.route("/api/cache/clear", methods=['POST'])
+def clear_cache():
+    """Clear cache (admin only)"""
+    passkey = request.args.get('key')
+    if passkey != "iec_core_2026":
+        return jsonify({"error": "Unauthorized"}), 403
+    
+    cache.clear()
+    return jsonify({"message": "Cache cleared successfully"})
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
