@@ -1,11 +1,12 @@
-name: Sync GFG Users (Weekly)
+name: Sync GFG Users (Bi-Weekly - Ultra Conservative)
 
-# Runs once per week on Sunday at 2 AM UTC to sync all users
-# This replaces the resource-intensive sync-all API endpoint
+# Runs every 2 weeks on Sunday at 2 AM UTC - ULTRA-AGGRESSIVE for March 2026
+# Reduced from weekly to bi-weekly to minimize Vercel resource consumption
 on:
   schedule:
-    # Runs at 02:00 UTC every Sunday (cron format: minute hour day-of-month month day-of-week)
-    - cron: '0 2 * * 0'
+    # Runs at 02:00 UTC every other Sunday (1st and 3rd Sunday of month)
+    - cron: '0 2 1-7 * 0'   # First Sunday of month
+    - cron: '0 2 15-21 * 0' # Third Sunday of month
   workflow_dispatch:  # Allow manual triggering
 
 jobs:

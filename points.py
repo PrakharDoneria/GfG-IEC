@@ -17,12 +17,12 @@ def calculate_tier(score: int):
         return "Silver"
     return "Bronze"
 
-@cached(ttl=7200)  # Cache for 2 hours to drastically reduce API calls
+@cached(ttl=21600)  # Cache for 6 hours - ULTRA-AGGRESSIVE for March 2026
 def fetch_gfg_detailed_stats(handle: str):
     """
     Fetches detailed GFG stats using practice and community APIs.
     Returns a dictionary with breakdown of points.
-    CACHED: Results cached for 2 hours to reduce Vercel resource usage.
+    CACHED: Results cached for 6 hours (tripled from 2h) to minimize API calls.
     """
     # 1. Fetch Practice (Questions) Data
     practice_url = "https://practiceapi.geeksforgeeks.org/api/v1/user/problems/submissions/"
