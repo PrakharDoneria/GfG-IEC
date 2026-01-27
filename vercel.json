@@ -9,11 +9,11 @@
         },
         {
             "src": "/(.*)",
-            "dest": "main.py"
+            "dest": "api/main.py"
         }
     ],
     "functions": {
-        "main.py": {
+        "api/main.py": {
             "memory": 512,
             "maxDuration": 5
         }
