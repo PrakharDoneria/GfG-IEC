@@ -23,6 +23,15 @@ MEMBER_COUNT_TTL = 21600    # 6 hours for DB count (increased from 1 hour)
 JSON_CACHE = {}             # Global in-memory cache for JSON files (permanent cache)
 MEMBER_COUNT_CACHE = {"value": 0, "timestamp": 0}
 
+# Rate Limiting Configuration - OPTIMIZED FOR RESOURCE CONSERVATION
+RATE_LIMITS = {
+    'user_write': {'capacity': 5, 'refill_rate': 0.05},      # POST/PUT user: 5 requests, 20s cooldown
+    'referral_use': {'capacity': 3, 'refill_rate': 0.02},    # POST referral: 3 requests, 50s cooldown
+    'leaderboard': {'capacity': 30, 'refill_rate': 0.5},     # GET leaderboard: 30 requests, 2s cooldown
+    'user_read': {'capacity': 20, 'refill_rate': 0.2},       # GET user data: 20 requests, 5s cooldown
+    'referral_stats': {'capacity': 15, 'refill_rate': 0.25}, # GET referral stats: 15 requests, 4s cooldown
+}
+
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
@@ -254,7 +263,7 @@ def get_events(event_type):
     return jsonify(data)
 
 @app.route("/api/user/<handle>", methods=['POST'])
-@rate_limit(capacity=5, refill_rate=0.05)  # Max 5 requests, refills at 1 per 20 seconds
+@rate_limit(**RATE_LIMITS['user_write'])
 def add_user(handle):
     if not supabase: return jsonify({"error": "Database not connected"}), 500
     try:
@@ -288,7 +297,7 @@ def add_user(handle):
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/user/<old_handle>", methods=['PUT'])
-@rate_limit(capacity=5, refill_rate=0.05)  # Max 5 requests, refills at 1 per 20 seconds
+@rate_limit(**RATE_LIMITS['user_write'])
 def edit_user(old_handle):
     if not supabase: return jsonify({"error": "Database not connected"}), 500
     new_handle = request.args.get('new_handle')
@@ -319,7 +328,7 @@ def edit_user(old_handle):
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/leaderboard", methods=['GET'])
-@rate_limit(capacity=30, refill_rate=0.5)  # More generous for read-only operations
+@rate_limit(**RATE_LIMITS['leaderboard'])
 def get_leaderboard():
     if not supabase: return jsonify({"error": "Database not connected"}), 500
     try:
@@ -333,7 +342,7 @@ def get_leaderboard():
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/rank/<handle>", methods=['GET'])
-@rate_limit(capacity=20, refill_rate=0.2)  # 20 requests, refills at 1 per 5 seconds
+@rate_limit(**RATE_LIMITS['user_read'])
 def get_my_rank(handle):
     if not supabase: return jsonify({"error": "Database not connected"}), 500
     try:
@@ -399,7 +408,7 @@ def sync_all_users():
 import refer
 
 @app.route("/api/referral/stats/<handle>", methods=['GET'])
-@rate_limit(capacity=15, refill_rate=0.25)  # 15 requests, refills at 1 per 4 seconds
+@rate_limit(**RATE_LIMITS['referral_stats'])
 def get_referral_stats(handle):
     """Get referral statistics for a user"""
     if not supabase:
@@ -429,7 +438,7 @@ def get_referral_stats(handle):
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/referral/use", methods=['POST'])
-@rate_limit(capacity=3, refill_rate=0.02)  # Very strict: 3 requests, refills at 1 per 50 seconds
+@rate_limit(**RATE_LIMITS['referral_use'])
 def use_referral():
     """Apply a referral code"""
     if not supabase:
@@ -456,7 +465,7 @@ def use_referral():
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/points/<handle>", methods=['GET'])
-@rate_limit(capacity=20, refill_rate=0.2)  # 20 requests, refills at 1 per 5 seconds
+@rate_limit(**RATE_LIMITS['user_read'])
 def get_points_breakdown(handle):
     """Get detailed points breakdown for a user"""
     if not supabase:

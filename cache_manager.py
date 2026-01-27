@@ -19,7 +19,11 @@ class CacheManager:
         }
     
     def _generate_key(self, func_name, *args, **kwargs):
-        """Generate a cache key from function name and arguments"""
+        """
+        Generate a cache key from function name and arguments
+        Note: Using MD5 for cache key generation (not security-critical).
+        MD5 is fast and sufficient for cache key hashing.
+        """
         key_dict = {
             'func': func_name,
             'args': args,

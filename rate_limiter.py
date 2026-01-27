@@ -11,7 +11,7 @@ class RateLimiter:
     def __init__(self):
         # Token buckets: {identifier: {'tokens': count, 'last_update': timestamp}}
         self.buckets = {}
-        self.global_bucket = {'tokens': 0, 'last_update': time.time()}
+        self.global_bucket = {'tokens': 0, 'last_update': time.time(), 'initialized': None}
     
     def _refill_bucket(self, bucket, capacity, refill_rate):
         """Refill tokens based on elapsed time"""
@@ -52,9 +52,10 @@ class RateLimiter:
     
     def is_globally_allowed(self, capacity=100, refill_rate=1.0):
         """Global rate limit for all requests"""
-        # Initialize if needed
-        if self.global_bucket['tokens'] == 0 and self.global_bucket['last_update'] == time.time():
+        # Initialize if needed - check if bucket was just created
+        if self.global_bucket.get('initialized') is None:
             self.global_bucket['tokens'] = capacity
+            self.global_bucket['initialized'] = True
         
         available_tokens = self._refill_bucket(
             self.global_bucket, 
