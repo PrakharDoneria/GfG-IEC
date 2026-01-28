@@ -137,7 +137,7 @@
     },
     {
         "name": "Ayush Kumar Shahi",
-        "role": "Treasurer",
+        "role": "Volunteer",
         "details": "Core Team Member",
         "image": "static/assets/photos/Ayush-Kumar-Shahi.jpg",
         "linkedin": "",
@@ -238,5 +238,29 @@
         "image": "static/assets/photos/prasansha.jpeg",
         "linkedin": "",
         "email": "kashyapprasansha@gmail.com"
+    },
+    {
+        "name": "Riddhi Kumari",
+        "role": "PR and Promotions",
+        "details": "Core Team Member",
+        "image": "static/assets/photos/ridhi.jpeg",
+        "linkedin": "",
+        "email": "ridhikumari516@gmail.com"
+    },
+    {
+        "name": "Aditya Singh",
+        "role": "Video Editing",
+        "details": "Core Team Member",
+        "image": "static/assets/photos/aditya-singh.HEIC",
+        "linkedin": "",
+        "email": "ridhikumari516@gmail.com"
+    },
+    {
+        "name": "Aryansh Singh ",
+        "role": "Technical Role",
+        "details": "Core Team Member",
+        "image": "static/assets/photos/aryansh-singh.jpeg",
+        "linkedin": "",
+        "email": "ridhikumari516@gmail.com"
     }
 ]

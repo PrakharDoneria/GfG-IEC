@@ -13,6 +13,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/validation-modal.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app-download.css') }}">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
@@ -37,22 +38,17 @@
             <ul class="nav-links">
                 <li><a href="{{ url_for('home') }}"
                         class="nav-link {% if request.endpoint == 'home' %}active{% endif %}">Home</a></li>
-                <li><a href="{{ url_for('leaderboard_page') }}"
-                        class="nav-link {% if request.endpoint == 'leaderboard_page' %}active{% endif %}">Leaderboard</a>
-                </li>
                 <li><a href="{{ url_for('events_page') }}"
                         class="nav-link {% if request.endpoint == 'events_page' %}active{% endif %}">Events</a></li>
                 <li><a href="{{ url_for('courses_page') }}"
                         class="nav-link {% if request.endpoint == 'courses_page' %}active{% endif %}">Courses</a></li>
+                <li><a href="{{ url_for('team_page') }}"
+                        class="nav-link {% if request.endpoint == 'team_page' %}active{% endif %}">Team</a></li>
             </ul>
             <div class="nav-actions">
-                <div class="nav-points" id="nav-points">
-                    <i data-lucide="award"></i>
-                    <span id="nav-points-value">0</span>
-                </div>
-                <a href="{{ url_for('profile_page') }}" class="btn-profile">
-                    <i data-lucide="user"></i>
-                    <span id="nav-username">Profile</span>
+                <a href="#download-app" class="btn-app-download">
+                    <i data-lucide="smartphone"></i>
+                    <span>Get App</span>
                 </a>
                 <button class="mobile-menu-btn" id="mobile-menu-toggle">
                     <span></span>
@@ -67,13 +63,11 @@
     <div class="mobile-drawer-backdrop" id="mobile-drawer-backdrop"></div>
     <div class="mobile-drawer" id="mobile-drawer">
         <div class="drawer-header">
-            <div class="drawer-user-info">
-                <div class="drawer-avatar">
-                    <i data-lucide="user"></i>
-                </div>
-                <div class="drawer-user-details">
-                    <span class="drawer-username" id="drawer-username">Guest User</span>
-                    <span class="drawer-points" id="drawer-points">0 Points</span>
+            <div class="drawer-brand">
+                <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="GFG Logo" class="drawer-logo">
+                <div>
+                    <h3>GFG IEC</h3>
+                    <p>Student Chapter</p>
                 </div>
             </div>
             <button class="drawer-close" id="drawer-close">
@@ -84,10 +78,6 @@
             <a href="{{ url_for('home') }}" class="drawer-link">
                 <i data-lucide="home"></i>
                 <span>Home</span>
-            </a>
-            <a href="{{ url_for('leaderboard_page') }}" class="drawer-link">
-                <i data-lucide="trophy"></i>
-                <span>Leaderboard</span>
             </a>
             <a href="{{ url_for('events_page') }}" class="drawer-link">
                 <i data-lucide="calendar"></i>
@@ -109,10 +99,6 @@
                 <i data-lucide="credit-card"></i>
                 <span>ID Card</span>
             </a>
-            <a href="{{ url_for('refer_page') }}" class="drawer-link">
-                <i data-lucide="gift"></i>
-                <span>Refer & Earn</span>
-            </a>
             <a href="{{ url_for('partners_page') }}" class="drawer-link">
                 <i data-lucide="handshake"></i>
                 <span>Our Partners</span>
@@ -120,11 +106,6 @@
             <a href="{{ url_for('sponsors_page') }}" class="drawer-link">
                 <i data-lucide="award"></i>
                 <span>Our Sponsors</span>
-            </a>
-            <div class="drawer-divider"></div>
-            <a href="{{ url_for('profile_page') }}" class="drawer-link" id="drawer-profile-btn">
-                <i data-lucide="settings"></i>
-                <span>Settings</span>
             </a>
         </nav>
     </div>
@@ -194,10 +175,6 @@
                             <i data-lucide="home"></i>
                             <span>Home</span>
                         </a>
-                        <a href="{{ url_for('leaderboard_page') }}" class="footer-link">
-                            <i data-lucide="trophy"></i>
-                            <span>Leaderboard</span>
-                        </a>
                         <a href="{{ url_for('events_page') }}" class="footer-link">
                             <i data-lucide="calendar"></i>
                             <span>Events</span>
@@ -205,10 +182,6 @@
                         <a href="{{ url_for('courses_page') }}" class="footer-link">
                             <i data-lucide="book-open"></i>
                             <span>Courses</span>
-                        </a>
-                        <a href="{{ url_for('refer_page') }}" class="footer-link">
-                            <i data-lucide="gift"></i>
-                            <span>Refer & Earn</span>
                         </a>
                     </div>
                 </div>
@@ -235,10 +208,6 @@
                         <a href="{{ url_for('sponsors_page') }}" class="footer-link">
                             <i data-lucide="award"></i>
                             <span>Our Sponsors</span>
-                        </a>
-                        <a href="{{ url_for('profile_page') }}" class="footer-link">
-                            <i data-lucide="user"></i>
-                            <span>Profile</span>
                         </a>
                     </div>
                 </div>
@@ -684,27 +653,6 @@
 
     </footer>
 
-    <!-- Points Breakdown Modal -->
-    {% include 'points.html' %}
-
-    <!-- Validation Modal -->
-    <div class="validation-modal" id="validation-modal">
-        <div class="validation-backdrop"></div>
-        <div class="validation-content">
-            <div class="validation-loader">
-                <div class="loader-circle"></div>
-                <div class="loader-eye">
-                    <i data-lucide="eye"></i>
-                </div>
-                <div class="loader-dots">
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                    <div class="dot"></div>
-                </div>
-            </div>
-            <h3 id="validation-title">Verifying Profile...</h3>
-        </div>
-    </div>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script>
