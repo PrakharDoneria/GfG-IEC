@@ -9,6 +9,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="hackathon.css">
+  <style>
+    /* Ensure grid items can shrink below their minimum content size on mobile to allow horizontal scrolling of tabs */
+    .main>div {
+      min-width: 0;
+    }
+  </style>
 </head>
 
 <body>
@@ -399,7 +405,7 @@
         <h2 class="section-title">🚀 Event Sponsors</h2>
         <p style="font-size:14px;color:var(--mid);margin-bottom:20px;">We are proud to be supported by these amazing
           organizations.</p>
-        <div class="hc-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+        <div class="hc-grid">
           <div class="hc" style="flex-direction: column; text-align: center; align-items: center; padding: 24px;">
             <div
               style="height: 60px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px;">
@@ -444,7 +450,7 @@
         <h2 class="section-title">🤝 Community & Outreach Partners</h2>
         <p style="font-size:14px;color:var(--mid);margin-bottom:20px;">Collaborating with these communities to reach
           more students.</p>
-        <div class="hc-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+        <div class="hc-grid">
           <div class="hc" style="flex-direction: column; text-align: center; align-items: center; padding: 24px;">
             <div
               style="height: 60px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px;">
