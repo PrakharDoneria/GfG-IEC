@@ -23,12 +23,12 @@
         "link": "events/dsa-workshop/"
     },
     {
-        "title": "Hack a Geek ",
-        "date": "March 17, 2026",
-        "time": "10:00 AM",
+        "title": "Hack-A-Geek",
+        "date": "March 28, 2026",
+        "time": "10:30 AM",
         "status": "upcoming",
-        "venue": "Multiple Venues | Virtual",
-        "description": "Make cool projects along with your friends from our partner colleges.",
+        "venue": "IEC College of Engineering & Technology",
+        "description": "A level playing field where creativity meets code. Build real-world solutions using code, AI tools or no-code — the idea and impact matter most.",
         "link": "events/hack-a-geek/"
     }
 ]
