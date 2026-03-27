@@ -17,7 +17,7 @@
         "title": "GfG IEC DSA Workshop",
         "date": "Feb  27, 2026",
         "time": "10:00 AM",
-        "status": "ongoing",
+        "status": "past",
         "venue": "IEC Seminar Hall",
         "description": "GFG IEC DSA Workshop at IEC College of Engineering & Technology, is a hands-on learning session designed to help students master Data Structures and Algorithms",
         "link": "events/dsa-workshop/"
@@ -26,7 +26,7 @@
         "title": "Hack-A-Geek",
         "date": "March 28, 2026",
         "time": "10:30 AM",
-        "status": "upcoming",
+        "status": "ongoing",
         "venue": "IEC College of Engineering & Technology",
         "description": "A level playing field where creativity meets code. Build real-world solutions using code, AI tools or no-code — the idea and impact matter most.",
         "link": "events/hack-a-geek/"
