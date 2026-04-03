@@ -258,4 +258,74 @@
 
     @media(max-width: 768px) {
         .winners-row { grid-template-columns: 1fr; }
-    }
+    }
+
+    /* UI APPS SECTION */
+    .ui-apps-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 24px;
+        margin-top: 20px;
+    }
+    .ui-app-card {
+        background: var(--white);
+        border: 1.5px solid var(--border);
+        border-radius: 20px;
+        padding: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+    .ui-app-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    }
+    .ui-app-top {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+    .ui-badge {
+        background: var(--light-green);
+        color: var(--green);
+        font-size: 10px;
+        font-weight: 800;
+        padding: 5px 10px;
+        border-radius: 6px;
+        text-transform: uppercase;
+        border: 1px solid rgba(47,141,70,0.15);
+    }
+    .ui-name { font-size: 16px; font-weight: 700; color: var(--text); line-height: 1.2; }
+    .ui-team { font-size: 12px; color: var(--light); margin-top: 2px; }
+    .ui-gallery { border-radius: 12px; overflow: hidden; background: #f9f9f9; }
+    .ui-gallery img { width: 100%; object-fit: cover; display: block; border-radius: 8px; transition: transform 0.3s; }
+    .ui-gallery img:hover { transform: scale(1.03); }
+    
+    .gallery-1 { display: grid; }
+    .gallery-1 img { aspect-ratio: 16/10; }
+    
+    .gallery-3 { 
+        display: grid; 
+        grid-template-columns: 1.5fr 1fr; 
+        grid-template-rows: 1fr 1fr; 
+        gap: 8px; 
+    }
+    .gallery-3 img { height: 100%; }
+    .gallery-3 img:first-child { grid-row: span 2; }
+    
+    .gallery-scroller { 
+        display: flex; 
+        overflow-x: auto; 
+        gap: 10px; 
+        padding-bottom: 5px; 
+        scroll-snap-type: x mandatory; 
+    }
+    .gallery-scroller::-webkit-scrollbar { height: 4px; }
+    .gallery-scroller::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+    .gallery-scroller img { 
+        flex: 0 0 160px; 
+        aspect-ratio: 9/16; 
+        scroll-snap-align: start; 
+    }
+
