@@ -279,4 +279,21 @@
         "linkedin": "",
         "email": "aasthakashyap555@gmail.com"
     }
+    ,
+    {
+        "name": "Vidya Sagar Pandey",
+        "role": "Event Volunteer",
+        "details": "Core Team Member",
+        "image": "static/assets/photos/vspandey.png",
+        "linkedin": "https://www.linkedin.com/in/vidya-sagar-pandey-9315a632a/",
+        "email": "Vidyasagarpandey999@gmail.com"
+    },
+    {
+        "name": "Manya Upadhyay",
+        "role": "Tech Manager",
+        "details": "Core Team Member",
+        "image": "static/assets/photos/manya.png",
+        "linkedin": "https://www.linkedin.com/in/manya-upadhyay-2b70522b2/",
+        "email": "MANYAYUV8404@gmail.com"
+    }
 ]
