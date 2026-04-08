@@ -1,0 +1,196 @@
+:root {
+  --ink: #0a1d32;
+  --soft: #4a5f78;
+  --line: #d6e0ea;
+  --ok: #0d9a50;
+  --warn: #c63d1f;
+  --accent: #1269c7;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Manrope", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 85% 15%, rgba(18, 105, 199, 0.2), transparent 42%),
+    radial-gradient(circle at 5% 95%, rgba(13, 154, 80, 0.18), transparent 37%),
+    linear-gradient(150deg, #f4fbff, #effff5);
+}
+
+.attendance-shell {
+  width: min(980px, 94vw);
+  margin: 20px auto 34px;
+}
+
+.top-card,
+.form-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 22px;
+  padding: 24px;
+  box-shadow: 0 20px 50px rgba(11, 40, 70, 0.14);
+  backdrop-filter: blur(8px);
+}
+
+.top-card h1 {
+  margin: 8px 0 10px;
+  font-family: "Sora", sans-serif;
+  font-size: clamp(1.7rem, 3.3vw, 2.6rem);
+}
+
+.top-card p {
+  color: var(--soft);
+  line-height: 1.6;
+}
+
+.back-link {
+  color: #24496f;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.target-box {
+  margin: 16px 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-weight: 700;
+  color: #1e3e62;
+}
+
+.verify-btn {
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(130deg, var(--accent), #0c4f9f);
+  color: #fff;
+  padding: 14px 22px;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.verify-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 22px rgba(18, 105, 199, 0.3);
+}
+
+.verify-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.75;
+  transform: none;
+}
+
+.helper-text {
+  margin: 14px 0 0;
+  font-size: 0.9rem;
+}
+
+.form-card {
+  margin-top: 18px;
+  overflow: hidden;
+}
+
+.hidden {
+  display: none;
+}
+
+iframe {
+  border: 0;
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 16, 30, 0.72);
+  backdrop-filter: blur(4px);
+}
+
+.modal-card {
+  position: relative;
+  z-index: 1;
+  width: min(500px, 92vw);
+  border-radius: 18px;
+  background: #fff;
+  padding: 22px 20px 18px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.28);
+  animation: riseIn 0.22s ease;
+}
+
+.modal-accent {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(120deg, #1f9d55, #0d9a50);
+  margin-bottom: 14px;
+}
+
+.modal-card h2 {
+  margin: 0;
+  font-family: "Sora", sans-serif;
+}
+
+.modal-card p {
+  margin: 10px 0 18px;
+  color: #39526d;
+  line-height: 1.6;
+}
+
+.modal-btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 16px;
+  font-weight: 700;
+  color: #fff;
+  background: #113f70;
+  cursor: pointer;
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .attendance-shell {
+    width: min(980px, 96vw);
+    margin-top: 10px;
+  }
+
+  .top-card,
+  .form-card {
+    border-radius: 16px;
+    padding: 18px;
+  }
+
+  iframe {
+    height: 1900px;
+  }
+}

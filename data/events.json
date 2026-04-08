@@ -32,12 +32,12 @@
         "link": "events/hack-a-geek/"
     },
     {
-        "title": "Level Up Your Tech Career at the GeeksforGeeks HQ!",
+        "title": "Career Boost Workshop",
         "date": "13th April 2026",
         "time": "2:00 PM – 5:00 PM",
         "status": "upcoming",
-        "venue": "GfG Noida Office",
-        "description": "Ready to bridge the gap between classroom learning and industry standards? Exclusive, hands-on Career Boost Workshop at the GfG Noida Office! Master Data Science or understand top-tier tech roles. Perks: Goodies & E-Certificates. Max 80 seats.",
-        "link": "https://docs.google.com/forms/d/e/1FAIpQLSeYjZ9MWlXoWxQ-vTQce5spTwr8FWUn9EoGMiUqh6PbCYimbw/viewform"
+        "venue": "GFG Noida Office",
+        "description": "Ready to bridge the gap between classroom learning and industry standards? Exclusive, hands-on Career Boost Workshop with location-gated attendance verification.",
+        "link": "events/career-boost-workshop/"
     }
 ]
