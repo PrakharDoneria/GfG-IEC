@@ -1,5 +1,5 @@
-const TARGET_LAT = 28.4758963;
-const TARGET_LON = 77.4986127;
+const TARGET_LAT = 28.5050275;
+const TARGET_LON = 77.3938382;
 const RADIUS_KM = 5;
 const STORAGE_KEY = "career_boost_attendance_locked";
 
@@ -66,19 +66,40 @@ function haversineKm(lat1, lon1, lat2, lon2) {
   return earthRadiusKm * c;
 }
 
-function getCurrentPosition() {
+function getCurrentPosition(options) {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
       reject(new Error("Geolocation is not supported in this browser."));
       return;
     }
 
-    navigator.geolocation.getCurrentPosition(resolve, reject, {
-      enableHighAccuracy: true,
-      timeout: 20000,
-      maximumAge: 0
-    });
+    navigator.geolocation.getCurrentPosition(resolve, reject, options);
   });
+}
+
+async function getPositionWithFallback() {
+  const attempts = [
+    { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 },
+    { enableHighAccuracy: false, timeout: 25000, maximumAge: 120000 },
+    { enableHighAccuracy: false, timeout: 30000, maximumAge: 300000 }
+  ];
+
+  let lastError = null;
+
+  for (const options of attempts) {
+    try {
+      return await getCurrentPosition(options);
+    } catch (error) {
+      lastError = error;
+
+      // Stop retrying if user blocked permission.
+      if (error && error.code === 1) {
+        throw error;
+      }
+    }
+  }
+
+  throw lastError || new Error("Unable to determine location.");
 }
 
 async function ensurePermissionState() {
@@ -167,6 +188,17 @@ async function verifyAndUnlockAttendance() {
   verifyButton.disabled = true;
   verifyButton.textContent = "Checking Location...";
 
+  if (!window.isSecureContext) {
+    verifyButton.disabled = false;
+    verifyButton.textContent = "Verify Location and Open Form";
+    openModal(
+      "error",
+      "Secure Connection Required",
+      "Location access works only on HTTPS or localhost. Please open this page on your secure live site and try again."
+    );
+    return;
+  }
+
   const permissionState = await ensurePermissionState();
   if (permissionState === "denied") {
     verifyButton.disabled = false;
@@ -180,7 +212,7 @@ async function verifyAndUnlockAttendance() {
   }
 
   try {
-    const position = await getCurrentPosition();
+    const position = await getPositionWithFallback();
     const userLat = position.coords.latitude;
     const userLon = position.coords.longitude;
 
