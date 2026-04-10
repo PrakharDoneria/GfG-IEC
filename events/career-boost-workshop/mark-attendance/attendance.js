@@ -1,6 +1,6 @@
 const TARGET_LAT = 28.5050275;
 const TARGET_LON = 77.3938382;
-const RADIUS_KM = 5;
+const RADIUS_KM = 1;
 const STORAGE_KEY = "career_boost_attendance_locked";
 
 const verifyButton = document.getElementById("verifyButton");
