@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Attendance Data | Career Boost Workshop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="attendance.css" />
+</head>
+<body>
+  <main class="data-shell">
+    <div class="data-card">
+      <header class="data-header">
+        <div>
+          <a class="back-link" href="./">← Back to Attendance</a>
+          <h1>Workshop Attendance Data</h1>
+        </div>
+        <div class="header-actions">
+          <button id="exportBtn" class="data-btn export-btn hidden">Export CSV</button>
+          <button id="refreshBtn" class="refresh-btn">Refresh Data</button>
+        </div>
+      </header>
+
+      <section id="filterSection" class="filter-bar hidden">
+        <div class="filter-group" data-filter="Year">
+          <label>Year</label>
+          <div class="filter-options" id="filter-Year"></div>
+        </div>
+        <div class="filter-group" data-filter="Branch">
+          <label>Branch</label>
+          <div class="filter-options" id="filter-Branch"></div>
+        </div>
+        <div class="filter-group" data-filter="Section">
+          <label>Section</label>
+          <div class="filter-options" id="filter-Section"></div>
+        </div>
+        <div class="filter-group" data-filter="Mentor">
+          <label>Mentor</label>
+          <div class="filter-options" id="filter-Mentor"></div>
+        </div>
+        <div class="filter-group" data-filter="College">
+          <label>College</label>
+          <div class="filter-options" id="filter-College"></div>
+        </div>
+      </section>
+      
+      <div id="loadingState" class="loading-state">
+        <div class="spinner"></div>
+        <p>Fetching latest attendance data...</p>
+      </div>
+
+      <div id="tableContainer" class="hidden">
+        <table id="attendanceTable">
+          <thead>
+            <tr id="tableHeader">
+              <!-- Headers will be injected here -->
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Data rows will be injected here -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="errorState" class="hidden loading-state">
+        <p style="color: var(--warn); font-weight: 700;">Failed to load data.</p>
+        <button onclick="location.reload()" class="data-btn" style="margin-top: 10px;">Retry</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="data.js"></script>
+</body>
+</html>
