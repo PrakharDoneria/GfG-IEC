@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GfG IEC DSA Workshop 2026 | GFG IEC Chapter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="workshop.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="https://gfg.iec.edu.in/" class="nav-logo">
+      <div class="logo-box">GFG</div>
+      <div class="logo-text">
+        <span>GFG IEC Chapter</span>
+        <small>IEC College of Engineering & Technology</small>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="https://gfg.iec.edu.in/">Home</a></li>
+      <li><a href="https://gfg.iec.edu.in/events/" class="active">Events</a></li>
+      <li><a href="https://gfg.iec.edu.in/team/">Team</a></li>
+      <li><a href="https://gfg.iec.edu.in/deals/">Deals</a></li>
+      <li><a href="#" onclick="openModal();return false;" class="nav-btn">Register Free</a></li>
+    </ul>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="https://gfg.iec.edu.in/">🏠 Home</a>
+    <a href="https://gfg.iec.edu.in/events/">📅 Events</a>
+    <a href="https://gfg.iec.edu.in/team/">👥 Team</a>
+    <a href="https://gfg.iec.edu.in/deals/">🎁 Deals</a>
+    <a href="https://chat.whatsapp.com/LIn9ooUhHvjKWUm5s5tnDL" target="_blank">💬 WhatsApp Group</a>
+    <a href="#" onclick="openModal();return false;" class="m-reg">🚀 Register Now — Free!</a>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="https://gfg.iec.edu.in/">Home</a><span>›</span>
+  <a href="https://gfg.iec.edu.in/events/">Events</a><span>›</span>
+  GfG IEC DSA Workshop
+</div>
+
+<!-- HERO -->
+<div class="hero-wrap">
+  <div class="hero-banner">
+    <div class="hero-grid">
+      <div>
+        <div class="live-tag"><div class="live-dot"></div> Workshop · Free Entry</div>
+        <h1>GfG IEC <em>DSA</em><br><em>Workshop</em></h1>
+        <p class="hero-sub">Level up your coding game with an exclusive hands-on offline workshop on Data Structures & Algorithms — designed to sharpen your skills for internships and top product companies.</p>
+        <div class="hero-meta">
+          <div class="hm">
+            <div class="hm-icon">📅</div>
+            <div><b>27 Feb 2026</b><small>Seminar Day</small></div>
+          </div>
+          <div class="hm">
+            <div class="hm-icon">⏱️</div>
+            <div><b>10:00 AM – 12:00 PM</b><small>IST</small></div>
+          </div>
+          <div class="hm">
+            <div class="hm-icon">📍</div>
+            <div><b>F-Block Seminar Hall</b><small>IEC College, Greater Noida</small></div>
+          </div>
+          <div class="hm">
+            <div class="hm-icon">👤</div>
+            <div><b>Individual</b><small>All B.Tech Students</small></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COUNTDOWN -->
+      <div class="cd-box">
+        <div class="cd-title" id="cdLabel">📚 Seminar In</div>
+        <div class="cd-row">
+          <div class="cd-unit"><span class="cd-num" id="cD">--</span><div class="cd-lbl">Days</div></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit"><span class="cd-num" id="cH">--</span><div class="cd-lbl">Hrs</div></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit"><span class="cd-num" id="cM">--</span><div class="cd-lbl">Min</div></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit"><span class="cd-num" id="cS">--</span><div class="cd-lbl">Sec</div></div>
+        </div>
+        <div class="cd-event-label" id="cdSub">27 Feb 2026, 10:00 AM IST</div>
+        <button class="cd-register" onclick="openModal()">🚀 Register — Free!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div>
+    <div class="tabs">
+      <div class="tab active" onclick="showTab('about',this)">About</div>
+      <div class="tab" onclick="showTab('schedule',this)">Schedule</div>
+      <div class="tab" onclick="showTab('topics',this)">Topics</div>
+      <div class="tab" onclick="showTab('rules',this)">Rules</div>
+      <div class="tab" onclick="showTab('prizes',this)">Rewards</div>
+    </div>
+
+    <!-- ABOUT -->
+    <div id="tab-about">
+      <div class="prose">
+        <h2 class="section-title">About the Workshop</h2>
+        <p>Are you ready to level up your coding game? <strong>IEC College of Engineering and Technology</strong>, in collaboration with <strong>GeeksforGeeks</strong>, presents an exclusive, hands-on offline workshop on <strong>Data Structures and Algorithms (DSA)</strong>.</p>
+        <p>Whether you are preparing for upcoming internships or aiming for top-tier product companies, this offline session is designed to sharpen your problem-solving skills and provide you with a clear roadmap to mastery.</p>
+        <p>The live seminar will take place in the <strong>Seminar Hall, F-Block</strong> at IEC College, Greater Noida on <strong>27 February 2026 from 2:00 PM IST.</strong></p>
+      </div>
+
+      <div class="hc-grid">
+        <div class="hc"><div class="hc-icon">💻</div><div><h4>Hands-On Coding</h4><p>Live coding exercises on the GFG platform. Bring your fully charged laptop!</p></div></div>
+        <div class="hc"><div class="hc-icon">🎯</div><div><h4>Interview-Focused</h4><p>Problems and patterns curated for placement & internship preparation.</p></div></div>
+        <div class="hc"><div class="hc-icon">🗺️</div><div><h4>DSA Roadmap</h4><p>Clear, structured roadmap to DSA mastery — from basics to advanced topics.</p></div></div>
+        <div class="hc"><div class="hc-icon">📜</div><div><h4>Certificate</h4><p>Certificates provided to participants who attend the full session.</p></div></div>
+        <div class="hc"><div class="hc-icon">🤝</div><div><h4>Networking</h4><p>Connect with peers, seniors, and GFG IEC community members.</p></div></div>
+        <div class="hc"><div class="hc-icon">🆓</div><div><h4>Completely Free</h4><p>No registration fee — open to all B.Tech students of IEC College.</p></div></div>
+      </div>
+
+      <!-- SOCIAL -->
+      <div style="background:var(--light-green);border-radius:12px;padding:14px 16px;margin-top:4px;">
+        <p style="font-size:13px;color:var(--mid);margin:0;line-height:1.7;">
+          <strong style="color:var(--green);">📲 Stay Connected:</strong><br>
+          Instagram: <strong>@geeksforgeeks_ieccet</strong> &nbsp;|&nbsp; LinkedIn: <strong>@gfg-iec-campus-body</strong><br>
+          <a href="https://chat.whatsapp.com/LIn9ooUhHvjKWUm5s5tnDL" target="_blank" style="color:var(--green);font-weight:700;">💬 Join WhatsApp Group for updates & session links →</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- SCHEDULE -->
+    <div id="tab-schedule" style="display:none">
+      <h2 class="section-title">📅 Workshop Schedule</h2>
+      <div style="background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:6px 16px;margin-bottom:20px;">
+        <div class="agenda-item">
+          <div class="agenda-time">27 Feb<br>10:00 AM</div>
+          <div>
+            <div class="agenda-title">🎙️ Live Seminar Begins — F-Block Seminar Hall</div>
+            <div class="agenda-desc">The live seminar kicks off in the Seminar Hall, F-Block, IEC College. Introduction by GFG IEC Chapter leads, overview of the session and learning objectives.</div>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">10:30 AM</div>
+          <div>
+            <div class="agenda-title">📊 DSA Fundamentals & Complexity Analysis</div>
+            <div class="agenda-desc">What is DSA and why it matters for placements. Time & Space Complexity, Big-O notation — theory + examples.</div>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">11:00 AM</div>
+          <div>
+            <div class="agenda-title">🔢 Arrays, Strings & Common Patterns</div>
+            <div class="agenda-desc">Live coding on GFG platform. Sliding window, two pointers, prefix sum, and more interview-relevant patterns.</div>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">11:15 PM</div>
+          <div>
+            <div class="agenda-title">🔗 Linked Lists, Stacks & Queues</div>
+            <div class="agenda-desc">Core data structures with implementation and hands-on interview-style problem discussions.</div>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">11:30 PM</div>
+          <div>
+            <div class="agenda-title">🌲 Trees, Recursion & Problem Solving</div>
+            <div class="agenda-desc">Binary trees, traversal techniques, and recursion-based problem strategies.</div>
+          </div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">11:45 PM</div>
+          <div>
+            <div class="agenda-title">🏆 DSA Roadmap + Q&A + Certificate Distribution</div>
+            <div class="agenda-desc">Placement roadmap, open Q&A with the GFG IEC team, and certificate handout for full-session attendees.</div>
+          </div>
+        </div>
+        <div class="agenda-item" style="border-bottom:none;">
+          <div class="agenda-time">27 Feb<br>12:00 PM</div>
+          <div>
+            <div class="agenda-title">🏁 Session Closes</div>
+            <div class="agenda-desc">Official end of the GfG IEC DSA Workshop 2026.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOPICS -->
+    <div id="tab-topics" style="display:none">
+      <h2 class="section-title">Topics Covered</h2>
+      <ul class="topic-list">
+        <li>Time & Space Complexity — Big O, Big Theta, Big Omega</li>
+        <li>Arrays — Operations, Sorting, Searching, Common Patterns</li>
+        <li>Strings — Manipulation, Pattern Matching Basics</li>
+        <li>Linked Lists — Singly, Doubly, Circular; Insertion, Deletion</li>
+        <li>Stacks & Queues — Array and Linked List implementations</li>
+        <li>Recursion & Backtracking — Base cases, call stack, classic problems</li>
+        <li>Binary Trees — Inorder, Preorder, Postorder traversals, Height, Diameter</li>
+        <li>Hashing — HashMap, HashSet, Frequency counting</li>
+        <li>Two Pointers & Sliding Window Technique</li>
+        <li>Greedy Algorithms — Introduction and interview questions</li>
+        <li>Dynamic Programming — Memoization vs Tabulation</li>
+        <li>Placement Roadmap & Competitive Programming Tips</li>
+      </ul>
+    </div>
+
+    <!-- RULES -->
+    <div id="tab-rules" style="display:none">
+      <h2 class="section-title">Eligibility & Rules</h2>
+      <ul class="rule-list">
+        <li><div class="ri">🎓</div><div><strong>Who Can Join:</strong> Open to all B.Tech students of IEC College — all years and all branches are welcome.</div></li>
+        <li><div class="ri">💡</div><div><strong>Prerequisites:</strong> A basic understanding of any programming language (C++, Java, or Python) is recommended.</div></li>
+        <li><div class="ri">📜</div><div><strong>Attendance:</strong> Certificates will be provided only to participants who attend the <strong>full session</strong>.</div></li>
+        <li><div class="ri">💻</div><div><strong>Laptop Required:</strong> Please bring your laptop, <strong>fully charged</strong>, for the hands-on coding segments.</div></li>
+        <li><div class="ri">✅</div><div><strong>GFG Account (Mandatory):</strong> You must have a registered account on <strong>GeeksforGeeks</strong> to participate in the live coding exercises.</div></li>
+        <li><div class="ri">💬</div><div><strong>WhatsApp Group (Mandatory):</strong> Join our official WhatsApp group for real-time updates and session links: <a href="https://chat.whatsapp.com/LIn9ooUhHvjKWUm5s5tnDL" target="_blank" style="color:var(--green);font-weight:600;">Join Here →</a></div></li>
+        <li><div class="ri">📸</div><div><strong>Follow on Social Media (Recommended):</strong> Instagram <strong>@geeksforgeeks_ieccet</strong> &amp; LinkedIn <strong>@gfg-iec-campus-body</strong> for event photos, resources, and future opportunities.</div></li>
+      </ul>
+    </div>
+
+    <!-- PRIZES -->
+    <div id="tab-prizes" style="display:none">
+      <h2 class="section-title">🎁 Rewards & Prizes</h2>
+      <p class="prose" style="margin-bottom:0;"><p style="font-size:14px;color:var(--mid);">Special rewards for standout participants, plus certificates for everyone who attends!</p></p>
+      <div class="prize-row">
+        <div class="prize-card pc-gold">
+          <div class="p-trophy">🏆</div>
+          <div class="p-place">Special Award</div>
+          <div class="p-title">Most Attentive Participants</div>
+          <div class="p-details">📜 Certificate<br>🎁 GfG Goodies</div>
+        </div>
+        <div class="prize-card pc-green">
+          <div class="p-trophy">🎓</div>
+          <div class="p-place">All Attendees</div>
+          <div class="p-title">Participation Certificate</div>
+          <div class="p-details">Official certificate from GFG IEC Chapter for full-session attendance</div>
+        </div>
+      </div>
+      <div style="background:var(--light-green);border-radius:12px;padding:14px 16px;margin-top:14px;">
+        <p style="font-size:13px;color:var(--mid);margin:0;line-height:1.65;">🎁 <strong style="color:var(--green);">GfG Goodies</strong> include exclusive GeeksforGeeks merchandise — stay attentive and engaged throughout the session to win!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div>
+    <div class="reg-card">
+      <div class="reg-top">
+        <div class="reg-tag-s">📚 OFFLINE WORKSHOP</div>
+        <h3>GfG IEC <em>DSA</em><br><em>Workshop</em></h3>
+        <div class="free-pill">🆓 Free to Attend</div>
+      </div>
+      <div class="reg-body">
+        <div class="rd"><div class="ri2">📅</div><div><div class="rl">Date</div><div class="rv">27 Feb 2026</div></div></div>
+        <div class="rd"><div class="ri2">⏱️</div><div><div class="rl">Time</div><div class="rv">10:00 AM – 12:00 PM IST</div></div></div>
+        <div class="rd"><div class="ri2">📍</div><div><div class="rl">Venue</div><div class="rv">F-Block Seminar Hall, IEC College, Greater Noida</div></div></div>
+        <div class="rd"><div class="ri2">👤</div><div><div class="rl">Team Size</div><div class="rv">Individual Participation</div></div></div>
+        <div class="rd"><div class="ri2">🎓</div><div><div class="rl">Eligibility</div><div class="rv">UG / PG / Engineering — IEC College</div></div></div>
+        <div class="rd"><div class="ri2">📜</div><div><div class="rl">Certificate</div><div class="rv">Yes — Full Attendance Required</div></div></div>
+        <button class="reg-btn" onclick="openModal()">🚀 Register Now — Free!</button>
+        <div class="seats-note">⚡ Limited seats — Register fast!</div>
+      </div>
+    </div>
+
+    <div class="side-card">
+      <h3>🎁 What You Get</h3>
+      <ul class="perk-list">
+        <li><span>📜</span> Participation Certificate</li>
+        <li><span>🎁</span> GfG Goodies (Top Participants)</li>
+        <li><span>💻</span> Hands-on Coding Practice</li>
+        <li><span>🗺️</span> Placement Roadmap Session</li>
+        <li><span>🤝</span> Community & Networking</li>
+        <li><span>📚</span> DSA Resources & Materials</li>
+      </ul>
+    </div>
+
+    <div class="side-card">
+      <h3>🏢 Organized By</h3>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:38px;height:38px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;color:#fff;flex-shrink:0;">GFG</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;line-height:1.3;">GeeksforGeeks Student Chapter</div>
+          <div style="font-size:11px;color:var(--light);">IEC College of Engineering & Technology</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-card" style="background:linear-gradient(135deg,var(--light-green),#f0faf3);border:none;text-align:center;">
+      <a href="https://chat.whatsapp.com/LIn9ooUhHvjKWUm5s5tnDL" target="_blank" style="display:block;background:#25D366;color:#fff;text-decoration:none;padding:12px;border-radius:9px;font-size:13px;font-weight:700;">💬 Join WhatsApp Group</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="fb">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="logo-box">GFG</div>
+        <span style="font-weight:700;color:var(--green);font-size:15px;">GFG IEC Chapter</span>
+      </div>
+      <p>Building the coding culture at IEC College of Engineering & Technology, Greater Noida.</p>
+    </div>
+    <div class="fc">
+      <h4>Navigation</h4>
+      <a href="https://gfg.iec.edu.in/">Home</a>
+      <a href="https://gfg.iec.edu.in/events/">Events</a>
+      <a href="https://gfg.iec.edu.in/team/">Team</a>
+    </div>
+    <div class="fc">
+      <h4>Resources</h4>
+      <a href="https://gfg.iec.edu.in/student-id/">Student ID</a>
+      <a href="https://gfg.iec.edu.in/deals/">Deals</a>
+      <a href="https://gfg.iec.edu.in/partners/">Partners</a>
+    </div>
+    <div class="fc">
+      <h4>Community</h4>
+      <a href="https://chat.whatsapp.com/LIn9ooUhHvjKWUm5s5tnDL" target="_blank">WhatsApp Group</a>
+      <a href="https://forms.gle/5WysV2vAoAr7svFd7" target="_blank">Submit Idea</a>
+      <a href="https://forms.gle/NGTVzxbYBkLuKgKZA" target="_blank">Core Team App</a>
+    </div>
+  </div>
+  <div class="f-bottom">© 2026 GFG IEC Chapter · Made with ❤️ by the Core Team · IEC College of Engineering & Technology</div>
+</footer>
+
+<!-- MODAL -->
+<div class="overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="m-head">
+      <div class="m-icon">📚</div>
+      <h3>Register for DSA Workshop</h3>
+      <p>GeeksforGeeks Student Chapter — IEC</p>
+    </div>
+    <div class="m-body">
+      <p>You're about to register for the <strong>GfG IEC DSA Workshop 2026</strong> — a free offline seminar at IEC College, Greater Noida.</p>
+      <div class="m-info">
+        <strong>📅 Date:</strong> 27 Feb 2026, 10:00 AM IST<br>
+        <strong>📍 Venue:</strong> F-Block Seminar Hall, IEC College, Greater Noida<br>
+        <strong>💻 Required:</strong> GFG Account + Laptop (fully charged)<br>
+        <strong>💬 Required:</strong> Join WhatsApp Group for updates<br>
+        <strong>🆓 Fee:</strong> Completely Free!
+      </div>
+      <div class="m-actions">
+        <a href="https://unstop.com/p/gfg-iec-dsa-workshop-geeksforgeeks-student-chapter-iec-1630181" target="_blank" class="m-go">Register on Unstop ↗</a>
+        <button class="m-cancel" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="workshop.js"></script>
+</body>
+</html>

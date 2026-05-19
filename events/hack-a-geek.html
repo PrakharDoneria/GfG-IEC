@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hack-A-Geek 2026 | GFG IEC Chapter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="hackathon.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="https://gfg.iec.edu.in/" class="nav-logo">
+      <div class="logo-box">GFG</div>
+      <div class="logo-text">
+        <span>GFG IEC Chapter</span>
+        <small>IEC College of Engineering & Technology</small>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="https://gfg.iec.edu.in/">Home</a></li>
+      <li><a href="https://gfg.iec.edu.in/events/" class="active">Events</a></li>
+      <li><a href="https://gfg.iec.edu.in/team/">Team</a></li>
+      <li><a href="https://gfg.iec.edu.in/deals/">Deals</a></li>
+      <li><a href="#" onclick="openModal();return false;" class="nav-btn">Register Free</a></li>
+    </ul>
+    <button class="hamburger" onclick="toggleMenu()" id="ham" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="https://gfg.iec.edu.in/">🏠 Home</a>
+    <a href="https://gfg.iec.edu.in/events/">📅 Events</a>
+    <a href="https://gfg.iec.edu.in/team/">👥 Team</a>
+    <a href="https://gfg.iec.edu.in/deals/">🎁 Deals</a>
+    <a href="https://chat.whatsapp.com/LIn9ooUhHvjKWUm5s5tnDL" target="_blank">💬 WhatsApp Group</a>
+    <a href="#" onclick="openModal();return false;" class="m-reg">🚀 Register Now — Free!</a>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="https://gfg.iec.edu.in/">Home</a><span>›</span>
+  <a href="https://gfg.iec.edu.in/events/">Events</a><span>›</span>
+  Hack-A-Geek 2026
+</div>
+
+<!-- HERO -->
+<div class="hero-wrap">
+  <div class="hero-banner">
+    <div class="hero-grid">
+      <div>
+        <div class="live-tag"><div class="live-dot"></div> Hackathon · Open Now</div>
+        <h1>Hack<em>-A-</em>Geek<br><em>2026</em></h1>
+        <p class="hero-sub">A level playing field where creativity meets code. Build real-world solutions using code, AI tools like ChatGPT & Claude, or no-code — the idea and impact matter most.</p>
+        <div class="hero-meta">
+          <div class="hm">
+            <div class="hm-icon">📅</div>
+            <div><b>28 March 2026</b><small>Offline Round</small></div>
+          </div>
+          <div class="hm">
+            <div class="hm-icon">📍</div>
+            <div><b>Multiple Colleges</b><small>Gautam Buddha Nagar, UP</small></div>
+          </div>
+          <div class="hm">
+            <div class="hm-icon">👤</div>
+            <div><b>Individual</b><small>Solo Participation</small></div>
+          </div>
+          <div class="hm">
+            <div class="hm-icon">🆓</div>
+            <div><b>Free Entry</b><small>All Students Welcome</small></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIVE COUNTDOWN -->
+      <div class="cd-box">
+        <div class="cd-title" id="cdLabel">⚡ Loading...</div>
+        <div class="cd-row">
+          <div class="cd-unit"><span class="cd-num" id="cD">--</span><div class="cd-lbl">Days</div></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit"><span class="cd-num" id="cH">--</span><div class="cd-lbl">Hrs</div></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit"><span class="cd-num" id="cM">--</span><div class="cd-lbl">Min</div></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit"><span class="cd-num" id="cS">--</span><div class="cd-lbl">Sec</div></div>
+        </div>
+        <div class="cd-event-label" id="cdSub"></div>
+        <button class="cd-register" onclick="openModal()">🚀 Register — Free!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div>
+    <div class="tabs">
+      <div class="tab active" onclick="showTab('about',this)">About</div>
+      <div class="tab" onclick="showTab('timeline',this)">Timeline</div>
+      <div class="tab" onclick="showTab('prizes',this)">Prizes</div>
+      <div class="tab" onclick="showTab('rules',this)">Rules</div>
+      <div class="tab" onclick="showTab('judging',this)">Judging</div>
+    </div>
+
+    <!-- ABOUT -->
+    <div id="tab-about">
+      <div class="prose">
+        <h2 class="section-title">About Hack-A-Geek 2026</h2>
+        <p>Are you a coding wizard? A master of AI prompting? Or just a student with a brilliant idea and the grit to make it happen? <strong>This hackathon is for you.</strong></p>
+        <p>We believe great innovation shouldn't be gated by technical barriers. Whether you write every line of Python from scratch or leverage AI tools like ChatGPT, Claude, or GitHub Copilot — we want to see your creativity in action. This is a level playing field where the <strong>solution and the impact matter most.</strong></p>
+        <p>Organized by the <strong>GeeksforGeeks Student Chapter at IEC College of Engineering & Technology</strong>, Hack-A-Geek 2026 is an offline hackathon spanning multiple colleges across Gautam Buddha Nagar, Uttar Pradesh, India.</p>
+      </div>
+      <div class="hc-grid">
+        <div class="hc"><div class="hc-icon">🤖</div><div><h4>AI Tools Welcome</h4><p>Use ChatGPT, Claude, Copilot — AI is your co-pilot. Results matter more than the tool.</p></div></div>
+        <div class="hc"><div class="hc-icon">🌐</div><div><h4>Open to All Students</h4><p>School, College any year/stream, or Fresh Graduate — everyone is welcome!</p></div></div>
+        <div class="hc"><div class="hc-icon">👤</div><div><h4>Individual Participation</h4><p>Solo hackathon — showcase your own creativity and problem-solving skills independently.</p></div></div>
+        <div class="hc"><div class="hc-icon">🏆</div><div><h4>Rewards for Everyone</h4><p>Top 3, Top 10, Best Idea, Best UI prizes + ₹50 GfG Wallet for first 250 + certificates for all.</p></div></div>
+        <div class="hc"><div class="hc-icon">📱</div><div><h4>Product Design Focus</h4><p>Build real-world usable products with great UI/UX. The user experience matters as much as the idea.</p></div></div>
+        <div class="hc"><div class="hc-icon">📜</div><div><h4>Certificates for All</h4><p>Every participant who attends receives an official participation certificate from GFG IEC Chapter.</p></div></div>
+      </div>
+      <div style="background:var(--light-green);border-radius:12px;padding:14px 16px;">
+        <p style="font-size:13px;color:var(--mid);margin:0;line-height:1.65;"><strong style="color:var(--green);">📌 Eligibility:</strong> Open to all — Undergraduate, Postgraduate, Engineering students. No tech barrier: code, AI tools, or no-code all welcome. Individual participation only.</p>
+      </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div id="tab-timeline" style="display:none">
+      <h2 class="section-title">Stages & Timeline</h2>
+      <div class="timeline">
+
+        <div class="tl-item upcoming">
+          <div class="tl-dot"></div>
+          <div class="tl-badge upcoming">🔜 Upcoming</div>
+          <div class="tl-date">15 Mar 2026 · 12:00 AM IST</div>
+          <div class="tl-title">📋 Registration Deadline</div>
+          <div class="tl-desc">Last date to register on Unstop for Hack-A-Geek 2026. Free to register.</div>
+        </div>
+
+        <div class="tl-item upcoming">
+          <div class="tl-dot"></div>
+          <div class="tl-badge upcoming">🔜 Upcoming</div>
+          <div class="tl-date">17 Mar 2026 · 09:30 PM – 10:00 PM IST</div>
+          <div class="tl-title">🎙️ Orientation Session — Google Meet</div>
+          <div class="tl-desc">Detailed session about the hackathon — what to do and how to build your project. Conducted online via Google Meet.</div>
+        </div>
+
+        <div class="tl-item upcoming">
+          <div class="tl-dot"></div>
+          <div class="tl-badge upcoming">🔜 Upcoming</div>
+          <div class="tl-date">24 Mar 2026, 12:00 AM IST → 27 Mar 2026, 12:01 AM IST</div>
+          <div class="tl-title">💡 Idea Submission</div>
+          <div class="tl-desc">Create a post on <strong>TheWide</strong> explaining your idea. Share a screenshot of your post as your submission for this round.</div>
+        </div>
+
+        <div class="tl-item upcoming">
+          <div class="tl-dot"></div>
+          <div class="tl-badge upcoming">🔜 Upcoming</div>
+          <div class="tl-date">28 Mar 2026 · 10:30 AM – 04:30 PM IST</div>
+          <div class="tl-title">🏫 Offline Round — Build & Showcase</div>
+          <div class="tl-desc">Come to the venue at Multiple Colleges, Gautam Buddha Nagar, UP. Build your project and showcase it to judges and mentors in person.</div>
+        </div>
+
+        <div class="tl-item upcoming">
+          <div class="tl-dot"></div>
+          <div class="tl-badge upcoming">🔜 Upcoming</div>
+          <div class="tl-date">28 Mar 2026 · 12:00 PM – 05:00 PM IST</div>
+          <div class="tl-title">📤 Project Submission</div>
+          <div class="tl-desc">Share your working project link (GitHub / Drive) and a brief video demo of your solution. Must be submitted within the deadline.</div>
+        </div>
+
+        <div class="tl-item upcoming">
+          <div class="tl-dot"></div>
+          <div class="tl-badge upcoming">🔜 Upcoming</div>
+          <div class="tl-date">28 Mar 2026, 12:04 AM → 30 Mar 2026, 12:05 AM IST</div>
+          <div class="tl-title">📝 Post on GfG Connect</div>
+          <div class="tl-desc">Make a post on <strong>GfG Connect</strong> explaining how you built your project — share your journey, process, and learnings with the community.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PRIZES -->
+    <div id="tab-prizes" style="display:none">
+      <h2 class="section-title">🏆 Prizes & Rewards</h2>
+      <div class="prize-row">
+        <div class="prize-card pc-g1">
+          <div class="p-trophy">🥇</div>
+          <div class="p-place">Top 1</div>
+          <div class="p-title">Winner</div>
+          <div class="p-details">📜 Certificate<br>👕 Custom T-Shirt</div>
+        </div>
+        <div class="prize-card pc-g2">
+          <div class="p-trophy">🥈</div>
+          <div class="p-place">Top 2</div>
+          <div class="p-title">Runner-Up</div>
+          <div class="p-details">📜 Certificate<br>👕 Custom T-Shirt</div>
+        </div>
+        <div class="prize-card pc-g3">
+          <div class="p-trophy">🥉</div>
+          <div class="p-place">Top 3</div>
+          <div class="p-title">2nd Runner-Up</div>
+          <div class="p-details">📜 Certificate<br>👕 Custom T-Shirt</div>
+        </div>
+      </div>
+      <div class="prizes-extra">
+        <div class="prize-card pc-g4">
+          <div class="p-trophy">🌐</div>
+          <div class="p-place">Top 10</div>
+          <div class="p-title">Top 10 Finalists</div>
+          <div class="p-details">📜 Certificate<br>🌐 Free .xyz Domain<br>for 1 Year</div>
+        </div>
+        <div class="prize-card pc-g5">
+          <div class="p-trophy">💡</div>
+          <div class="p-place">Special Award</div>
+          <div class="p-title">Best Idea</div>
+          <div class="p-details">📜 Certificate<br>🎫 Stickers</div>
+        </div>
+        <div class="prize-card pc-g6">
+          <div class="p-trophy">🎨</div>
+          <div class="p-place">Special Award</div>
+          <div class="p-title">Best UI Design</div>
+          <div class="p-details">📜 Certificate<br>☕ Custom Mug</div>
+        </div>
+      </div>
+      <div style="background:linear-gradient(135deg,var(--light-green),#f0faf3);border-radius:12px;padding:14px 16px;margin-top:12px;display:flex;gap:12px;align-items:flex-start;">
+        <div style="font-size:22px;flex-shrink:0;">⚡</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:3px;">First 250 Registrations</div>
+          <div style="font-size:13px;color:var(--mid);">Get <strong style="color:var(--green);">₹50 in your GeeksforGeeks Wallet</strong> — Register fast before spots are gone!</div>
+        </div>
+      </div>
+      <div style="background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:13px 15px;margin-top:10px;display:flex;gap:10px;align-items:center;">
+        <div style="font-size:20px;">🎓</div>
+        <div style="font-size:13px;color:var(--mid);">📜 <strong>Participation Certificate</strong> for every single participant who attends Hack-A-Geek 2026.</div>
+      </div>
+    </div>
+
+    <!-- RULES -->
+    <div id="tab-rules" style="display:none">
+      <h2 class="section-title">Rules & Guidelines</h2>
+      <ul class="rule-list">
+        <li><div class="ri">🛠️</div><div><strong>Bring Your Own Tools:</strong> You are encouraged to use AI assistants (LLMs, code generators) to speed up your workflow.</div></li>
+        <li><div class="ri">💡</div><div><strong>Originality First:</strong> While AI is your co-pilot, the final logic, integration, and "Big Idea" must be your own. Plagiarism of existing projects is strictly prohibited.</div></li>
+        <li><div class="ri">⚖️</div><div><strong>Ethics First:</strong> Any AI-generated content must be reviewed by you to ensure accuracy and ethical standards before submission.</div></li>
+        <li><div class="ri">📤</div><div><strong>Project Submission:</strong> Submit your project link (GitHub / Drive) + a brief video demo of your solution within the deadline on 28 Mar 2026.</div></li>
+        <li><div class="ri">📝</div><div><strong>Idea Submission:</strong> Create a post on <strong>TheWide</strong> explaining your idea and share a screenshot as your submission (24 Mar – 27 Mar 2026).</div></li>
+        <li><div class="ri">📱</div><div><strong>GfG Connect Post:</strong> After the hackathon, post on GfG Connect explaining how you built your project (28 Mar – 30 Mar 2026).</div></li>
+        <li><div class="ri">👤</div><div><strong>Individual Only:</strong> This is a solo hackathon. Each participant competes independently — no team submissions.</div></li>
+        <li><div class="ri">🏫</div><div><strong>Offline Presence Required:</strong> The offline round on 28 March requires physical presence at the venue in Gautam Buddha Nagar, UP.</div></li>
+      </ul>
+    </div>
+
+    <!-- JUDGING -->
+    <div id="tab-judging" style="display:none">
+      <h2 class="section-title">Judging Criteria</h2>
+      <p style="font-size:14px;color:var(--mid);margin-bottom:4px;">Each submission is evaluated equally across four key parameters:</p>
+      <div class="judging-grid">
+        <div class="judge-card">
+          <div class="judge-pct">25%</div>
+          <div class="judge-name">💡 Innovation</div>
+          <div class="judge-desc">How unique and original is the idea? Does it stand out from typical solutions?</div>
+          <div class="judge-bar"><div class="judge-fill"></div></div>
+        </div>
+        <div class="judge-card">
+          <div class="judge-pct">25%</div>
+          <div class="judge-name">🎯 Problem-Solution Fit</div>
+          <div class="judge-desc">Does your solution actually and effectively solve the stated problem?</div>
+          <div class="judge-bar"><div class="judge-fill"></div></div>
+        </div>
+        <div class="judge-card">
+          <div class="judge-pct">25%</div>
+          <div class="judge-name">⚙️ Technical Execution</div>
+          <div class="judge-desc">How well did you use your tools (Code / AI) to build a working, functional prototype?</div>
+          <div class="judge-bar"><div class="judge-fill"></div></div>
+        </div>
+        <div class="judge-card">
+          <div class="judge-pct">25%</div>
+          <div class="judge-name">✨ User Experience</div>
+          <div class="judge-desc">Is the solution easy to use, well-presented, and visually intuitive?</div>
+          <div class="judge-bar"><div class="judge-fill"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div>
+    <div class="reg-card">
+      <div class="reg-top">
+        <div class="reg-tag-s">⚡ HACKATHON 2026</div>
+        <h3>Hack-A-Geek<br><em>2026</em></h3>
+        <div class="free-pill">🆓 Free to Register</div>
+      </div>
+      <div class="reg-body">
+        <div class="rd"><div class="ri2">📅</div><div><div class="rl">Offline Round</div><div class="rv">28 Mar 2026, 10:30 AM – 4:30 PM</div></div></div>
+        <div class="rd"><div class="ri2">📍</div><div><div class="rl">Venue</div><div class="rv">Multiple Colleges, Gautam Buddha Nagar, UP</div></div></div>
+        <div class="rd"><div class="ri2">👤</div><div><div class="rl">Team Size</div><div class="rv">Individual Participation</div></div></div>
+        <div class="rd"><div class="ri2">🎓</div><div><div class="rl">Eligibility</div><div class="rv">UG / PG / Engineering Students</div></div></div>
+        <div class="rd"><div class="ri2">🗓️</div><div><div class="rl">Reg. Deadline</div><div class="rv">15 Mar 2026</div></div></div>
+        <div class="rd"><div class="ri2">🏷️</div><div><div class="rl">Category</div><div class="rv">Product Design / Hackathon</div></div></div>
+        <button class="reg-btn" onclick="openModal()">🚀 Register Now — Free!</button>
+        <div class="deadline-note">⚡ First 250 get ₹50 GfG Wallet!</div>
+      </div>
+    </div>
+
+    <div class="side-card">
+      <h3>🎁 What You Get</h3>
+      <ul class="perk-list">
+        <li><span>👕</span> Custom T-Shirt (Top 3)</li>
+        <li><span>🌐</span> Free .xyz Domain — 1 Year (Top 10)</li>
+        <li><span>☕</span> Custom Mug (Best UI)</li>
+        <li><span>🎫</span> Stickers (Best Idea)</li>
+        <li><span>💰</span> ₹50 GfG Wallet (First 250)</li>
+        <li><span>📜</span> Certificate — Everyone</li>
+      </ul>
+    </div>
+
+    <div class="side-card">
+      <h3>🏢 Organized By</h3>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:38px;height:38px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;color:#fff;flex-shrink:0;">GFG</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;line-height:1.3;">GeeksforGeeks Student Chapter</div>
+          <div style="font-size:11px;color:var(--light);">IEC College of Engineering & Technology</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-card" style="background:linear-gradient(135deg,var(--light-green),#f0faf3);text-align:center;border:none;">
+      <a href="https://chat.whatsapp.com/LIn9ooUhHvjKWUm5s5tnDL" target="_blank" style="display:block;background:#25D366;color:#fff;text-decoration:none;padding:12px;border-radius:9px;font-size:13px;font-weight:700;">💬 Join WhatsApp Group</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="fb">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="logo-box">GFG</div>
+        <span style="font-weight:700;color:var(--green);font-size:15px;">GFG IEC Chapter</span>
+      </div>
+      <p>Building the coding culture at IEC College of Engineering & Technology, Greater Noida.</p>
+    </div>
+    <div class="fc">
+      <h4>Navigation</h4>
+      <a href="https://gfg.iec.edu.in/">Home</a>
+      <a href="https://gfg.iec.edu.in/events/">Events</a>
+      <a href="https://gfg.iec.edu.in/team/">Team</a>
+    </div>
+    <div class="fc">
+      <h4>Resources</h4>
+      <a href="https://gfg.iec.edu.in/student-id/">Student ID</a>
+      <a href="https://gfg.iec.edu.in/deals/">Deals</a>
+      <a href="https://gfg.iec.edu.in/partners/">Partners</a>
+    </div>
+    <div class="fc">
+      <h4>Community</h4>
+      <a href="https://chat.whatsapp.com/LIn9ooUhHvjKWUm5s5tnDL" target="_blank">WhatsApp Group</a>
+      <a href="https://forms.gle/5WysV2vAoAr7svFd7" target="_blank">Submit Idea</a>
+      <a href="https://forms.gle/NGTVzxbYBkLuKgKZA" target="_blank">Core Team App</a>
+    </div>
+  </div>
+  <div class="f-bottom">© 2026 GFG IEC Chapter · Made with ❤️ by the Core Team · IEC College of Engineering & Technology</div>
+</footer>
+
+<!-- MODAL -->
+<div class="overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="m-head">
+      <div class="m-icon">⚡</div>
+      <h3>Register for Hack-A-Geek 2026</h3>
+      <p>GeeksforGeeks Student Chapter — IEC</p>
+    </div>
+    <div class="m-body">
+      <p>You're about to register for <strong>Hack-A-Geek 2026</strong> — an offline hackathon at Multiple Colleges, Gautam Buddha Nagar. Registration is completely free on Unstop.</p>
+      <div class="m-info">
+        <strong>📅 Offline Round:</strong> 28 Mar 2026, 10:30 AM – 4:30 PM IST<br>
+        <strong>📍 Venue:</strong> Multiple Colleges, Gautam Buddha Nagar, UP<br>
+        <strong>👤 Type:</strong> Individual Participation<br>
+        <strong>💰 First 250 Reg:</strong> ₹50 in GfG Wallet!
+      </div>
+      <div class="m-actions">
+        <a href="https://unstop.com/p/hack-a-geek-2026-geeksforgeeks-student-chapter-iec-1631006" target="_blank" class="m-go">Register on Unstop ↗</a>
+        <button class="m-cancel" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="hackathon.js"></script>
+</body>
+</html>
