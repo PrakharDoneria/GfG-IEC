@@ -7,7 +7,7 @@
     },
     {
         "name": "Techmania Club",
-        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1mCKBN6STvgWMZvBKoxIeBUfxdB0htPoiAw&s",
+        "logo": "static/assets/brands/techmania.png",
         "description": "Official Technical Club of IEC College of Engineering & Technology.",
         "website": "https://www.iec.edu.in/"
     },

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GFG IEC | Merch Store</title>
+    <meta name="description"
+        content="Support the GFG IEC Student Chapter by grabbing our official merchandise.">
+    <link rel="icon" href="../static/assets/logo.png" type="image/png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../static/css/modern-styles.css">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="../static/css/merch.css">
+</head>
+
+<body>
+    <!-- Premium Loader -->
+    <div id="loader" class="loader-wrapper">
+        <div class="loader-content">
+            <div class="loader-logo">
+                <img src="../static/assets/logo.png" alt="GFG Logo">
+            </div>
+            <div class="loader-bar-container">
+                <div class="loader-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="premium-nav">
+        <div class="nav-container">
+            <a href="../" class="logo">
+                <img src="../static/assets/logo.png" alt="GFG Logo">
+                <div class="logo-text">
+                    <span class="logo-main">GFG</span>
+                    <span class="logo-sub">IEC Chapter</span>
+                </div>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="../" class="nav-link">Home</a></li>
+                <li><a href="../events/" class="nav-link">Events</a></li>
+                <li><a href="../team/" class="nav-link">Team</a></li>
+                <li><a href="./" class="nav-link active">Merch</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="mobile-toggle" id="mobile-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <img src="../static/assets/logo.png" alt="GFG Logo">
+                <button id="drawer-close"><i data-lucide="x"></i></button>
+            </div>
+            <nav class="drawer-nav">
+                <a href="../" class="drawer-link"><i data-lucide="home"></i> Home</a>
+                <a href="../events/" class="drawer-link"><i data-lucide="calendar"></i> Events</a>
+                <a href="../team/" class="drawer-link"><i data-lucide="users"></i> Team</a>
+                <a href="./" class="drawer-link active"><i data-lucide="shopping-bag"></i> Merch</a>
+            </nav>
+        </div>
+    </div>
+
+    <main>
+        <section class="section" style="padding-top: 120px;">
+            <div class="container">
+                <div class="section-header text-center" style="justify-content: center; flex-direction: column; align-items: center;">
+                    <div class="badge fade-in">Support Our Events</div>
+                    <h1 class="section-title fade-in-up">Official <span class="text-gradient">Merch Store</span></h1>
+                    <p class="hero-description fade-in-up" style="max-width: 600px; text-align: center; margin-top: 1rem;">
+                        Grab some cool merchandise. Every purchase contributes to our community fund, allowing us to host bigger and better events!
+                    </p>
+                </div>
+                
+                <div class="merch-grid" id="merch-container">
+                    <!-- Loaded via JS -->
+                </div>
+
+                <div class="partner-card fade-in-up">
+                    <h2>More from our Partner</h2>
+                    <p>Looking for premium tech merchandise, exclusive swags, and developer setups? Check out MakeInsane!</p>
+                    <a href="https://makeinsane.com/" target="_blank" class="btn-primary" style="display: inline-flex; align-items: center; justify-content: center;">
+                        <span>Visit MakeInsane</span>
+                        <i data-lucide="external-link" style="margin-left: 0.5rem;"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <div class="logo">
+                    <img src="../static/assets/logo.png" alt="GFG Logo">
+                    <span>GFG IEC Chapter</span>
+                </div>
+                <p>Building the coding culture at IEC College of Engineering & Technology.</p>
+                <div class="socials">
+                    <a href="https://www.linkedin.com/company/gfg-iec-campus-body/" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                    </a>
+                    <a href="https://www.instagram.com/geeksforgeeks_ieccet/" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 GFG IEC Chapter. Made with ❤️ by the Core Team.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Order Modal -->
+    <div class="modal" id="order-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="close-modal"><i data-lucide="x"></i></button>
+            <h3 class="modal-title">Place Order for <span id="modal-item-name" class="text-gradient"></span></h3>
+            
+            <form id="order-form">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="order-name" class="form-control" required placeholder="John Doe">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" id="order-email" class="form-control" required placeholder="john@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Mobile Number</label>
+                        <input type="tel" id="order-phone" class="form-control" required pattern="[0-9]{10}" placeholder="10-digit mobile number">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Delivery Address</label>
+                    <textarea id="order-address" class="form-control" rows="3" required placeholder="Full Address"></textarea>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label">Quantity (Min 5)</label>
+                        <input type="number" id="order-quantity" class="form-control" min="5" value="5" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Preferred Sizes (e.g. 2 M, 3 L)</label>
+                        <input type="text" id="order-sizes" class="form-control" required placeholder="e.g. 2 M, 3 L">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Color Preference</label>
+                    <div class="color-options">
+                        <label class="color-option">
+                            <input type="radio" name="order-color" value="Black" required checked>
+                            <span class="color-tile" style="background: #111;"></span>
+                            <span class="color-label">Black</span>
+                        </label>
+                        <label class="color-option">
+                            <input type="radio" name="order-color" value="White" required>
+                            <span class="color-tile" style="background: #fff; border: 1px solid #ddd;"></span>
+                            <span class="color-label" style="color: var(--text);">White</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Other Details / Instructions (Optional)</label>
+                    <input type="text" id="order-other" class="form-control" placeholder="Any specific requests?">
+                </div>
+
+                <div class="price-breakdown">
+                    <div class="price-row">
+                        <span>Base Amount (Total items)</span>
+                        <span>₹<span id="bp-item">0</span></span>
+                    </div>
+                    <div class="price-row discount-row" id="bulk-discount-row" style="display: none;">
+                        <span>Bulk Discount (10+ Items)</span>
+                        <span>-₹<span id="bp-discount">0</span></span>
+                    </div>
+                </div>
+                
+                <div class="total-amount">
+                    Final Amount: <span class="text-gradient">₹<span id="order-total">0</span></span>
+                </div>
+
+                <div class="upi-box">
+                    <h4>Payment Details</h4>
+                    <p>Please pay the exact amount using UPI to:</p>
+                    <p><strong>6395203201@mbkns</strong></p>
+                    <a href="#" id="upi-dynamic-link" class="upi-link">Pay with UPI App</a>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">UPI Transaction ID / UTR Number</label>
+                    <input type="text" id="order-utr" class="form-control" required placeholder="Enter 12-digit UTR number">
+                </div>
+
+                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;" id="submit-btn">
+                    <span>Submit Request</span>
+                    <i data-lucide="send"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../static/js/modern-main.js"></script>
+    <script src="../static/js/merch.js"></script>
+</body>
+
+</html>

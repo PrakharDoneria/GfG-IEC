@@ -10,5 +10,23 @@
         "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCNktcn-hr_Va9GlbInD7iwZSF8fYbIerMOg&s",
         "tier": "Platinum",
         "website": "https://gen.xyz/"
+    },
+    {
+        "name": "TheWide",
+        "logo": "static/assets/brands/TheWide.png",
+        "tier": "Platinum",
+        "website": "https://thewide.com/signup/code/JDErNzczODE0XzY="
+    },
+    {
+        "name": "IEC College of Engineering & Technology",
+        "logo": "static/assets/brands/ieccet.png",
+        "tier": "Platinum",
+        "website": "https://iec.edu.in"
+    },
+    {
+        "name": "GeeksforGeeks",
+        "logo": "static/assets/brands/geeksforgeeks.png",
+        "tier": "Platinum",
+        "website": "https://www.geeksforgeeks.org/"
     }
 ]

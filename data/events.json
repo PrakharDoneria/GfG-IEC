@@ -1,0 +1,43 @@
+[
+    {
+        "title": "Three 90 Challenge",
+        "date": "Anytime",
+        "status": "past",
+        "description": "Finish Your Course - Get Your Money Back!",
+        "link": "https://gfgcdn.com/tu/Xk4/"
+    },
+    {
+        "title": "Inauguration Ceremony",
+        "date": "Jan 20, 2026",
+        "status": "past",
+        "description": "Grand opening of GFG Student Chapter at IEC.",
+        "highlight_link": "https://www.instagram.com/geeksforgeeks_ieccet/"
+    },
+    {
+        "title": "GfG IEC DSA Workshop",
+        "date": "Feb  27, 2026",
+        "time": "10:00 AM",
+        "status": "past",
+        "venue": "IEC Seminar Hall",
+        "description": "GFG IEC DSA Workshop at IEC College of Engineering & Technology, is a hands-on learning session designed to help students master Data Structures and Algorithms",
+        "link": "events/dsa-workshop/"
+    },
+    {
+        "title": "Hack-A-Geek",
+        "date": "March 28, 2026",
+        "time": "10:30 AM",
+        "status": "past",
+        "venue": "IEC College of Engineering & Technology",
+        "description": "A level playing field where creativity meets code. Build real-world solutions using code, AI tools or no-code — the idea and impact matter most.",
+        "link": "events/hack-a-geek/"
+    },
+    {
+        "title": "Career Boost Workshop",
+        "date": "13th April 2026",
+        "time": "2:00 PM – 5:00 PM",
+        "status": "upcoming",
+        "venue": "GFG Noida Office",
+        "description": "Ready to bridge the gap between classroom learning and industry standards? Exclusive, hands-on Career Boost Workshop with location-gated attendance verification.",
+        "link": "events/career-boost-workshop/"
+    }
+]

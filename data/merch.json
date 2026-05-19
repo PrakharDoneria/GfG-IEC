@@ -1,0 +1,9 @@
+[
+    {
+        "id": "merch-1",
+        "name": "Classic GFG IEC T-Shirt",
+        "description": "High-quality cotton t-shirt with GFG IEC Chapter logo. Perfect for coding sessions and events.",
+        "price": 399,
+        "image": "../static/assets/merch/tshirt.png"
+    }
+]

@@ -140,32 +140,32 @@ function initScrollEffects() {
 // Data Fetching
 function getRelativeDataPath() {
     const path = window.location.pathname;
-    
+
     // Known subdirectories in the project
     const knownDirs = ['events', 'team', 'deals', 'partners', 'sponsors', 'student-id', 'secret-id-gen'];
-    
+
     // Check if we're in a subdirectory by looking at the last meaningful part of the path
     let depth = 0;
-    
+
     // Split path and filter out empty strings
     const parts = path.split('/').filter(p => p !== '');
-    
+
     // If we have parts, check the last non-index.html part
     if (parts.length > 0) {
         // Get the last part (could be index.html or a directory name)
         let lastPart = parts[parts.length - 1];
-        
+
         // If it's index.html, check the part before it
         if (lastPart === 'index.html' && parts.length > 1) {
             lastPart = parts[parts.length - 2];
         }
-        
+
         // If the last part is a known directory, we're one level deep
         if (knownDirs.includes(lastPart)) {
             depth = 1;
         }
     }
-    
+
     return "../".repeat(depth) + "data/";
 }
 
@@ -193,18 +193,27 @@ function fixImagePath(path) {
     return rootPath + path;
 }
 
+function fixRelativePath(path) {
+    if (!path || path.startsWith('http') || path.startsWith('/') || path.startsWith('#')) return path;
+    const rootPath = getRelativeDataPath().replace('data/', '');
+    return rootPath + path;
+}
+
 // Home Page Logic
 async function initHomePage() {
     const deals = await fetchData('/data/deals.json');
     const team = await fetchData('/data/team.json');
-    const upcoming = await fetchData('/data/events/upcoming.json');
-    const ongoing = await fetchData('/data/events/ongoing.json');
-    const past = await fetchData('/data/events/past.json');
+    const allEvents = await fetchData('/data/events.json') || [];
+
+    const upcoming = allEvents.filter(e => e.status === 'upcoming');
+    const ongoing = allEvents.filter(e => e.status === 'ongoing');
+    const past = allEvents.filter(e => e.status === 'past');
+
     const partners = await fetchData('/data/partners.json');
     const sponsors = await fetchData('/data/sponsors.json');
 
     // Stats
-    const totalEvents = (upcoming?.length || 0) + (ongoing?.length || 0) + (past?.length || 0);
+    const totalEvents = allEvents.length;
     const eventsCountEl = document.getElementById('events-count');
     if (eventsCountEl) eventsCountEl.innerText = `${totalEvents}+`;
 
@@ -244,7 +253,7 @@ async function initHomePage() {
                 <span class="highlight-tag">Next Event</span>
                 <h3>${event.title}</h3>
                 <p>${event.date} • ${event.venue}</p>
-                <a href="${event.link || '/events/'}" class="btn-primary btn-sm">Register Now</a>
+                <a href="${fixRelativePath(event.link) || '/events/'}" class="btn-primary btn-sm">Register Now</a>
             </div>
         `;
     }
@@ -281,19 +290,26 @@ async function initHomePage() {
 
 // Events Page Logic
 async function initEventsPage() {
-    const upcoming = await fetchData('/data/events/upcoming.json');
-    const ongoing = await fetchData('/data/events/ongoing.json');
-    const past = await fetchData('/data/events/past.json');
+    const allEvents = await fetchData('/data/events.json') || [];
 
     const grid = document.getElementById('events-grid');
     const tabBtns = document.querySelectorAll('.tab-btn');
 
+    const setActiveTab = (type) => {
+        tabBtns.forEach(b => {
+            if (b.dataset.tab === type) {
+                b.classList.add('active');
+                b.style.color = 'var(--text-primary)';
+            } else {
+                b.classList.remove('active');
+                b.style.color = 'var(--text-secondary)';
+            }
+        });
+    };
+
     const renderEvents = (type) => {
         grid.innerHTML = '';
-        let data = [];
-        if (type === 'upcoming') data = upcoming;
-        else if (type === 'past') data = past;
-        else if (type === 'ongoing') data = ongoing;
+        const data = allEvents.filter(e => e.status === type);
 
         if (!data || data.length === 0) {
             grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-secondary);">No events found in this category.</div>';
@@ -308,18 +324,25 @@ async function initEventsPage() {
 
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            tabBtns.forEach(b => {
-                b.classList.remove('active');
-                b.style.color = 'var(--text-secondary)';
-            });
-            btn.classList.add('active');
-            btn.style.color = 'var(--text-primary)';
-            renderEvents(btn.dataset.tab);
+            const type = btn.dataset.tab;
+            setActiveTab(type);
+            renderEvents(type);
+            // Update URL without reloading (optional, but requested support implies this might be useful)
+            const newUrl = window.location.pathname + '?' + type;
+            window.history.pushState({path:newUrl}, '', newUrl);
         });
     });
 
-    // Default
-    renderEvents('upcoming');
+    // Handle URL parameters
+    const search = window.location.search;
+    let initialTab = 'upcoming';
+    
+    if (search.includes('past')) initialTab = 'past';
+    else if (search.includes('ongoing')) initialTab = 'ongoing';
+    else if (search.includes('upcoming')) initialTab = 'upcoming';
+
+    setActiveTab(initialTab);
+    renderEvents(initialTab);
 }
 
 
@@ -327,15 +350,58 @@ async function initEventsPage() {
 async function initTeamPage() {
     const team = await fetchData('/data/team.json');
     const container = document.getElementById('team-container');
-    console.log('Team data:', team);
-    console.log('Team container:', container);
+
     if (team && container) {
-        team.forEach(member => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const filterName = urlParams.get('name');
+
+        let displayTeam = team;
+        if (filterName) {
+            displayTeam = team.filter(m => m.name.toLowerCase().includes(filterName.toLowerCase()));
+        }
+
+        if (displayTeam.length === 0) {
+            container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-secondary);">No team member found.</div>';
+            return;
+        }
+
+        // Profile View (Single Result)
+        if (filterName && displayTeam.length === 1) {
+            const member = displayTeam[0];
+            const heroTitle = document.querySelector('.hero-title');
+            const heroDesc = document.querySelector('.hero-description');
+
+            if (heroTitle) heroTitle.innerHTML = `Team <span class="text-gradient">Profile</span>`;
+            if (heroDesc) heroDesc.innerText = `Detailed profile and contact information for ${member.name}.`;
+
+            container.style.gridTemplateColumns = '1fr';
+            container.style.maxWidth = '800px';
+            container.style.margin = '0 auto';
+            container.innerHTML = renderProfileCard(member);
+            lucide.createIcons();
+            return;
+        }
+
+        // Pinned roles that should always stay at the top
+        const pinnedRoles = ["Faculty Coordinator", "Chapter Lead"];
+
+        const pinnedMembers = displayTeam.filter(m => pinnedRoles.includes(m.role));
+        const otherMembers = displayTeam.filter(m => !pinnedRoles.includes(m.role));
+
+        // Fisher-Yates shuffle for other members
+        for (let i = otherMembers.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [otherMembers[i], otherMembers[j]] = [otherMembers[j], otherMembers[i]];
+        }
+
+        const finalTeam = [...pinnedMembers, ...otherMembers];
+
+        container.innerHTML = ''; // Clear container before rendering
+        finalTeam.forEach(member => {
             container.innerHTML += renderTeamCard(member);
         });
-    } else {
-        console.error('Team data or container not found');
     }
+
     setTimeout(() => {
         initAutoScroll();
     }, 500);
@@ -390,7 +456,7 @@ function renderEventCard(event) {
             <p class="event-description" style="margin-bottom: 28px;">${(event.description || '').substring(0, 100)}...</p>
             <div class="event-footer" style="gap: 12px;">
                 <span class="event-venue"><i data-lucide="map-pin" style="width:14px"></i> ${event.venue}</span>
-                <a href="${event.link || '#'}" class="btn-primary btn-sm">Join</a>
+                <a href="${fixRelativePath(event.link) || '#'}" class="btn-primary btn-sm">Join</a>
             </div>
         </div>
     `;
@@ -402,7 +468,7 @@ function renderOngoingCard(event) {
             <div class="event-status" style="background:#2f8d46; color:white">LIVE</div>
             <h3 class="event-title" style="margin-bottom: 16px; margin-top: 8px;">${event.title}</h3>
             <p class="event-description" style="margin-bottom: 28px;">${event.description}</p>
-            <a href="${event.link}" target="_blank" class="btn-primary">Join Now <i data-lucide="external-link"></i></a>
+            <a href="${fixRelativePath(event.link)}" target="_blank" class="btn-primary">Join Now <i data-lucide="external-link"></i></a>
         </div>
     `;
 }
@@ -423,6 +489,13 @@ function renderDealCard(deal) {
 
 
 function renderTeamCard(member) {
+    const socials = `
+        <div class="socials" style="margin-top: 20px; justify-content: center; gap: 12px;">
+            ${member.linkedin ? `<a href="${member.linkedin}" target="_blank"><i data-lucide="linkedin"></i></a>` : ''}
+            ${member.email ? `<a href="mailto:${member.email}"><i data-lucide="mail"></i></a>` : ''}
+        </div>
+    `;
+
     return `
         <div class="card team-card" style="text-align:center; padding: 36px 28px;">
             <div style="width:140px; height:140px; border-radius:100px; overflow:hidden; margin: 0 auto 28px; border: 3px solid var(--primary); box-shadow: var(--shadow-primary);">
@@ -430,7 +503,43 @@ function renderTeamCard(member) {
             </div>
             <h3 class="event-title" style="margin-bottom:12px; font-size: 19px;">${member.name}</h3>
             <span style="color:var(--primary); font-weight:700; font-size:13px; text-transform:uppercase; letter-spacing: 1.2px; display: block; margin-bottom: 20px;">${member.role}</span>
-            <p class="event-description" style="margin-top:0; line-height: 1.8; font-size: 14px;">${member.details}</p>
+            <p class="event-description" style="margin-top:0; line-height: 1.8; font-size: 14px; margin-bottom: 0;">${member.details}</p>
+            ${(member.linkedin || member.email) ? socials : ''}
+        </div>
+    `;
+}
+
+function renderProfileCard(member) {
+     const socials = `
+        <div class="socials" style="margin-top: 10px; justify-content: center; gap: 24px; transform: scale(1.3);">
+            ${member.linkedin ? `<a href="${member.linkedin}" target="_blank"><i data-lucide="linkedin"></i></a>` : ''}
+            ${member.email ? `<a href="mailto:${member.email}"><i data-lucide="mail"></i></a>` : ''}
+        </div>
+    `;
+
+    return `
+        <div class="card profile-card fade-in-up" style="padding: 60px 40px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 40px; border-color: var(--primary);">
+            <div style="width: 200px; height: 200px; border-radius: 50%; overflow: hidden; border: 4px solid var(--primary); box-shadow: var(--shadow-primary);">
+                <img src="${fixImagePath(member.image)}" alt="${member.name}" class="zoomable" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;">
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 16px; align-items: center;">
+                <h2 style="font-size: 42px; margin: 0; color: var(--text-primary);">${member.name}</h2>
+                <div class="badge" style="font-size: 14px; padding: 6px 24px;">${member.role}</div>
+            </div>
+
+            <p style="font-size: 18px; line-height: 1.8; color: var(--text-secondary); max-width: 600px; margin: 0;">
+                ${member.details}
+            </p>
+
+            ${(member.linkedin || member.email) ? socials : ''}
+
+            <div style="margin-top: 20px; padding-top: 40px; border-top: 1px solid var(--glass-border); width: 100%;">
+                <a href="?" class="btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 10px;">
+                    <i data-lucide="arrow-left" style="width:16px"></i>
+                    <span>Explore Other Members</span>
+                </a>
+            </div>
         </div>
     `;
 }

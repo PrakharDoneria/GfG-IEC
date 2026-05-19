@@ -1,0 +1,148 @@
+:root {
+  --ink: #091523;
+  --ink-soft: #334357;
+  --brand: #1f9d55;
+  --brand-deep: #0f6f3a;
+  --card: #ffffff;
+  --line: #d9e2ee;
+  --bg-a: #f6fff9;
+  --bg-b: #e6f1ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Manrope", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 80% 10%, rgba(31, 157, 85, 0.16), transparent 40%),
+    radial-gradient(circle at 10% 90%, rgba(19, 112, 201, 0.15), transparent 38%),
+    linear-gradient(140deg, var(--bg-a), var(--bg-b));
+}
+
+.page-shell {
+  width: min(980px, 92vw);
+  margin: 40px auto;
+}
+
+.hero {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 26px;
+  padding: 30px;
+  box-shadow: 0 28px 60px rgba(10, 30, 55, 0.12);
+}
+
+.back-link {
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.eyebrow {
+  margin: 18px 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  color: var(--brand-deep);
+  font-weight: 700;
+}
+
+h1 {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(2rem, 3.6vw, 3.4rem);
+  line-height: 1.05;
+}
+
+.hero-copy {
+  max-width: 58ch;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.meta-pill {
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.attendance-card {
+  margin-top: 24px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 12px 34px rgba(15, 30, 50, 0.1);
+}
+
+.attendance-card h2 {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.8rem;
+}
+
+.attendance-card p {
+  color: var(--ink-soft);
+  line-height: 1.65;
+  margin: 12px 0 20px;
+}
+
+.attendance-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 220px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #fff;
+  background: linear-gradient(135deg, var(--brand), var(--brand-deep));
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.attendance-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(15, 111, 58, 0.28);
+}
+
+.attendance-card small {
+  display: block;
+  margin-top: 12px;
+  color: #55657a;
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    width: min(940px, 94vw);
+    margin: 18px auto;
+  }
+
+  .hero,
+  .attendance-card {
+    border-radius: 18px;
+    padding: 20px;
+  }
+
+  .attendance-btn {
+    width: 100%;
+  }
+}
