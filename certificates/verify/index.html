@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Certificate | GFG IEC</title>
+    <link rel="icon" href="../../static/assets/logo.png" type="image/png">
+    <link rel="stylesheet" href="../../static/css/modern-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <link rel="stylesheet" href="../../static/css/certificates.css">
+</head>
+<body>
+    <!-- Premium Loader -->
+    <div id="loader" class="loader-wrapper">
+        <div class="loader-content">
+            <div class="loader-logo"><img src="../../static/assets/logo.png" alt="GFG Logo"></div>
+            <div class="loader-bar-container"><div class="loader-bar"></div></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="premium-nav">
+        <div class="nav-container">
+            <a href="../../" class="logo">
+                <img src="../../static/assets/logo.png" alt="GFG Logo">
+                <div class="logo-text"><span class="logo-main">GFG</span><span class="logo-sub">IEC Chapter</span></div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="../../" class="nav-link">Home</a></li>
+                <li><a href="../../events/" class="nav-link">Events</a></li>
+                <li><a href="../../team/" class="nav-link">Team</a></li>
+                <li><a href="../../merch/" class="nav-link">Merch</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section" style="min-height: 80vh; display: flex; align-items: center;">
+            <div class="container" style="width: 100%;">
+                <div class="cert-container verify-theme">
+                    <div class="cert-content">
+                        <div class="badge fade-in" style="margin: 0 auto 1rem; background: rgba(14, 165, 233, 0.1); color: #38bdf8; border-color: rgba(14, 165, 233, 0.2);">Official Records</div>
+                        <h1 class="hero-title fade-in-up" style="font-size: 2.5rem; margin-bottom: 1rem;">
+                            Verify <span class="text-gradient" style="background: linear-gradient(135deg, #38bdf8, #0ea5e9); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Certificate</span>
+                        </h1>
+                        <p class="hero-description fade-in-up" style="font-size: 1.1rem; color: #94a3b8;">
+                            Enter the Roll Number to verify the authenticity of a certificate.
+                        </p>
+                        
+                        <form id="cert-form" class="fade-in-up">
+                            <input type="text" id="roll-input" class="cert-input" placeholder="Enter Roll No. (e.g. 2400900100104)" required>
+                            <button type="submit" class="btn-blue" id="submit-btn">
+                                <i data-lucide="check-circle"></i>
+                                <span>Verify Now</span>
+                            </button>
+                            <div id="cert-error" class="cert-error"></div>
+                        </form>
+
+                        <div id="cert-result" class="cert-result">
+                            <i data-lucide="shield-check" class="verify-icon"></i>
+                            <h3 id="student-name" style="font-size: 1.8rem; margin-bottom: 0.5rem; color: white;">Student Name</h3>
+                            <div class="badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border-color: rgba(16, 185, 129, 0.3);">Authentic Certificate</div>
+                            
+                            <div class="cert-details">
+                                <p><strong>Roll No:</strong> <span id="student-roll"></span></p>
+                                <p><strong>Year:</strong> <span id="student-year"></span></p>
+                                <p><strong>Section:</strong> <span id="student-section"></span></p>
+                                <p><strong>Issued By:</strong> <span style="color: #38bdf8;">GFG IEC Chapter</span></p>
+                            </div>
+                            
+                            <div style="margin-top: 1.5rem;">
+                                <a href="../download/" class="view-all" style="justify-content: center;">Download this Certificate <i data-lucide="arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <div class="logo">
+                    <img src="../../static/assets/logo.png" alt="GFG Logo">
+                    <span>GFG IEC Chapter</span>
+                </div>
+                <p>Building the coding culture at IEC College of Engineering & Technology.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Navigation</h3>
+                <a href="../../">Home</a>
+                <a href="../../events/">Events</a>
+                <a href="../../team/">Team</a>
+            </div>
+            <div class="footer-links">
+                <h3>Certificates</h3>
+                <a href="../download/">Download Certificate</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 GFG IEC Chapter. Made with ❤️ by the Core Team.</p>
+        </div>
+    </footer>
+
+    <script src="../../static/js/modern-main.js"></script>
+    <script src="../../static/js/certificates-verify.js"></script>
+</body>
+</html>
